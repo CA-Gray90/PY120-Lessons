@@ -1,0 +1,6 @@
+# Files for git to ignore:
+.DS_Store
+*.ipynb*
+.pylintrc
+written_assesment
+PEDAC_sessions
