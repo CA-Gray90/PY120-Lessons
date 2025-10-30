@@ -4,8 +4,9 @@ class Move:
     def __init__(self):
         self._beats = None
 
+    # Each subclass returns its name lowercased when coerced to a string
     def __str__(self):
-        return NotImplemented
+        return self.__class__.__name__.lower()
 
     # Each Move subclass knows who it can beat (using comparison operators)
     def __gt__(self, other):
@@ -19,40 +20,25 @@ class Rock(Move):
         super().__init__()
         self._beats = ('scissors', 'lizard')
 
-    def __str__(self):
-        return 'rock'
-
 class Paper(Move):
     def __init__(self):
         super().__init__()
         self._beats = ('rock', 'spock')
-
-    def __str__(self):
-        return 'paper'
 
 class Scissors(Move):
     def __init__(self):
         super().__init__()
         self._beats = ('lizard', 'paper')
 
-    def __str__(self):
-        return 'scissors'
-
 class Lizard(Move):
     def __init__(self):
         super().__init__()
         self._beats = ('paper', 'spock')
 
-    def __str__(self):
-        return 'lizard'
-
 class Spock(Move):
     def __init__(self):
         super().__init__()
         self._beats = ('rock', 'scissors')
-
-    def __str__(self):
-        return 'spock'
 
 class Player:
     CHOICES = (Rock(), Paper(), Scissors(), Lizard(), Spock())
@@ -169,6 +155,7 @@ class RPSGame:
         self._computer.choose()
         self._display_winner()
         self._display_scoreboard()
+        # self._update_history()
         
     # Orchestration function to play the game
     def play(self):
