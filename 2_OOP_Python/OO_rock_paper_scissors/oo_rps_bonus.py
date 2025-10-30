@@ -44,20 +44,10 @@ class Human(Player):
 
         self.move = move
 
-class ScoreBoard:
-    def __init__(self, player1, player2):
-        self._player1 = player1
-        self._player2 = player2
-        
-    def display(self):
-        print(f'{self._player1.name} : {self._player1.score}\n'
-              f'{self._player2.name} : {self._player2.score}')
-
 class RPSGame:
     def __init__(self):
         self._human = Human()
         self._computer = Computer()
-        self._scoreboard = ScoreBoard(self._human, self._computer)
 
     def _display_welcome_msg(self):
         print('Welcome to Rock Paper Scissors!')
@@ -94,6 +84,10 @@ class RPSGame:
         else:
             print("It's a Tie!")
 
+    def _display_scoreboard(self):
+        print(f'{self._human.name} : {self._human.score}\n'
+              f'{self._computer.name} : {self._computer.score}')
+
     def _play_again(self):
         prompt = 'Play again? (y/n)'
 
@@ -114,9 +108,7 @@ class RPSGame:
             self._display_winner()
 
             # Display scores:
-            self._scoreboard.display()
-            # print(f'Human score: {self._human.score}')
-            # print(f'Computer score: {self._computer.score}')
+            self._display_scoreboard()
 
             if not self._play_again():
                 break
