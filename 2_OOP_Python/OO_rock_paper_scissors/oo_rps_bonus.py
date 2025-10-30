@@ -1,7 +1,7 @@
 import random
 
 class Player:
-    CHOICES = ('rock', 'paper', 'scissors')
+    CHOICES = ('rock', 'paper', 'scissors', 'lizard', 'spock')
 
     def __init__(self):
         self.move = None
@@ -33,7 +33,7 @@ class Human(Player):
         self._name = 'Human Player'
 
     def choose(self):
-        prompt = "Enter either 'rock', 'paper' or 'scissors'"
+        prompt = "Enter either 'rock', 'paper', 'scissors', 'lizard' or 'spock'"
 
         while True:
             move = input(f'{prompt}: ').lower()
@@ -46,41 +46,44 @@ class Human(Player):
 
 class RPSGame:
     POINTS_TO_WIN = 5
+    RULES = {
+        'rock' : ['scissors', 'lizard'],
+        'paper' : ['rock', 'spock'],
+        'scissors' : ['lizard', 'paper'],
+        'lizard' : ['spock', 'paper'],
+        'spock' : ['rock', 'scissors']
+    }
 
     def __init__(self):
         self._human = Human()
         self._computer = Computer()
 
     def _display_welcome_msg(self):
-        print('Welcome to Rock Paper Scissors!')
+        print('Welcome to Rock Paper Scissors Lizard Spock!')
 
     def _display_goodbye_msg(self):
-        print('Thanks for playing Rock Paper Scissors. Goodbye!')
+        print('Thanks for playing. Goodbye!')
 
-    def _human_wins(self):
+    def _determine_round_winner(self):
         human_move = self._human.move
         computer_move = self._computer.move
 
-        return ((human_move == 'rock' and computer_move == 'scissors') or
-            (human_move == 'paper' and computer_move == 'rock') or
-            (human_move == 'scissors' and computer_move == 'paper'))
-
-    def _computer_wins(self):
-        human_move = self._human.move
-        computer_move = self._computer.move
-
-        return ((human_move == 'rock' and computer_move == 'paper') or \
-              (human_move == 'paper' and computer_move == 'scissors') or \
-              (human_move == 'scissors' and computer_move == 'rock'))
+        if computer_move in RPSGame.RULES[human_move]:
+            return self._human
+        elif human_move in RPSGame.RULES[computer_move]:
+            return self._computer
+        else:
+            return None
 
     def _display_winner(self):
         print(f'You chose: {self._human.move.capitalize()}')
         print(f'Computer chose: {self._computer.move.capitalize()}')
 
-        if self._human_wins():
+        winner = self._determine_round_winner()
+        if winner == self._human:
             self._human.add_point()
             print('You win!')
-        elif self._computer_wins():
+        elif winner == self._computer:
             self._computer.add_point()
             print('Computer won. You lost!')
         else:
