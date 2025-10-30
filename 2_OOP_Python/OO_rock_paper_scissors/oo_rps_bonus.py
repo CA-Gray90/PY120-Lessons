@@ -45,6 +45,8 @@ class Human(Player):
         self.move = move
 
 class RPSGame:
+    POINTS_TO_WIN = 5
+
     def __init__(self):
         self._human = Human()
         self._computer = Computer()
@@ -84,6 +86,16 @@ class RPSGame:
         else:
             print("It's a Tie!")
 
+    def _display_overall_winner(self):
+        if self._human.score == RPSGame.POINTS_TO_WIN:
+            print('You are the overall winner!')
+            return True
+        elif self._computer.score == RPSGame.POINTS_TO_WIN:
+            print('Computer is the overall winner!')
+            return True
+        else:
+            return False
+    
     def _display_scoreboard(self):
         print(f'{self._human.name} : {self._human.score}\n'
               f'{self._computer.name} : {self._computer.score}')
@@ -98,20 +110,23 @@ class RPSGame:
 
             print('Invalid input. ', end='')
 
+    def _play_round(self):
+        self._human.choose()
+        self._computer.choose()
+        self._display_winner()
+
+        # Display scores:
+        self._display_scoreboard()
+        
     # Orchestration function to play the game
     def play(self):
         self._display_welcome_msg()
 
         while True:
-            self._human.choose()
-            self._computer.choose()
-            self._display_winner()
-
-            # Display scores:
-            self._display_scoreboard()
-
-            if not self._play_again():
-                break
+            self._play_round()
+            if self._display_overall_winner():
+                if not self._play_again():
+                    break
 
         self._display_goodbye_msg()
 
