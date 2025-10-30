@@ -45,15 +45,72 @@ class Human(Player):
 
         self.move = move
 
+class Move:
+    moves = []
+
+    def __init__(self):
+        self._beats = None
+        Move.moves.append(str(self))
+    
+    def __str__(self):
+        return NotImplemented
+    
+    # Each Move subclass knows who it can beat (using comparison operators)
+    def __gt__(self, other):
+        if isinstance(other, Move):
+            return str(other) in self._beats
+        else:
+            return NotImplemented
+
+class Rock(Move):
+    def __init__(self):
+        super().__init__()
+        self._beats = ('scissors', 'lizard')
+
+    def __str__(self):
+        return 'rock'
+
+class Paper(Move):
+    def __init__(self):
+        super().__init__()
+        self._beats = ('rock', 'spock')
+
+    def __str__(self):
+        return 'paper'
+
+class Scissors(Move):
+    def __init__(self):
+        super().__init__()
+        self._beats = ('lizard', 'paper')
+
+    def __str__(self):
+        return 'scissors'
+
+class Lizard(Move):
+    def __init__(self):
+        super().__init__()
+        self._beats = ('paper', 'spock')
+
+    def __str__(self):
+        return 'lizard'
+
+class Spock(Move):
+    def __init__(self):
+        super().__init__()
+        self._beats = ('rock', 'scissors')
+
+    def __str__(self):
+        return 'spock'
+
 class RPSGame:
     POINTS_TO_WIN = 5
-    RULES = {
-        'rock' : ['scissors', 'lizard'],
-        'paper' : ['rock', 'spock'],
-        'scissors' : ['lizard', 'paper'],
-        'lizard' : ['spock', 'paper'],
-        'spock' : ['rock', 'scissors']
-    }
+    # RULES = {
+    #     'rock' : ['scissors', 'lizard'],
+    #     'paper' : ['rock', 'spock'],
+    #     'scissors' : ['lizard', 'paper'],
+    #     'lizard' : ['spock', 'paper'],
+    #     'spock' : ['rock', 'scissors']
+    # }
 
     def __init__(self):
         self._human = Human()
@@ -70,12 +127,14 @@ class RPSGame:
         human_move = self._human.move
         computer_move = self._computer.move
 
-        if computer_move in RPSGame.RULES[human_move]:
-            return self._human
-        elif human_move in RPSGame.RULES[computer_move]:
-            return self._computer
-        else:
-            return None
+        # if computer_move in RPSGame.RULES[human_move]:
+        #     return self._human
+        # elif human_move in RPSGame.RULES[computer_move]:
+        #     return self._computer
+        # else:
+        #     return None
+
+
 
     def _display_winner(self):
         print(f'You chose: {self._human.move.capitalize()}')

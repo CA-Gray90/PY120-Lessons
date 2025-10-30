@@ -1,23 +1,80 @@
-import random
+class Move:
+    def __init__(self):
+        self._beats = None
+    
+    def __str__(self):
+        return NotImplemented
+    
+    # Each Move subclass knows who it can beat (using comparison operators)
+    def __gt__(self, other):
+        if isinstance(other, Move):
+            return str(other) in self._beats
+        else:
+            return NotImplemented
 
-rules = {
-    'rock' : ['scissors', 'lizard'],
-    'paper' : ['rock', 'spock'],
-    'scissors' : ['lizard', 'paper'],
-    'lizard' : ['spock', 'paper'],
-    'spock' : ['rock', 'scissors']
-}
+class Rock(Move):
+    def __init__(self):
+        super().__init__()
+        self._beats = ('scissors', 'lizard')
 
-CHOICES = ('rock', 'paper', 'scissors', 'lizard', 'spock')
+    def __str__(self):
+        return 'rock'
 
-player = input('Enter move: ')
-computer = random.choice(CHOICES)
+class Paper(Move):
+    def __init__(self):
+        super().__init__()
+        self._beats = ('rock', 'spock')
 
-print(f'Your move: {player}')
-print(f'Computer move: {computer}')
-if computer in rules[player]:
-    print('You win')
-elif player in rules[computer]:
-    print('You lose')
-else:
-    print('Its a tie')
+    def __str__(self):
+        return 'paper'
+
+class Scissors(Move):
+    def __init__(self):
+        super().__init__()
+        self._beats = ('lizard', 'paper')
+
+    def __str__(self):
+        return 'scissors'
+
+class Lizard(Move):
+    def __init__(self):
+        super().__init__()
+        self._beats = ('paper', 'spock')
+
+    def __str__(self):
+        return 'lizard'
+
+class Spock(Move):
+    def __init__(self):
+        super().__init__()
+        self._beats = ('rock', 'scissors')
+
+    def __str__(self):
+        return 'spock'
+
+rock = Rock()
+paper = Paper()
+scissors = Scissors()
+lizard = Lizard()
+spock = Spock()
+
+print((rock > scissors) == True)
+print((spock > scissors) == True)
+print((paper > spock) == True)
+print((lizard > spock) == True)
+print((lizard > paper) == True)
+print((scissors > paper) == True)
+print((rock > lizard) == True)
+print((scissors > lizard) == True)
+print((spock > rock) == True)
+print((paper > rock) == True)
+print((rock < scissors) == False)
+print((spock < scissors) == False)
+print((paper < spock) == False)
+print((lizard < spock) == False)
+print((lizard < paper) == False)
+print((scissors < paper) == False)
+print((rock < lizard) == False)
+print((scissors < lizard) == False)
+print((spock < rock) == False)
+print((paper < rock) == False)
