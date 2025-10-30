@@ -1,60 +1,12 @@
 import random
 
-class Player:
-    CHOICES = ('rock', 'paper', 'scissors', 'lizard', 'spock')
-
-    def __init__(self):
-        self.move = None
-        self._name = None
-        self._score = 0
-
-    @property
-    def score(self):
-        return self._score
-
-    @property
-    def name(self):
-        return self._name
-
-    def add_point(self):
-        self._score += 1
-
-class Computer(Player):
-    def __init__(self):
-        super().__init__()
-        self._name = 'Computer Player'
-
-    def choose(self):
-        self.move = random.choice(Player.CHOICES)
-
-class Human(Player):
-    def __init__(self):
-        super().__init__()
-        self._name = 'Human Player'
-
-    def choose(self):
-        prompt = ("Enter either 'rock', 'paper', 'scissors', "
-                  "'lizard' or 'spock'")
-
-        while True:
-            move = input(f'{prompt}: ').lower()
-            if move in Player.CHOICES:
-                break
-
-            print('Invalid input. ', end='')
-
-        self.move = move
-
 class Move:
-    moves = []
-
     def __init__(self):
         self._beats = None
-        Move.moves.append(str(self))
-    
+
     def __str__(self):
         return NotImplemented
-    
+
     # Each Move subclass knows who it can beat (using comparison operators)
     def __gt__(self, other):
         if isinstance(other, Move):
@@ -102,15 +54,55 @@ class Spock(Move):
     def __str__(self):
         return 'spock'
 
+class Player:
+    CHOICES = (Rock(), Paper(), Scissors(), Lizard(), Spock())
+
+    def __init__(self):
+        self.move = None
+        self._name = None
+        self._score = 0
+
+    @property
+    def score(self):
+        return self._score
+
+    @property
+    def name(self):
+        return self._name
+
+    def add_point(self):
+        self._score += 1
+
+class Computer(Player):
+    def __init__(self):
+        super().__init__()
+        self._name = 'Computer Player'
+
+    def choose(self):
+        self.move = random.choice(Player.CHOICES)
+
+class Human(Player):
+    def __init__(self):
+        super().__init__()
+        self._name = 'Human Player'
+
+    def choose(self):
+        prompt = ("Enter either 'rock', 'paper', 'scissors', "
+                  "'lizard' or 'spock'")
+
+        while True:
+            choice = input(f'{prompt}: ').lower()
+            if choice in {str(move) for move in Player.CHOICES}:
+                break
+
+            print('Invalid input. ', end='')
+
+        for move in Player.CHOICES:
+            if str(move) == choice:
+                self.move = move
+
 class RPSGame:
     POINTS_TO_WIN = 5
-    # RULES = {
-    #     'rock' : ['scissors', 'lizard'],
-    #     'paper' : ['rock', 'spock'],
-    #     'scissors' : ['lizard', 'paper'],
-    #     'lizard' : ['spock', 'paper'],
-    #     'spock' : ['rock', 'scissors']
-    # }
 
     def __init__(self):
         self._human = Human()
@@ -127,18 +119,16 @@ class RPSGame:
         human_move = self._human.move
         computer_move = self._computer.move
 
-        # if computer_move in RPSGame.RULES[human_move]:
-        #     return self._human
-        # elif human_move in RPSGame.RULES[computer_move]:
-        #     return self._computer
-        # else:
-        #     return None
-
-
+        if human_move > computer_move:
+            return self._human
+        elif computer_move > human_move:
+            return self._computer
+        else:
+            return None
 
     def _display_winner(self):
-        print(f'You chose: {self._human.move.capitalize()}')
-        print(f'Computer chose: {self._computer.move.capitalize()}')
+        print(f'You chose: {str(self._human.move).capitalize()}')
+        print(f'Computer chose: {str(self._computer.move).capitalize()}')
 
         winner = self._determine_round_winner()
         if winner == self._human:
@@ -178,8 +168,6 @@ class RPSGame:
         self._human.choose()
         self._computer.choose()
         self._display_winner()
-
-        # Display scores:
         self._display_scoreboard()
         
     # Orchestration function to play the game
