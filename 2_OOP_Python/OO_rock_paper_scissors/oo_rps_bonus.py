@@ -33,7 +33,8 @@ class Human(Player):
         self._name = 'Human Player'
 
     def choose(self):
-        prompt = "Enter either 'rock', 'paper', 'scissors', 'lizard' or 'spock'"
+        prompt = ("Enter either 'rock', 'paper', 'scissors', "
+                  "'lizard' or 'spock'")
 
         while True:
             move = input(f'{prompt}: ').lower()
@@ -60,6 +61,7 @@ class RPSGame:
 
     def _display_welcome_msg(self):
         print('Welcome to Rock Paper Scissors Lizard Spock!')
+        print(f'First to {RPSGame.POINTS_TO_WIN} wins!')
 
     def _display_goodbye_msg(self):
         print('Thanks for playing. Goodbye!')
