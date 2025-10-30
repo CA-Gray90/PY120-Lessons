@@ -5,10 +5,24 @@ class Player:
 
     def __init__(self):
         self.move = None
+        self._name = None
+        self._score = 0
+
+    @property
+    def score(self):
+        return self._score
+
+    @property
+    def name(self):
+        return self._name
+
+    def add_point(self):
+        self._score += 1
 
 class Computer(Player):
     def __init__(self):
         super().__init__()
+        self._name = 'Computer Player'
 
     def choose(self):
         self.move = random.choice(Player.CHOICES)
@@ -16,6 +30,7 @@ class Computer(Player):
 class Human(Player):
     def __init__(self):
         super().__init__()
+        self._name = 'Human Player'
 
     def choose(self):
         prompt = "Enter either 'rock', 'paper' or 'scissors'"
@@ -29,10 +44,20 @@ class Human(Player):
 
         self.move = move
 
+class ScoreBoard:
+    def __init__(self, player1, player2):
+        self._player1 = player1
+        self._player2 = player2
+        
+    def display(self):
+        print(f'{self._player1.name} : {self._player1.score}\n'
+              f'{self._player2.name} : {self._player2.score}')
+
 class RPSGame:
     def __init__(self):
         self._human = Human()
         self._computer = Computer()
+        self._scoreboard = ScoreBoard(self._human, self._computer)
 
     def _display_welcome_msg(self):
         print('Welcome to Rock Paper Scissors!')
@@ -61,8 +86,10 @@ class RPSGame:
         print(f'Computer chose: {self._computer.move.capitalize()}')
 
         if self._human_wins():
+            self._human.add_point()
             print('You win!')
         elif self._computer_wins():
+            self._computer.add_point()
             print('Computer won. You lost!')
         else:
             print("It's a Tie!")
@@ -85,6 +112,12 @@ class RPSGame:
             self._human.choose()
             self._computer.choose()
             self._display_winner()
+
+            # Display scores:
+            self._scoreboard.display()
+            # print(f'Human score: {self._human.score}')
+            # print(f'Computer score: {self._computer.score}')
+
             if not self._play_again():
                 break
 
