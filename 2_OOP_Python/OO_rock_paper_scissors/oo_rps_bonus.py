@@ -162,6 +162,7 @@ class RPSGame:
               f'{self._computer.name} : {self._computer.score.points}')
         
     def _display_history(self):
+        print('Move History:')
         for player in (self._human, self._computer):
             print(player.name)
             print('Points:', player.score.points)
