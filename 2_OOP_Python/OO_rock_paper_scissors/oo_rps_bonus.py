@@ -43,7 +43,8 @@ class Score:
     def __init__(self):
         self._game_points = 0
         self._total_points = 0
-        self._move_history = []
+        self._own_move_history = []
+        self._other_move_history = []
     
     @property
     def points(self):
@@ -52,17 +53,18 @@ class Score:
     @property
     def total_points(self):
         return self._total_points
-    
+
     @property
     def history(self):
-        return tuple(self._move_history)
+        return tuple(self._own_move_history)
 
     def add_point(self):
         self._game_points += 1
         self._total_points += 1
 
-    def add_move(self, move):
-        self._move_history.append(str(move))
+    def add_moves(self, move, other_move):
+        self._own_move_history.append(str(move))
+        self._other_move_history.append(str(other_move))
     
     def reset_points(self):
         self._game_points = 0
@@ -129,7 +131,12 @@ class Daneel(Computer):
         self._name = 'R. Daneel Olivaw'
     
     def choose(self):
-        pass
+        if self.score._other_move_history:
+            for choice in Player.CHOICES:
+                if str(choice) == self.score._other_move_history[-1]:
+                    self.move = choice
+        else:
+            self.move = random.choice(Player.CHOICES)
 
 class Human(Player):
     def __init__(self):
@@ -156,7 +163,7 @@ class RPSGame:
 
     def __init__(self):
         self._human = Human()
-        self._computer = Hal()
+        self._computer = Daneel()
 
     def _display_welcome_msg(self):
         print('Welcome to Rock Paper Scissors Lizard Spock!')
@@ -165,11 +172,14 @@ class RPSGame:
     def _display_goodbye_msg(self):
         print('Thanks for playing. Goodbye!')
 
-    def _determine_round_winner(self):
-        # Add to move history
-        for player in (self._human, self._computer):
-            player.score.add_move(player.move)
+    def _add_to_history(self):
+        human_move = self._human.move
+        computer_move = self._computer.move
 
+        self._human.score.add_moves(human_move, computer_move)
+        self._computer.score.add_moves(computer_move, human_move)
+
+    def _determine_round_winner(self):
         human_move = self._human.move
         computer_move = self._computer.move
 
@@ -218,7 +228,7 @@ class RPSGame:
             for move in player.score.history:
                 print('   -', move)
             print()
-    
+
     def _play_again(self):
         prompt = 'Play again? (y/n)'
 
@@ -237,6 +247,7 @@ class RPSGame:
         self._human.choose()
         self._computer.choose()
         self._display_winner()
+        self._add_to_history()
         self._display_scoreboard()
         
     # Orchestration function to play the game
