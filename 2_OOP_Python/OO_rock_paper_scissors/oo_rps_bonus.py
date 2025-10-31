@@ -87,8 +87,30 @@ class Player:
 class Computer(Player):
     def __init__(self):
         super().__init__()
+        # Do we need this line?
         self._name = 'Computer Player'
+    
+    def personality(self):
+        # Each subclass has its own 'personality' or speak?
+        pass
 
+    def __str__(self):
+        return self._name
+
+class R2D2(Computer):
+    pass
+
+class Hal(Computer):
+    pass
+
+class Daneel(Computer):
+    pass
+
+class C3PO(Computer):
+    def __init__(self):
+        super().__init__()
+        self._name = 'C3PO'
+    
     def choose(self):
         self.move = random.choice(Player.CHOICES)
 
@@ -117,7 +139,7 @@ class RPSGame:
 
     def __init__(self):
         self._human = Human()
-        self._computer = Computer()
+        self._computer = C3PO()
 
     def _display_welcome_msg(self):
         print('Welcome to Rock Paper Scissors Lizard Spock!')
@@ -146,13 +168,13 @@ class RPSGame:
 
     def _display_winner(self):
         print(f'You chose: {str(self._human.move).capitalize()}')
-        print(f'Computer chose: {str(self._computer.move).capitalize()}')
+        print(f'{self._computer} chose: {str(self._computer.move).capitalize()}')
 
         winner = self._determine_round_winner()
         if winner == self._human:
             print('You win!')
         elif winner == self._computer:
-            print('Computer won. You lost!')
+            print(f'{self._computer} won. You lost!')
         else:
             print("It's a Tie!")
 
@@ -161,14 +183,14 @@ class RPSGame:
             print('You are the overall winner!')
             return True
         elif self._computer.score.points == RPSGame.POINTS_TO_WIN:
-            print('Computer is the overall winner!')
+            print(f'{self._computer} is the overall winner!')
             return True
         else:
             return False
     
     def _display_scoreboard(self):
         print(f'{self._human.name} : {self._human.score.points}\n'
-              f'{self._computer.name} : {self._computer.score.points}')
+              f'{self._computer} : {self._computer.score.points}')
         
     def _display_history(self):
         print('Move History:')
