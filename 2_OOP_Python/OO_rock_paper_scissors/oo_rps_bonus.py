@@ -42,25 +42,31 @@ class Spock(Move):
 
 class Score:
     def __init__(self):
-        self._points = 0
+        self._game_points = 0
+        self._total_points = 0
         self._move_history = []
     
     @property
     def points(self):
-        return self._points
+        return self._game_points
+    
+    @property
+    def total_points(self):
+        return self._total_points
     
     @property
     def history(self):
         return tuple(self._move_history)
 
     def add_point(self):
-        self._points += 1
+        self._game_points += 1
+        self._total_points += 1
 
     def add_move(self, move):
         self._move_history.append(str(move))
     
     def reset_points(self):
-        self._points = 0
+        self._game_points = 0
 
 class Player:
     CHOICES = (Rock(), Paper(), Scissors(), Lizard(), Spock())
@@ -168,7 +174,7 @@ class RPSGame:
         print('Move History:')
         for player in (self._human, self._computer):
             print(player.name)
-            print('Points:', player.score.points)
+            print('Total Points:', player.score.total_points)
             print('Moves:')
             for move in player.score.history:
                 print('   -', move)
