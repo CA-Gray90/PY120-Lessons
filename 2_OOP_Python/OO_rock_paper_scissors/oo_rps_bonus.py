@@ -40,13 +40,32 @@ class Spock(Move):
         super().__init__()
         self._beats = ('rock', 'scissors')
 
+class Score:
+    def __init__(self):
+        self._points = 0
+        self._move_history = []
+    
+    @property
+    def points(self):
+        return self._points
+    
+    @property
+    def history(self):
+        return tuple(self._move_history)
+
+    def add_point(self):
+        self._points += 1
+
+    def add_move(self, move):
+        self._move_history.append(str(move))
+
 class Player:
     CHOICES = (Rock(), Paper(), Scissors(), Lizard(), Spock())
 
     def __init__(self):
         self.move = None
         self._name = None
-        self._score = 0
+        self._score = Score()
 
     @property
     def score(self):
@@ -55,9 +74,6 @@ class Player:
     @property
     def name(self):
         return self._name
-
-    def add_point(self):
-        self._score += 1
 
 class Computer(Player):
     def __init__(self):
@@ -102,12 +118,19 @@ class RPSGame:
         print('Thanks for playing. Goodbye!')
 
     def _determine_round_winner(self):
+        # Add to move history
+        for player in (self._human, self._computer):
+            player.score.add_move(player.move)
+
         human_move = self._human.move
         computer_move = self._computer.move
 
+        # Determine winner and add points
         if human_move > computer_move:
+            self._human.score.add_point()
             return self._human
         elif computer_move > human_move:
+            self._computer.score.add_point()
             return self._computer
         else:
             return None
@@ -118,27 +141,25 @@ class RPSGame:
 
         winner = self._determine_round_winner()
         if winner == self._human:
-            self._human.add_point()
             print('You win!')
         elif winner == self._computer:
-            self._computer.add_point()
             print('Computer won. You lost!')
         else:
             print("It's a Tie!")
 
     def _display_overall_winner(self):
-        if self._human.score == RPSGame.POINTS_TO_WIN:
+        if self._human.score.points == RPSGame.POINTS_TO_WIN:
             print('You are the overall winner!')
             return True
-        elif self._computer.score == RPSGame.POINTS_TO_WIN:
+        elif self._computer.score.points == RPSGame.POINTS_TO_WIN:
             print('Computer is the overall winner!')
             return True
         else:
             return False
     
     def _display_scoreboard(self):
-        print(f'{self._human.name} : {self._human.score}\n'
-              f'{self._computer.name} : {self._computer.score}')
+        print(f'{self._human.name} : {self._human.score.points}\n'
+              f'{self._computer.name} : {self._computer.score.points}')
 
     def _play_again(self):
         prompt = 'Play again? (y/n)'
@@ -155,7 +176,6 @@ class RPSGame:
         self._computer.choose()
         self._display_winner()
         self._display_scoreboard()
-        # self._update_history()
         
     # Orchestration function to play the game
     def play(self):
@@ -168,5 +188,7 @@ class RPSGame:
                     break
 
         self._display_goodbye_msg()
+        print(self._human.score.history)
+        print(self._computer.score.history)
 
 RPSGame().play()
