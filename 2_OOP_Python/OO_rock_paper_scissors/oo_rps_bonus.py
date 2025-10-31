@@ -58,6 +58,9 @@ class Score:
 
     def add_move(self, move):
         self._move_history.append(str(move))
+    
+    def reset_points(self):
+        self._points = 0
 
 class Player:
     CHOICES = (Rock(), Paper(), Scissors(), Lizard(), Spock())
@@ -181,6 +184,10 @@ class RPSGame:
 
             print('Invalid input. ', end='')
 
+    def _reset(self):
+        self._human.score.reset_points()
+        self._computer.score.reset_points()
+
     def _play_round(self):
         self._human.choose()
         self._computer.choose()
@@ -194,7 +201,9 @@ class RPSGame:
         while True:
             self._play_round()
             if self._display_overall_winner():
-                if not self._play_again():
+                if self._play_again():
+                    self._reset()
+                else:
                     break
 
         self._display_goodbye_msg()
