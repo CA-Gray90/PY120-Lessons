@@ -162,8 +162,14 @@ class RPSGame:
               f'{self._computer.name} : {self._computer.score.points}')
         
     def _display_history(self):
-        print(f'')
-
+        for player in (self._human, self._computer):
+            print(player.name)
+            print('Points:', player.score.points)
+            print('Moves:')
+            for move in player.score.history:
+                print('   -', move)
+            print()
+    
     def _play_again(self):
         prompt = 'Play again? (y/n)'
 
@@ -191,7 +197,6 @@ class RPSGame:
                     break
 
         self._display_goodbye_msg()
-        print(self._human.score.history)
-        print(self._computer.score.history)
+        self._display_history()
 
 RPSGame().play()
