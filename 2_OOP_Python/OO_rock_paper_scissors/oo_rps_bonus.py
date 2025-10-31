@@ -124,7 +124,12 @@ class Hal(Computer):
         self.move = random.choice((self._preferred_move, random_choice))
 
 class Daneel(Computer):
-    pass
+    def __init__(self):
+        super().__init__()
+        self._name = 'R. Daneel Olivaw'
+    
+    def choose(self):
+        pass
 
 class Human(Player):
     def __init__(self):
