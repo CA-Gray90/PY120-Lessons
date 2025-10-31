@@ -90,15 +90,24 @@ class Computer(Player):
         # Do we need this line?
         self._name = 'Computer Player'
     
-    def personality(self):
-        # Each subclass has its own 'personality' or speak?
+    def choose(self):
+        self.move = random.choice(Player.CHOICES)
+
+    def speak(self):
+        # Each subclass has its own 'personality' or 'speak'?
         pass
 
     def __str__(self):
         return self._name
 
 class R2D2(Computer):
-    pass
+    def __init__(self):
+        super().__init__()
+        self._name = 'R2D2'
+        self._move = Rock()
+
+    def choose(self):
+        self.move = self._move
 
 class Hal(Computer):
     pass
@@ -110,9 +119,6 @@ class C3PO(Computer):
     def __init__(self):
         super().__init__()
         self._name = 'C3PO'
-    
-    def choose(self):
-        self.move = random.choice(Player.CHOICES)
 
 class Human(Player):
     def __init__(self):
@@ -139,7 +145,7 @@ class RPSGame:
 
     def __init__(self):
         self._human = Human()
-        self._computer = C3PO()
+        self._computer = R2D2()
 
     def _display_welcome_msg(self):
         print('Welcome to Rock Paper Scissors Lizard Spock!')
