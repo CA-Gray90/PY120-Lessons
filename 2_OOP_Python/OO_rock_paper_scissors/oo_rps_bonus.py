@@ -160,6 +160,9 @@ class RPSGame:
     def _display_scoreboard(self):
         print(f'{self._human.name} : {self._human.score.points}\n'
               f'{self._computer.name} : {self._computer.score.points}')
+        
+    def _display_history(self):
+        print(f'')
 
     def _play_again(self):
         prompt = 'Play again? (y/n)'
