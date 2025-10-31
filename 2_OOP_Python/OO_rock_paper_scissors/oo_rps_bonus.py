@@ -12,8 +12,7 @@ class Move:
     def __gt__(self, other):
         if isinstance(other, Move):
             return str(other) in self._beats
-        else:
-            return NotImplemented
+        return NotImplemented
 
 class Rock(Move):
     def __init__(self):
@@ -100,25 +99,32 @@ class Computer(Player):
     def __str__(self):
         return self._name
 
-class R2D2(Computer):
-    def __init__(self):
-        super().__init__()
-        self._name = 'R2D2'
-        self._move = Rock()
-
-    def choose(self):
-        self.move = self._move
-
-class Hal(Computer):
-    pass
-
-class Daneel(Computer):
-    pass
-
 class C3PO(Computer):
     def __init__(self):
         super().__init__()
-        self._name = 'C3PO'
+        self._name = 'C-3PO'
+
+class R2D2(Computer):
+    def __init__(self):
+        super().__init__()
+        self._name = 'R2-D2'
+        self._preferred_move = Rock()
+
+    def choose(self):
+        self.move = self._preferred_move
+
+class Hal(Computer):
+    def __init__(self):
+        super().__init__()
+        self._name = 'HAL 9000'
+        self._preferred_move = Scissors()
+    
+    def choose(self):
+        random_choice = random.choice(Player.CHOICES)
+        self.move = random.choice((self._preferred_move, random_choice))
+
+class Daneel(Computer):
+    pass
 
 class Human(Player):
     def __init__(self):
@@ -145,7 +151,7 @@ class RPSGame:
 
     def __init__(self):
         self._human = Human()
-        self._computer = R2D2()
+        self._computer = Hal()
 
     def _display_welcome_msg(self):
         print('Welcome to Rock Paper Scissors Lizard Spock!')
