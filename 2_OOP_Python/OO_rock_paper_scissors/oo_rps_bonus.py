@@ -10,9 +10,9 @@ class Move:
 
     # Each Move subclass knows who it can beat (using comparison operators)
     def __gt__(self, other):
-        if isinstance(other, Move):
-            return str(other) in self._beats
-        return NotImplemented
+        if not isinstance(other, Move):
+            return NotImplemented
+        return str(other) in self._beats
 
 class Rock(Move):
     def __init__(self):
