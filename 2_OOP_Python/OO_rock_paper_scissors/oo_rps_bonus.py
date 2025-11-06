@@ -288,3 +288,8 @@ class RPSGame:
         self._display_history()
 
 RPSGame().play()
+
+#Todo
+# Personalities? Or speak methods for computer players?
+# upgrade Daneel choices to pick statistically likely moves...?
+# Friendly UI, clear terminal, rules, etc etc.
