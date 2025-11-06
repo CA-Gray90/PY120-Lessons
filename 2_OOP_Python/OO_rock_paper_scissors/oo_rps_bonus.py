@@ -1,4 +1,5 @@
 import random
+import os
 
 class Move:
     def __init__(self):
@@ -181,14 +182,18 @@ class Human(Player):
 
 class RPSGame:
     POINTS_TO_WIN = 5
+    DISPLAY_LENGTH = 80
 
     def __init__(self):
         self._human = Human()
         self._computer = Daneel()
 
     def _display_welcome_msg(self):
-        print('Welcome to Rock Paper Scissors Lizard Spock!')
-        print(f'First to {RPSGame.POINTS_TO_WIN} wins!')
+        print(f'{' Welcome to Rock Paper Scissors Lizard Spock! '.center(RPSGame.DISPLAY_LENGTH, '*')}')
+        print(f'{f'First to {RPSGame.POINTS_TO_WIN} wins!'.center(RPSGame.DISPLAY_LENGTH, ' ')}')
+
+    def _display_ruleset(self):
+        
 
     def _display_goodbye_msg(self):
         print('Thanks for playing. Goodbye!')
@@ -273,6 +278,8 @@ class RPSGame:
         
     # Orchestration function to play the game
     def play(self):
+        os.system('clear')
+
         self._display_welcome_msg()
 
         while True:
