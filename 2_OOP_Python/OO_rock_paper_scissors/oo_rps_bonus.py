@@ -99,14 +99,11 @@ class Player:
     def name(self):
         return self._name
 
-class Computer(Player):
-    def __init__(self):
-        super().__init__()
-
     @staticmethod
     def available_choices():
         return [move for move in Player.CHOICES.values()]
-  
+
+class ComputerMixin:
     def choose(self):
         self.move = None
 
@@ -117,7 +114,7 @@ class Computer(Player):
     def __str__(self):
         return self._name
 
-class C3PO(Computer):
+class C3PO(ComputerMixin, Player):
     def __init__(self):
         super().__init__()
         self._name = 'C-3PO'
@@ -125,7 +122,7 @@ class C3PO(Computer):
     def choose(self):
         self.move = random.choice(self.available_choices())
 
-class R2D2(Computer):
+class R2D2(ComputerMixin, Player):
     def __init__(self):
         super().__init__()
         self._name = 'R2-D2'
@@ -134,7 +131,7 @@ class R2D2(Computer):
     def choose(self):
         self.move = self._preferred_move
 
-class Hal(Computer):
+class Hal(ComputerMixin, Player):
     def __init__(self):
         super().__init__()
         self._name = 'HAL 9000'
@@ -148,7 +145,7 @@ class Hal(Computer):
 
         self.move = random.choice((self._preferred_move, random_choice))
 
-class Daneel(Computer):
+class Daneel(ComputerMixin, Player):
     def __init__(self):
         super().__init__()
         self._name = 'R. Daneel Olivaw'
