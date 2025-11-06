@@ -188,12 +188,21 @@ class RPSGame:
         self._human = Human()
         self._computer = Daneel()
 
+    @staticmethod
+    def _prompt(text):
+        return f'> {text}'
+
+    def _enter_to_continue(self):
+        input(f'{self._prompt('Enter to continue...')}')
+
     def _display_welcome_msg(self):
         print(f'{' Welcome to Rock Paper Scissors Lizard Spock! '.center(RPSGame.DISPLAY_LENGTH, '*')}')
         print(f'{f'First to {RPSGame.POINTS_TO_WIN} wins!'.center(RPSGame.DISPLAY_LENGTH, ' ')}')
 
     def _display_ruleset(self):
-        
+        if self._prompt_user('Would you like to see the rules? (y/n)'):
+            print('some rules')
+            print()
 
     def _display_goodbye_msg(self):
         print('Thanks for playing. Goodbye!')
@@ -255,11 +264,9 @@ class RPSGame:
                 print('   -', move)
             print()
 
-    def _play_again(self):
-        prompt = 'Play again? (y/n)'
-
+    def _prompt_user(self, question):
         while True:
-            answer = input(f'{prompt}: ').lower()
+            answer = input(f'{self._prompt(question)}: ').lower()
             if answer in ('yes', 'no', 'y', 'n'):
                 return answer[0] == 'y'
 
@@ -279,13 +286,15 @@ class RPSGame:
     # Orchestration function to play the game
     def play(self):
         os.system('clear')
-
         self._display_welcome_msg()
+        self._display_ruleset()
+        print('Ready to play?')
+        self._enter_to_continue()
 
         while True:
             self._play_round()
             if self._display_overall_winner():
-                if self._play_again():
+                if self._prompt_user('Play again? (y/n)'):
                     self._reset()
                 else:
                     break
@@ -299,3 +308,4 @@ RPSGame().play()
 # Personalities? Or speak methods for computer players?
 # upgrade Daneel choices to pick statistically likely moves...?
 # Friendly UI, clear terminal, rules, etc etc.
+# prompt display for everytime a user needs to input something
