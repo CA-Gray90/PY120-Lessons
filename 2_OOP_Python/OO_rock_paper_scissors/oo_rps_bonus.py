@@ -70,7 +70,21 @@ class Score:
         self._game_points = 0
 
 class Player:
-    CHOICES = (Rock(), Paper(), Scissors(), Lizard(), Spock())
+    CHOICES = {
+        'rock' : Rock(),
+        'paper' : Paper(),
+        'scissors' : Scissors(),
+        'lizard' : Lizard(),
+        'spock' : Spock()
+    }
+
+    CHOICES_ABBREV = {
+        'r' : CHOICES['rock'],
+        'p' : CHOICES['paper'],
+        'sc' : CHOICES['scissors'],
+        'l' : CHOICES['lizard'],
+        'sp' : CHOICES['spock']
+    }
 
     def __init__(self):
         self.move = None
@@ -88,11 +102,13 @@ class Player:
 class Computer(Player):
     def __init__(self):
         super().__init__()
-        # Do we need this line?
-        self._name = 'Computer Player'
-    
+
+    @staticmethod
+    def available_choices():
+        return [move for move in Player.CHOICES.values()]
+  
     def choose(self):
-        self.move = random.choice(Player.CHOICES)
+        self.move = None
 
     def speak(self):
         # Each subclass has its own 'personality' or 'speak'?
@@ -105,12 +121,15 @@ class C3PO(Computer):
     def __init__(self):
         super().__init__()
         self._name = 'C-3PO'
+    
+    def choose(self):
+        self.move = random.choice(self.available_choices())
 
 class R2D2(Computer):
     def __init__(self):
         super().__init__()
         self._name = 'R2-D2'
-        self._preferred_move = Rock()
+        self._preferred_move = Player.CHOICES['rock']
 
     def choose(self):
         self.move = self._preferred_move
@@ -119,10 +138,14 @@ class Hal(Computer):
     def __init__(self):
         super().__init__()
         self._name = 'HAL 9000'
-        self._preferred_move = Scissors()
+        self._preferred_move = Player.CHOICES['scissors']
     
     def choose(self):
-        random_choice = random.choice(Player.CHOICES)
+        while True:
+            random_choice = random.choice(self.available_choices())
+            if random_choice != self._preferred_move:
+                break
+
         self.move = random.choice((self._preferred_move, random_choice))
 
 class Daneel(Computer):
@@ -131,12 +154,10 @@ class Daneel(Computer):
         self._name = 'R. Daneel Olivaw'
     
     def choose(self):
-        if self.score._other_move_history:
-            for choice in Player.CHOICES:
-                if str(choice) == self.score._other_move_history[-1]:
-                    self.move = choice
+        if len(self.score._other_move_history) >= 1:
+            self.move = Player.CHOICES[self.score._other_move_history[-1]]
         else:
-            self.move = random.choice(Player.CHOICES)
+            self.move = random.choice(self.available_choices())
 
 class Human(Player):
     def __init__(self):
@@ -144,19 +165,20 @@ class Human(Player):
         self._name = 'Human Player'
 
     def choose(self):
-        prompt = ("Enter either 'rock', 'paper', 'scissors', "
-                  "'lizard' or 'spock'")
+        prompt = ("Enter either '(r)ock', '(p)aper', '(sc)issors', "
+                  "'(l)izard' or '(sp)ock'")
 
         while True:
             choice = input(f'{prompt}: ').lower()
-            if choice in {str(move) for move in Player.CHOICES}:
+
+            if choice in Player.CHOICES_ABBREV.keys():
+                self.move = Player.CHOICES_ABBREV[choice]
+                break
+            elif choice in Player.CHOICES.keys():
+                self.move = Player.CHOICES[choice]
                 break
 
             print('Invalid input. ', end='')
-
-        for move in Player.CHOICES:
-            if str(move) == choice:
-                self.move = move
 
 class RPSGame:
     POINTS_TO_WIN = 5
