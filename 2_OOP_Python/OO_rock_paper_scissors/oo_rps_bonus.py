@@ -155,6 +155,8 @@ class Daneel(ComputerMixin, Player):
             self.move = Player.CHOICES[self.score._other_move_history[-1]]
         else:
             self.move = random.choice(self.available_choices())
+        # print(f'move history of daneel:')
+        # print(self.score.__dict__)
 
 class Human(Player):
     def __init__(self):
