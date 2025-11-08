@@ -184,6 +184,7 @@ class Human(Player):
 class RPSGame:
     POINTS_TO_WIN = 5
     DISPLAY_LENGTH = 80
+    GAME_TITLE = 'Rock, Paper, Scissors, Lizard, Spock!'
 
     def __init__(self):
         self._human = Human()
@@ -195,10 +196,14 @@ class RPSGame:
 
     def _enter_to_continue(self):
         input(f'{self._prompt('Enter to continue...')}')
+    
+    def _display_game_title(self):
+        print(f'{f' {RPSGame.GAME_TITLE} '.center(RPSGame.DISPLAY_LENGTH, '*')}')
 
     def _display_welcome_msg(self):
-        print(f'{' Welcome to Rock, Paper, Scissors, Lizard, Spock! '.center(RPSGame.DISPLAY_LENGTH, '*')}')
+        print(f'{f' Welcome to {RPSGame.GAME_TITLE} '.center(RPSGame.DISPLAY_LENGTH, '*')}')
         print(f'{f'First to {RPSGame.POINTS_TO_WIN} wins!'.center(RPSGame.DISPLAY_LENGTH, ' ')}')
+        print()
 
     def _display_ruleset(self):
         if self._prompt_user('Would you like to see the rules? (y/n)'):
@@ -210,6 +215,8 @@ class RPSGame:
                 print(''.join(ruleset[line]))
                 print()
                 self._enter_to_continue()
+            print()
+            print(f'Remember: First to {RPSGame.POINTS_TO_WIN} wins!')
             print()
 
     def _display_goodbye_msg(self):
@@ -300,6 +307,7 @@ class RPSGame:
         self._enter_to_continue()
         os.system('clear')
 
+        self._display_game_title()
         while True:
             self._play_round()
             if self._display_overall_winner():

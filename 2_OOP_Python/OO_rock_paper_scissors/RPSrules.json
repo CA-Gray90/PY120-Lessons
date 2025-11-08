@@ -1,7 +1,7 @@
 {
     "overview" : ["Welcome to Rock, Paper, Scissors, Lizard, Spock!\n",
         "In this game, you will be pitted against a computer player.\n",
-        "Winning a match wins you a point. First player to 5 points wins the game."],
+        "Winning a match wins you a point."],
     "computers_info" : ["There are several computer players to choose from:\n",
         "C-3PO, R2D2, Hal, and Daneel.\n",
         "\n",
@@ -20,5 +20,5 @@
         "- Spock vaporizes Rock and smashes Scissors."],
     "conclusion" : ["Once the game is over, you will also be given the opportunity to see ",
         "the game history.\n",
-        "Take the time to memorize these moves before moving on.\n"]
+        "Take the time to memorize these moves before moving on."]
 }
