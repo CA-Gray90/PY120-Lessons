@@ -1,5 +1,6 @@
 import random
 import os
+import json
 
 class Move:
     def __init__(self):
@@ -196,12 +197,19 @@ class RPSGame:
         input(f'{self._prompt('Enter to continue...')}')
 
     def _display_welcome_msg(self):
-        print(f'{' Welcome to Rock Paper Scissors Lizard Spock! '.center(RPSGame.DISPLAY_LENGTH, '*')}')
+        print(f'{' Welcome to Rock, Paper, Scissors, Lizard, Spock! '.center(RPSGame.DISPLAY_LENGTH, '*')}')
         print(f'{f'First to {RPSGame.POINTS_TO_WIN} wins!'.center(RPSGame.DISPLAY_LENGTH, ' ')}')
 
     def _display_ruleset(self):
         if self._prompt_user('Would you like to see the rules? (y/n)'):
-            print('some rules')
+            print()
+            with open('RPSrules.json', 'r') as file:
+                ruleset = json.load(file)
+
+            for line in ruleset:
+                print(''.join(ruleset[line]))
+                print()
+                self._enter_to_continue()
             print()
 
     def _display_goodbye_msg(self):
@@ -290,6 +298,7 @@ class RPSGame:
         self._display_ruleset()
         print('Ready to play?')
         self._enter_to_continue()
+        os.system('clear')
 
         while True:
             self._play_round()
@@ -305,6 +314,7 @@ class RPSGame:
 RPSGame().play()
 
 #Todo
+# Change CHOICES dict to tuples for keys?
 # Personalities? Or speak methods for computer players?
 # upgrade Daneel choices to pick statistically likely moves...?
 # Friendly UI, clear terminal, rules, etc etc.
