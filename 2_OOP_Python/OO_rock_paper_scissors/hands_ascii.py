@@ -8,6 +8,7 @@ rock = [
     "   __/(______)",
     "      (_____)",
     "---.__(____)",
+    "    ROCK!"
 ]
 
 paper = [
@@ -17,6 +18,7 @@ paper = [
     "   __/     ______)",
     "       (   _____)",
     "---.__ ( ____)",
+    "    PAPER!"
 ]
 
 scissors = [
@@ -26,6 +28,7 @@ scissors = [
     "   __/  _________)",
     "       (___)",
     "---.__ (__)",
+    "   SCISSORS!"
 ]
 
 lizard = [
@@ -35,6 +38,7 @@ lizard = [
     "    |-__ '' _)",
     "         __'",
     "---.__ /",
+    "   LIZARD!"
 ]
 
 spock = [
@@ -44,6 +48,7 @@ spock = [
     "   __/ (___)",
     "       ( __)_",
     "---.__  ______)",
+    "    SPOCK!"
 ]
 
 def display_hands(*hands):
@@ -51,6 +56,6 @@ def display_hands(*hands):
         os.system('clear')
         for line in hand:
             print(line)
-        time.sleep(0.5)
+        time.sleep(0.75)
 
 display_hands(rock, paper, scissors, lizard, spock)

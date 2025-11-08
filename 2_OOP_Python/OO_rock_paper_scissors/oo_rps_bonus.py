@@ -217,7 +217,7 @@ class RPSGame:
                 self._enter_to_continue()
             print()
             print(f'Remember: First to {RPSGame.POINTS_TO_WIN} wins!')
-            print()
+        print()
 
     def _display_goodbye_msg(self):
         print('Thanks for playing. Goodbye!')
@@ -297,9 +297,8 @@ class RPSGame:
         self._display_winner()
         self._add_to_history()
         self._display_scoreboard()
-        
-    # Orchestration function to play the game
-    def play(self):
+    
+    def _set_up_game(self):
         os.system('clear')
         self._display_welcome_msg()
         self._display_ruleset()
@@ -307,7 +306,11 @@ class RPSGame:
         self._enter_to_continue()
         os.system('clear')
 
+    # Orchestration function to play the game
+    def play(self):
+        self._set_up_game()
         self._display_game_title()
+
         while True:
             self._play_round()
             if self._display_overall_winner():
@@ -325,5 +328,5 @@ RPSGame().play()
 # Change CHOICES dict to tuples for keys?
 # Personalities? Or speak methods for computer players?
 # upgrade Daneel choices to pick statistically likely moves...?
-# Friendly UI, clear terminal, rules, etc etc.
+# Friendly UI, clear terminal, rules, countdowns... game pauses etc etc.
 # prompt display for everytime a user needs to input something
