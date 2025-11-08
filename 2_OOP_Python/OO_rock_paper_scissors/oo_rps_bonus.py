@@ -290,13 +290,6 @@ class RPSGame:
     def _reset(self):
         self._human.score.reset_points()
         self._computer.score.reset_points()
-
-    def _play_round(self):
-        self._human.choose()
-        self._computer.choose()
-        self._display_winner()
-        self._add_to_history()
-        self._display_scoreboard()
     
     def _set_up_game(self):
         os.system('clear')
@@ -304,20 +297,30 @@ class RPSGame:
         self._display_ruleset()
         print('Ready to play?')
         self._enter_to_continue()
+
+    def _play_round(self):
         os.system('clear')
+        self._display_game_title()
+        self._human.choose()
+        self._computer.choose()
+        self._display_winner()
+        self._add_to_history()
+        self._display_scoreboard()
 
     # Orchestration function to play the game
     def play(self):
         self._set_up_game()
-        self._display_game_title()
 
         while True:
             self._play_round()
-            if self._display_overall_winner():
-                if self._prompt_user('Play again? (y/n)'):
-                    self._reset()
-                else:
-                    break
+            if not self._display_overall_winner():
+                print('Ready for the next round?')
+                self._enter_to_continue()
+
+            elif self._prompt_user('Play again? (y/n)'):
+                self._reset()
+            else:
+                break
 
         self._display_goodbye_msg()
         self._display_history()
