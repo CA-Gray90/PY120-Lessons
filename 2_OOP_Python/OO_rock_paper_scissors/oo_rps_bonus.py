@@ -191,14 +191,16 @@ class RPSGame(PromptMixin):
     POINTS_TO_WIN = 5
     DISPLAY_LENGTH = 80
     GAME_TITLE = 'Rock, Paper, Scissors, Lizard, Spock!'
+    OPPONENTS = {
+        '1' : C3PO(),
+        '2' : R2D2(),
+        '3' : Hal(),
+        '4' : Daneel()
+    }
 
     def __init__(self):
         self._human = Human()
-        self._computer = Daneel()
-
-    # @staticmethod
-    # def _prompt(text):
-    #     return f'> {text}'
+        self._computer = None
 
     def _enter_to_continue(self):
         input(f'{self._prompt('Enter to continue...')}')
@@ -226,8 +228,27 @@ class RPSGame(PromptMixin):
             print(f'Remember: First to {RPSGame.POINTS_TO_WIN} wins!')
         print()
     
+    def _choose_opponent(self):
+        print('Choose your opponent!')
+        print()
+        print(', '.join([f'({num}): {opponent.name}'
+                         for num, opponent in self.OPPONENTS.items()
+                         ]))
+        print()
+        while True:
+            choice = input(f'{self._prompt('Enter choice: ')}')
+            if choice in self.OPPONENTS.keys():
+                break
+            else:
+                print('Invalid input. Enter either 1, 2, 3 or 4.')
+
+        print(f'You have chosen: {self.OPPONENTS[choice].name}')
+        self._computer = self.OPPONENTS[choice]
+
     def _display_game_countdown(self):
+        print()
         print('Game will start in...')
+        time.sleep(1)
         for num in range(3, 0, -1):
             print(f'{num}...')
             time.sleep(1)
@@ -308,7 +329,7 @@ class RPSGame(PromptMixin):
 
     def _reset(self):
         self._human.score.reset_points()
-        self._computer.score.reset_points()
+        # self._computer.score.reset_points()
     
     def _program_start(self):
         os.system('clear')
@@ -318,9 +339,10 @@ class RPSGame(PromptMixin):
         self._enter_to_continue()
 
     def _set_up_game(self):
-        self._reset()
         os.system('clear')
         self._display_game_title()
+        self._choose_opponent()
+        self._enter_to_continue()
         self._display_game_countdown()
 
     def _play_round(self):
@@ -347,6 +369,7 @@ class RPSGame(PromptMixin):
                     self._enter_to_continue()
 
                 elif self._prompt_user('Play again? (y/n)'):
+                    self._reset()
                     break
 
                 else:
