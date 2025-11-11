@@ -1,6 +1,7 @@
 import random
 import os
 import json
+import time
 
 class Move:
     def __init__(self):
@@ -160,13 +161,18 @@ class Daneel(ComputerMixin, Player):
         # print(f'move history of daneel:')
         # print(self.score.__dict__)
 
-class Human(Player):
+class PromptMixin:
+    @staticmethod
+    def _prompt(text):
+        return f'> {text}'
+
+class Human(PromptMixin, Player):
     def __init__(self):
         super().__init__()
         self._name = 'Human Player'
 
     def choose(self):
-        prompt = ("Enter either '(r)ock', '(p)aper', '(sc)issors', "
+        prompt = self._prompt("Enter either '(r)ock', '(p)aper', '(sc)issors', "
                   "'(l)izard' or '(sp)ock'")
 
         while True:
@@ -179,9 +185,9 @@ class Human(Player):
                 self.move = Player.CHOICES[choice]
                 break
 
-            print('Invalid input. ', end='')
+            print('Invalid input.')
 
-class RPSGame:
+class RPSGame(PromptMixin):
     POINTS_TO_WIN = 5
     DISPLAY_LENGTH = 80
     GAME_TITLE = 'Rock, Paper, Scissors, Lizard, Spock!'
@@ -190,15 +196,16 @@ class RPSGame:
         self._human = Human()
         self._computer = Daneel()
 
-    @staticmethod
-    def _prompt(text):
-        return f'> {text}'
+    # @staticmethod
+    # def _prompt(text):
+    #     return f'> {text}'
 
     def _enter_to_continue(self):
         input(f'{self._prompt('Enter to continue...')}')
     
     def _display_game_title(self):
         print(f'{f' {RPSGame.GAME_TITLE} '.center(RPSGame.DISPLAY_LENGTH, '*')}')
+        print()
 
     def _display_welcome_msg(self):
         print(f'{f' Welcome to {RPSGame.GAME_TITLE} '.center(RPSGame.DISPLAY_LENGTH, '*')}')
@@ -218,6 +225,18 @@ class RPSGame:
             print()
             print(f'Remember: First to {RPSGame.POINTS_TO_WIN} wins!')
         print()
+    
+    def _display_game_countdown(self):
+        print('Game will start in...')
+        for num in range(3, 0, -1):
+            print(f'{num}...')
+            time.sleep(1)
+
+        print('Game Start!')
+        time.sleep(1)
+
+    def _display_match_countdown(self):
+        pass
 
     def _display_goodbye_msg(self):
         print('Thanks for playing. Goodbye!')
@@ -285,7 +304,7 @@ class RPSGame:
             if answer in ('yes', 'no', 'y', 'n'):
                 return answer[0] == 'y'
 
-            print('Invalid input. ', end='')
+            print('Invalid input.')
 
     def _reset(self):
         self._human.score.reset_points()
@@ -297,6 +316,9 @@ class RPSGame:
         self._display_ruleset()
         print('Ready to play?')
         self._enter_to_continue()
+        os.system('clear')
+        self._display_game_title()
+        self._display_game_countdown()
 
     def _play_round(self):
         os.system('clear')

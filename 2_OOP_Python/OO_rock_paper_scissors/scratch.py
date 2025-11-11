@@ -1,9 +1,9 @@
-d = {
-    ('r', 'rock') : 'Its a rock choice',
-    ('p', 'paper') : 'Its a paper choice'
-}
+import time
+print('Game will start in:')
+time.sleep(1)
+for num in range(3, 0, -1):
+    print(f'{num}...')
+    time.sleep(1)
 
-choice = input('input r or p: ')
-for key in d.keys():
-    if choice in key:
-        print(d[key])
+print('Game Start!')
+time.sleep(1)
