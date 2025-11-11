@@ -310,12 +310,15 @@ class RPSGame(PromptMixin):
         self._human.score.reset_points()
         self._computer.score.reset_points()
     
-    def _set_up_game(self):
+    def _program_start(self):
         os.system('clear')
         self._display_welcome_msg()
         self._display_ruleset()
         print('Ready to play?')
         self._enter_to_continue()
+
+    def _set_up_game(self):
+        self._reset()
         os.system('clear')
         self._display_game_title()
         self._display_game_countdown()
@@ -331,18 +334,24 @@ class RPSGame(PromptMixin):
 
     # Orchestration function to play the game
     def play(self):
-        self._set_up_game()
+        self._program_start()
+        keep_playing = True
 
-        while True:
-            self._play_round()
-            if not self._display_overall_winner():
-                print('Ready for the next round?')
-                self._enter_to_continue()
+        while keep_playing:
+            self._set_up_game()
 
-            elif self._prompt_user('Play again? (y/n)'):
-                self._reset()
-            else:
-                break
+            while True:
+                self._play_round()
+                if not self._display_overall_winner():
+                    print('Ready for the next round?')
+                    self._enter_to_continue()
+
+                elif self._prompt_user('Play again? (y/n)'):
+                    break
+
+                else:
+                    keep_playing = False
+                    break
 
         self._display_goodbye_msg()
         self._display_history()
