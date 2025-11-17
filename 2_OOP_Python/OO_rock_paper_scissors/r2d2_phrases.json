@@ -16,7 +16,7 @@
         "*Whirr*",
         "*Whistle*"
     ],
-    "excited" : [
+    "winning_comments" : [
         "*Whoop-whistle*!",
         "*Stamp-stamp*!!",
         "*Whirr-buzz*!!",
@@ -25,7 +25,7 @@
         "B-b-b-beeep!",
         "Wooo-woo!"
     ],
-    "sad" : [
+    "losing_comments" : [
         "Wooooooo....",
         "*Shuffle*....",
         "*Shuffle-shuffle*....",

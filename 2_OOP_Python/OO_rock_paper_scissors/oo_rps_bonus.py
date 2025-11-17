@@ -110,9 +110,18 @@ class ComputerMixin:
     def choose(self):
         self.move = None
 
-    def speak(self):
-        # Each subclass has its own 'personality' or 'speak'?
-        pass
+    def _get_phrases(self, file_name):
+        with open(file_name, 'r') as file:
+            return json.load(file)
+
+    def introduce(self):
+        return random.choice(self._phrases['introductions'])
+    
+    def winning_comment(self):
+        return random.choice(self._phrases['winning_comments'])
+    
+    def losing_comment(self):
+        return random.choice(self._phrases['losing_comments'])
 
     def __str__(self):
         return self._name
@@ -121,6 +130,7 @@ class C3PO(ComputerMixin, Player):
     def __init__(self):
         super().__init__()
         self._name = 'C-3PO'
+        self._phrases = self._get_phrases('c3po_phrases.json')
     
     def choose(self):
         self.move = random.choice(self.available_choices())
@@ -130,6 +140,20 @@ class R2D2(ComputerMixin, Player):
         super().__init__()
         self._name = 'R2-D2'
         self._preferred_move = Player.CHOICES['rock']
+        self._phrases = self._get_phrases('r2d2_phrases.json')
+    
+    def introduce(self):
+        introduction_phrase = []
+        for _ in range(random.randrange(4, 6)):
+            introduction_phrase.append(random.choice(self._phrases['normal_expressions']))
+        
+        return ' '.join(introduction_phrase)
+
+    def winning_comment(self):
+        return self.introduce() + f' {super().winning_comment()}'
+
+    def losing_comment(self):
+        return self.introduce() + f' {super().losing_comment()}'
 
     def choose(self):
         self.move = self._preferred_move
@@ -139,6 +163,7 @@ class Hal(ComputerMixin, Player):
         super().__init__()
         self._name = 'HAL 9000'
         self._preferred_move = Player.CHOICES['scissors']
+        self._phrases = self._get_phrases('hal_phrases.json')
     
     def choose(self):
         while True:
@@ -152,6 +177,7 @@ class Daneel(ComputerMixin, Player):
     def __init__(self):
         super().__init__()
         self._name = 'R. Daneel Olivaw'
+        self._phrases = self._get_phrases('daneel_phrases.json')
     
     def choose(self):
         if len(self.score._other_move_history) >= 1:
@@ -244,6 +270,9 @@ class RPSGame(PromptMixin):
 
         print(f'You have chosen: {self.OPPONENTS[choice].name}')
         self._computer = self.OPPONENTS[choice]
+        print()
+        print(f'{self._computer.name}:\n{self._computer.introduce()}')
+        print()
 
     def _display_game_countdown(self):
         print()
@@ -298,9 +327,15 @@ class RPSGame(PromptMixin):
     def _display_overall_winner(self):
         if self._human.score.points == RPSGame.POINTS_TO_WIN:
             print('You are the overall winner!')
+            print()
+            print(f'{self._computer.name}:\n{self._computer.losing_comment()}')
+            print()
             return True
         elif self._computer.score.points == RPSGame.POINTS_TO_WIN:
             print(f'{self._computer} is the overall winner!')
+            print()
+            print(f'{self._computer.name}:\n{self._computer.winning_comment()}')
+            print()
             return True
         else:
             return False
