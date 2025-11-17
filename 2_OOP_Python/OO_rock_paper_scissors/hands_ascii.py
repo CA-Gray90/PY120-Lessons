@@ -51,7 +51,7 @@ spock = [
     "    SPOCK!"
 ]
 
-def display_hands(*hands):
+def display_hands(hands):
     for hand in hands:
         os.system('clear')
         for line in hand:

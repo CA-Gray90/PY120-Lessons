@@ -6,6 +6,16 @@ import time
 class Move:
     def __init__(self):
         self._beats = None
+        self._visual_display = None
+
+    @staticmethod
+    def _get_display(file_name):
+        with open(file_name, 'r') as file:
+            return json.load(file)
+
+    def display(self):
+        for line in self._visual_display['display']:
+            print(line)
 
     # Each subclass returns its name lowercased when coerced to a string
     def __str__(self):
@@ -19,28 +29,28 @@ class Move:
 
 class Rock(Move):
     def __init__(self):
-        super().__init__()
         self._beats = ('scissors', 'lizard')
+        self._visual_display = self._get_display('rock_ascii.json')
 
 class Paper(Move):
     def __init__(self):
-        super().__init__()
         self._beats = ('rock', 'spock')
+        self._visual_display = self._get_display('paper_ascii.json')
 
 class Scissors(Move):
     def __init__(self):
-        super().__init__()
         self._beats = ('lizard', 'paper')
+        self._visual_display = self._get_display('scissors_ascii.json')
 
 class Lizard(Move):
     def __init__(self):
-        super().__init__()
         self._beats = ('paper', 'spock')
+        self._visual_display = self._get_display('lizard_ascii.json')
 
 class Spock(Move):
     def __init__(self):
-        super().__init__()
         self._beats = ('rock', 'scissors')
+        self._visual_display = self._get_display('spock_ascii.json')
 
 class Score:
     def __init__(self):
@@ -107,12 +117,13 @@ class Player:
         return [move for move in Player.CHOICES.values()]
 
 class ComputerMixin:
-    def choose(self):
-        self.move = None
-
-    def _get_phrases(self, file_name):
+    @staticmethod
+    def _get_phrases(file_name):
         with open(file_name, 'r') as file:
             return json.load(file)
+
+    def choose(self):
+        self.move = None
 
     def introduce(self):
         return random.choice(self._phrases['introductions'])
@@ -365,6 +376,14 @@ class RPSGame(PromptMixin):
     def _reset(self):
         self._human.score.reset_points()
         # self._computer.score.reset_points()
+
+    def _display_match_countdown(self):
+        moves = Player.CHOICES.values()
+        for move in moves:
+            os.system('clear')
+            self._display_game_title()
+            move.display()
+            time.sleep(0.5)
     
     def _program_start(self):
         os.system('clear')
@@ -385,6 +404,9 @@ class RPSGame(PromptMixin):
         self._display_game_title()
         self._human.choose()
         self._computer.choose()
+        self._display_match_countdown()
+        os.system('clear')
+        self._display_game_title()
         self._display_winner()
         self._add_to_history()
         self._display_scoreboard()
@@ -418,9 +440,5 @@ RPSGame().play()
 
 # TODO:
 # - Change CHOICES dict to tuples for keys? OR Implement a function that can translate the input
-# - Personalities? Or speak methods for computer players?
-# - upgrade Daneel choices to pick statistically likely moves...?
 # - Friendly UI, clear terminal, rules, countdowns... game pauses etc etc.
 # - scoreboard display at top for each round
-# - visual display for each RPS match - each object has a visual display and knows
-# - how to display it
