@@ -92,11 +92,11 @@ class Player:
     }
 
     CHOICES_ABBREV = {
-        'r' : CHOICES['rock'],
-        'p' : CHOICES['paper'],
-        'sc' : CHOICES['scissors'],
-        'l' : CHOICES['lizard'],
-        'sp' : CHOICES['spock']
+        'r' : 'rock', 
+        'p' : 'paper',
+        'sc' : 'scissors',
+        'l' : 'lizard',
+        'sp' : 'spock'
     }
 
     def __init__(self):
@@ -195,8 +195,6 @@ class Daneel(ComputerMixin, Player):
             self.move = Player.CHOICES[self.score._other_move_history[-1]]
         else:
             self.move = random.choice(self.available_choices())
-        # print(f'move history of daneel:')
-        # print(self.score.__dict__)
 
 class PromptMixin:
     @staticmethod
@@ -214,11 +212,10 @@ class Human(PromptMixin, Player):
 
         while True:
             choice = input(f'{prompt}: ').lower()
+            if choice in Player.CHOICES_ABBREV:
+                choice = Player.CHOICES_ABBREV[choice]
 
-            if choice in Player.CHOICES_ABBREV.keys():
-                self.move = Player.CHOICES_ABBREV[choice]
-                break
-            elif choice in Player.CHOICES.keys():
+            if choice in Player.CHOICES.keys():
                 self.move = Player.CHOICES[choice]
                 break
 
@@ -384,7 +381,7 @@ class RPSGame(PromptMixin):
             self._display_game_title()
             move.display()
             time.sleep(0.5)
-    
+
     def _program_start(self):
         os.system('clear')
         self._display_welcome_msg()
@@ -439,6 +436,5 @@ class RPSGame(PromptMixin):
 RPSGame().play()
 
 # TODO:
-# - Change CHOICES dict to tuples for keys? OR Implement a function that can translate the input
 # - Friendly UI, clear terminal, rules, countdowns... game pauses etc etc.
 # - scoreboard display at top for each round
