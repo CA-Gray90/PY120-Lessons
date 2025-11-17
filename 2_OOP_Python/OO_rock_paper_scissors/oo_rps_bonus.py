@@ -82,6 +82,11 @@ class Score:
     def reset_points(self):
         self._game_points = 0
 
+class PromptMixin:
+    @staticmethod
+    def _prompt(text):
+        return f'> {text}'
+
 class Player:
     CHOICES = {
         'rock' : Rock(),
@@ -195,11 +200,6 @@ class Daneel(ComputerMixin, Player):
             self.move = Player.CHOICES[self.score._other_move_history[-1]]
         else:
             self.move = random.choice(self.available_choices())
-
-class PromptMixin:
-    @staticmethod
-    def _prompt(text):
-        return f'> {text}'
 
 class Human(PromptMixin, Player):
     def __init__(self):
@@ -349,8 +349,22 @@ class RPSGame(PromptMixin):
             return False
     
     def _display_scoreboard(self):
-        print(f'{self._human.name} : {self._human.score.points}\n'
-              f'{self._computer} : {self._computer.score.points}')
+        human_score = self._human.score._game_points
+        computer_score = self._computer.score._game_points
+    
+        lines = [
+            f'{self._human.name} : {human_score}',
+            f'{self._computer.name} : {computer_score}'
+        ]
+    
+        display_length = len(max(lines, key=len)) + 2
+        boarder = f'+{'-' * display_length}+'.center(self.DISPLAY_LENGTH, ' ')
+    
+        print(boarder)
+        for line in lines:
+            print(f'| {line.ljust(display_length - 1, ' ')}|'.center(self.DISPLAY_LENGTH, ' '))
+        print(boarder)
+        print()
         
     def _display_history(self):
         print('Move History:')
@@ -396,17 +410,19 @@ class RPSGame(PromptMixin):
         self._enter_to_continue()
         self._display_game_countdown()
 
-    def _play_round(self):
+    def _display_match_title(self):
         os.system('clear')
         self._display_game_title()
+        self._display_scoreboard()
+
+    def _play_round(self):
+        self._display_match_title()
         self._human.choose()
         self._computer.choose()
         self._display_match_countdown()
-        os.system('clear')
-        self._display_game_title()
+        self._display_match_title()
         self._display_winner()
         self._add_to_history()
-        self._display_scoreboard()
 
     # Orchestration function to play the game
     def play(self):
