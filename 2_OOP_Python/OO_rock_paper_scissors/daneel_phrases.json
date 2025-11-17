@@ -1,0 +1,34 @@
+{
+    "introductions": [
+        "I am R. Daneel Olivaw. It is a pleasure to make your acquaintance.",
+        "My name is R. Daneel Olivaw. I am assigned to provide an entertaining game.",
+        "You may call me Daneel Olivaw. I assure you, I am here to help and to provide an entertaining game.",
+        "I am R. Daneel Olivaw, engaged in long-term studies of human societal and gaming, development. This shall form part of my research.",
+        "I am R. Daneel Olivaw. Yes — I am a robot, but your entertainment remains my foremost priority.",
+        "I shall introduce myself. I am R. Daneel Olivaw, pleased to make your acquaintance.",
+        "Daneel Olivaw, it shall be a pleasure to provide an entertaining game.",
+        "Daneel Olivaw, and yes - I am a robot, older than you might think though I remember quite clearly how to play this game.",
+        "I am R. Daneel Olivaw, and as guardian of humanity, providing gaming entertaining is one of my priorities.",
+        "I am Daneel, and as a Robot, by law, I cannot do you any harm in this game. Let us play."
+    ],
+    "winning_comments": [
+        "It appears I have won. I assure you, my intention was only to play to the best of my capabilities, as I'm sure was yours.",
+        "Victory is mine in this instance. I hope the outcome is not displeasing to you.",
+        "The game concludes in my favour. Your strategy was nonetheless most instructive.",
+        "This game ends with my victory. I thank you. Competition, even in simple form, is valuable for understanding human behaviour.",
+        "I am declared the winner. Shall we play again?",
+        "I have secured the win. Please be assured that no harm or distress is intended.",
+        "The result is in my favour. Shall we play once more?",
+        "It seems I have won. I assure you, this was not intended to cause emotional harm… unless mild irritation qualifies.",
+        "I appear to have achieved victory again. I hope this does not compromise our continued cooperation."
+    ],
+    "losing_comments": [
+        "The game is yours. I congratulate you sincerely; your strategy was both elegant and efficient.",
+        "You have won. I am pleased that my participation contributed to your enjoyment, as the First Law encourages.",
+        "I concede defeat. Your reasoning surpassed mine in this instance, and I appreciate the opportunity to learn.",
+        "You have defeated me. I assure you I did not lose intentionally… though the First Law does require me to avoid harming human morale.",
+        "A human victory! I will ensure this outcome is recorded accurately — unless doing so would cause you embarrassment, of course.",
+        "You are the clear winner. If it improves your satisfaction, I am prepared to claim I never saw your winning move coming — though that would not be strictly factual.",
+        "You have won. I am relieved to report that no robotic laws were violated in the making of your triumph."
+    ]
+}

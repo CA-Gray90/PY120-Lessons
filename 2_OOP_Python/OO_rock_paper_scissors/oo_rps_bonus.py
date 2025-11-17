@@ -381,9 +381,11 @@ class RPSGame(PromptMixin):
 
 RPSGame().play()
 
-#Todo
-# Change CHOICES dict to tuples for keys?
-# Personalities? Or speak methods for computer players?
-# upgrade Daneel choices to pick statistically likely moves...?
-# Friendly UI, clear terminal, rules, countdowns... game pauses etc etc.
-# prompt display for everytime a user needs to input something
+# TODO:
+# - Change CHOICES dict to tuples for keys? OR Implement a function that can translate the input
+# - Personalities? Or speak methods for computer players?
+# - upgrade Daneel choices to pick statistically likely moves...?
+# - Friendly UI, clear terminal, rules, countdowns... game pauses etc etc.
+# - scoreboard display at top for each round
+# - visual display for each RPS match - each object has a visual display and knows
+# - how to display it

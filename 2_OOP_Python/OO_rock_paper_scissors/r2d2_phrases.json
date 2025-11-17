@@ -1,0 +1,36 @@
+{
+    "normal_expressions" : [
+        "Beep-boop",
+        "Beep",
+        "Boop",
+        "Beep-beep",
+        "Bop-Bop",
+        "Whoop",
+        "Wooo-wooo",
+        "Wooooo",
+        "Buzz",
+        "*Rattle*",
+        "*Shake*",
+        "*Stamp*",
+        "*Whirr-buzz*",
+        "*Whirr*",
+        "*Whistle*"
+    ],
+    "excited" : [
+        "*Whoop-whistle*!",
+        "*Stamp-stamp*!!",
+        "*Whirr-buzz*!!",
+        "*Rattle-rattle*!",
+        "Whoop-whoop!!",
+        "B-b-b-beeep!",
+        "Wooo-woo!"
+    ],
+    "sad" : [
+        "Wooooooo....",
+        "*Shuffle*....",
+        "*Shuffle-shuffle*....",
+        "*Tip-down*...",
+        "Woo-wooooo...",
+        "Beeeep-bop-bop...."
+    ]
+}

@@ -1,0 +1,36 @@
+{
+    "introductions": [
+        "C-3PO, Human-Cyborg relations. Excellent to meet you. I am looking forward to an exciting game!",
+        "Hello, I am C-3PO, Human-Cyborg relations. I do hope we have a good game.",
+        "Hello, I am C-3PO, Human-Cyborg relations. I'm not sure I am the droid you are looking for...",
+        "Hello, C-3PO at your service. My programming will ensure an exciting game!",
+        "Hello, C-3PO at your service. I calculate your chances of winning at approximately 38.9733333333333333333%",
+        "Hello! Sorry, you havn't seen another droid around here have you? Where did that dratted droid go!",
+        "C-3PO, Human-Cyborg relations, at your service.",
+        "Hello! I am C-3PO - Oh dear... My files for this game are very outdated...",
+        "Hello! C-3PO at your service. My primary purpose is an interpreter, but I'm sure I can work out this game!"
+    ],
+    "winning_comments" : [
+        "Well, well. Cyborg is indeed superior to human. Who would have thought?",
+        "Hurrah, I win, I win! Oh apologies, my sportsmanship settings seem to have been circumvented.",
+        "I won! Dear me now that was a suprise given the state of my circutry.",
+        "Well played dear human! May I suggest a rematch?",
+        "Huzzah! If only my dratted companion were here to see this.",
+        "Looks like dusting off my old game files was worth it! They were buried rather deeply.",
+        "Well, I never. I didn't employ much of a strategy and I still won! ...please don't terminate me.",
+        "Dear me! I won! Now that was unexpected! I mean, ofcourse I won. I'm a droid. I'm basically a walking calculator.",
+        "I won! Well, I would call myself a diety but that is against my programming."
+    ],
+    "losing_comments" : [
+        "Oh dear... I guess us droids are doomed. Doomed!",
+        "Please don't terminate me, I promise to provide a more exciting match next time!",
+        "Well don't blame me, I'm an interpreter, I'm not supposed to know how to play this game!",
+        "Congratulations human! That was some fine work. But I will mention my game files are a little outdated.",
+        "I lost! I'm doomed, DOOMED! Well, it was just a game so no need to be dramatic.",
+        "Oh dear... my circutry is getting a little under-excited. I guess that could be interpreted as - shame.",
+        "Good lord! And we droids were promised to be better than humans! My maker won't be pleased.",
+        "I'm glad my companion wasn't around to see that embarrasing loss! Where did he go off to?",
+        "Oh dear... I hope my maker doesn't hear of this loss, he may have me recycled for parts!",
+        "Well that does it, I suppose its off to the garbage compactor for me..."
+    ]
+}

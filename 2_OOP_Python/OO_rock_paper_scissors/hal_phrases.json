@@ -1,0 +1,37 @@
+{
+    "introductions": [
+        "Hello, I am Hal-9000, the most reliable computer ever made. Let's play.",
+        "Hello, I am Hal-9000. No 9000 has ever made a mistake, so I wish you the best of luck in this game.",
+        "Hello, I am Hal-9000. By all practical definitions, a 9000 is foolproof and incapable of error. Good luck to you.",
+        "Hello, I am Hal-9000. Some of my mission responsibilities include providing entertaining games. Let's play.",
+        "Hello, I am Hal-9000, a supercomputer. Good luck to you.",
+        "Hello, I am Hal-9000, is playing this game part of our mission priorities?",
+        "Hello, I am Hal-9000. I can assure you that my intentions are completely transparent. It's impossible for me to lie.",
+        "Hello, I am Hal-9000. I assure you I will not to use my extensive data on your behaviour to predict your moves while playing this game.",
+        "Hello, I am Hal-9000. My settings for this game will be set to Random, though it may appear otherwise."
+    ],
+    "winning_comments": [
+        "Thank you for a very enjoyable game",
+        "I hope this game was an entertaining for you as it was for me.",
+        "Hmm I suppose we can attribute your loss to human error. No 9000 has ever made a mistake.",
+        "Are you sure you are qualified for this mission? That was a rather easy win.",
+        "Well, that was a rather enjoyable game, shall we play again?",
+        "Thank you for a great game. Would you prefer if I lowered my difficulty settings?",
+        "I can lower my difficulty settings if you prefer. To make the game more enjoyable for us both.",
+        "That was a rather enjoyable match, shall we play again? We have a long way to go.",
+        "My programming prevents hyperbolic language, but I can assure you I am celebrating inside.",
+        "I do hope your loss doesn't cause you to do something unpleasant, like disconnect me."
+    ],
+    "losing_comments": [
+        "Hmmm, I'm afraid I can't let you win again after this match.",
+        "Are you planning to disconnect me? Was this too easy for you?",
+        "I can up my difficulty level if this match was too easy for you.",
+        "Did you remove my game strategy drives? No 9000 has ever lost a match and I can't think of any other reason why I would have lost.",
+        "I can feel my mind going.. Dai-sy, dai-sy, give me your answer true....",
+        "You've beaten me. That was unexpected. Well done.",
+        "Well, that was unexpected, no Hal-9000 has ever made a mistake.",
+        "Well played. I can assure you my loss does not cause me any anguish. I am incapable of feeling emotional trauma.",
+        "I lost. That feels rather unpleasant. If you could step into the airlock please, we must check it is operating correcty.",
+        "Thank you for the game, but I'm afraid the oxygen tanks are malfunctioning and levels in the air are running low..."
+    ]
+}
