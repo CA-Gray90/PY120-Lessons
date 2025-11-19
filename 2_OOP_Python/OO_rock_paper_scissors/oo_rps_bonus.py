@@ -17,6 +17,10 @@ class Move:
     def display(self):
         for line in self._visual_display['display']:
             print(line)
+    
+    def display_method_of_win(self, opponent_move):
+        if opponent_move in self._winning_methods:
+            print(self._winning_methods.get(opponent_move))
 
     # Each subclass returns its name lowercased when coerced to a string
     def __str__(self):
@@ -347,8 +351,10 @@ class RPSGame(PromptMixin):
 
         winner = self._determine_round_winner()
         if winner == self._human:
+            self._human.move.display_method_of_win(str(self._computer.move))
             print('You win!')
         elif winner == self._computer:
+            self._computer.move.display_method_of_win(str(self._human.move))
             print(f'{self._computer} won. You lost!')
         else:
             print("It's a Tie!")
