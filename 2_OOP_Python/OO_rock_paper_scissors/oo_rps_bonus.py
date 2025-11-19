@@ -452,5 +452,7 @@ class RPSGame(PromptMixin):
 RPSGame().play()
 
 # TODO:
-# - Friendly UI, clear terminal, rules, countdowns... game pauses etc etc.
+# - Improve UI for game results, display method of winning etc.
 # - scoreboard display at top for each round
+# - Choose to see game history
+# - Hal to choose scissors more often
