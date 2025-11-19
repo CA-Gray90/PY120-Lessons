@@ -351,13 +351,19 @@ class RPSGame(PromptMixin):
 
         winner = self._determine_round_winner()
         if winner == self._human:
+            print()
             self._human.move.display_method_of_win(str(self._computer.move))
             print('You win!')
+            print()
         elif winner == self._computer:
+            print()
             self._computer.move.display_method_of_win(str(self._human.move))
             print(f'{self._computer} won. You lost!')
+            print()
         else:
+            print()
             print("It's a Tie!")
+            print()
 
     def _display_overall_winner(self):
         if self._human.score.points == RPSGame.POINTS_TO_WIN:
