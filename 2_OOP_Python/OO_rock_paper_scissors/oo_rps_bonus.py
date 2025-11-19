@@ -7,6 +7,7 @@ class Move:
     def __init__(self):
         self._beats = None
         self._visual_display = None
+        self._winning_methods = {}
 
     @staticmethod
     def _get_display(file_name):
@@ -31,26 +32,46 @@ class Rock(Move):
     def __init__(self):
         self._beats = ('scissors', 'lizard')
         self._visual_display = self._get_display('rock_ascii.json')
+        self._winning_methods = {
+            'scissors' : 'Rock smashes Scissors!',
+            'lizard' : 'Rock crushes Lizard!'
+        }
 
 class Paper(Move):
     def __init__(self):
         self._beats = ('rock', 'spock')
         self._visual_display = self._get_display('paper_ascii.json')
+        self._winning_methods = {
+            'rock' : 'Paper covers Rock!',
+            'spock' : 'Paper disproves Spock!'
+        }
 
 class Scissors(Move):
     def __init__(self):
         self._beats = ('lizard', 'paper')
         self._visual_display = self._get_display('scissors_ascii.json')
+        self._winning_methods = {
+            'paper' : 'Scissors cuts Paper!',
+            'lizard' : 'Scissors decapitates Lizard!'
+        }
 
 class Lizard(Move):
     def __init__(self):
         self._beats = ('paper', 'spock')
         self._visual_display = self._get_display('lizard_ascii.json')
+        self._winning_methods = {
+            'spock' : 'Lizard poisons Spock!',
+            'paper' : 'Lizard eats Paper!'
+        }
 
 class Spock(Move):
     def __init__(self):
         self._beats = ('rock', 'scissors')
         self._visual_display = self._get_display('spock_ascii.json')
+        self._winning_methods = {
+            'rock' : 'Spock vapourizes Rock!',
+            'scissors' : 'Spock dismantles Scissors!'
+        }
 
 class Score:
     def __init__(self):
@@ -310,7 +331,7 @@ class RPSGame(PromptMixin):
         human_move = self._human.move
         computer_move = self._computer.move
 
-        # Determine winner and add points
+        # winner and add points
         if human_move > computer_move:
             self._human.score.add_point()
             return self._human
@@ -455,4 +476,4 @@ RPSGame().play()
 # - Improve UI for game results, display method of winning etc.
 # - scoreboard display at top for each round
 # - Choose to see game history
-# - Hal to choose scissors more often
+# - Daneel choice improvements? Is it worth the time?

@@ -13,11 +13,11 @@
     "rules" : ["There are also two additional moves that you can choose from: Lizard and Spock.\n",
         "\n",
         "The rules are as follows:\n",
-        "- Rock crushes Scissors and Lizard\n",
+        "- Rock smashes Scissors and crushes Lizard\n",
         "- Paper covers Rock and disproves Spock\n",
         "- Scissors cuts Paper and decapitates Lizard\n",
         "- Lizard eats Paper and poisons Spock\n",
-        "- Spock vaporizes Rock and smashes Scissors."],
+        "- Spock vaporizes Rock and dismantles Scissors."],
     "conclusion" : ["Once the game is over, you will also be given the opportunity to see ",
         "the game history.\n",
         "Take the time to memorize these moves before moving on."]
