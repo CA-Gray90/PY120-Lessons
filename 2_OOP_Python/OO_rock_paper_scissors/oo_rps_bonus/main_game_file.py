@@ -264,7 +264,8 @@ class Human(PromptMixin, Player):
         return self._opponents
 
     def add_opponents(self, opponent):
-        self.opponents.append(opponent)
+        if opponent not in self.opponents:
+            self.opponents.append(opponent)
 
 class RPSGame(PromptMixin):
     POINTS_TO_WIN = 5
@@ -456,6 +457,7 @@ class RPSGame(PromptMixin):
 
     def _reset(self):
         self._human.score.reset_points()
+        self._computer.score.reset_points()
 
     def _display_match_countdown(self):
         moves = Player.CHOICES.values()
@@ -520,6 +522,3 @@ class RPSGame(PromptMixin):
         self._display_goodbye_msg()
 
 RPSGame().play()
-
-#TODO:
-# Game doesn't correctly reset players if you choose the same opponent
