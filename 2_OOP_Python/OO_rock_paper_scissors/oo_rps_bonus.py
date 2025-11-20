@@ -230,6 +230,7 @@ class Human(PromptMixin, Player):
     def __init__(self):
         super().__init__()
         self._name = 'Human Player'
+        self._opponents = []
 
     def choose(self):
         prompt = self._prompt("Enter either '(r)ock', '(p)aper', '(sc)issors', "
@@ -245,6 +246,13 @@ class Human(PromptMixin, Player):
                 break
 
             print('Invalid input.')
+    
+    @property
+    def opponents(self):
+        return self._opponents
+
+    def add_opponents(self, opponent):
+        self.opponents.append(opponent)
 
 class RPSGame(PromptMixin):
     POINTS_TO_WIN = 5
@@ -404,9 +412,11 @@ class RPSGame(PromptMixin):
         
     def _display_history(self):
         if self._prompt_user('Would you like to see the move history? (y/n)'):
+            players = [self._human] + [player for player in self._human.opponents]
+            
             print()
             print('Move History:')
-            for player in (self._human, self._computer):
+            for player in players:
                 print(player.name)
                 print('Total Points:', player.score.total_points)
                 print('Moves:')
@@ -425,7 +435,6 @@ class RPSGame(PromptMixin):
 
     def _reset(self):
         self._human.score.reset_points()
-        # self._computer.score.reset_points()
 
     def _display_match_countdown(self):
         moves = Player.CHOICES.values()
@@ -439,14 +448,13 @@ class RPSGame(PromptMixin):
         os.system('clear')
         self._display_welcome_msg()
         self._display_ruleset()
-        print('Ready to play?')
-        self._enter_to_continue()
+        self._enter_to_continue('Press Enter if you are ready to choose your opponent...')
 
     def _set_up_game(self):
         os.system('clear')
         self._display_game_title()
         self._choose_opponent()
-        self._enter_to_continue()
+        self._enter_to_continue('Press Enter if you are ready to play!')
         self._display_game_countdown()
 
     def _display_match_title(self):
@@ -470,6 +478,7 @@ class RPSGame(PromptMixin):
 
         while keep_playing:
             self._set_up_game()
+            self._human.add_opponents(self._computer)
 
             while True:
                 self._play_round()
