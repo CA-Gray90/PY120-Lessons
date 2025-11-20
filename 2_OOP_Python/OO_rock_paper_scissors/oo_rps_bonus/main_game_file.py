@@ -520,3 +520,6 @@ class RPSGame(PromptMixin):
         self._display_goodbye_msg()
 
 RPSGame().play()
+
+#TODO:
+# Game doesn't correctly reset players if you choose the same opponent
