@@ -261,8 +261,11 @@ class RPSGame(PromptMixin):
         self._human = Human()
         self._computer = None
 
-    def _enter_to_continue(self):
-        input(f'{self._prompt('Enter to continue...')}')
+    def _enter_to_continue(self, msg=None):
+        if not msg:
+            input(f'{self._prompt('Enter to continue...')}')
+        else:
+            input(f'{self._prompt(msg)}')
     
     def _display_game_title(self):
         print(f'{f' {RPSGame.GAME_TITLE} '.center(RPSGame.DISPLAY_LENGTH, '*')}')
@@ -400,14 +403,17 @@ class RPSGame(PromptMixin):
         print()
         
     def _display_history(self):
-        print('Move History:')
-        for player in (self._human, self._computer):
-            print(player.name)
-            print('Total Points:', player.score.total_points)
-            print('Moves:')
-            for move in player.score.history:
-                print('   -', move)
+        if self._prompt_user('Would you like to see the move history? (y/n)'):
             print()
+            print('Move History:')
+            for player in (self._human, self._computer):
+                print(player.name)
+                print('Total Points:', player.score.total_points)
+                print('Moves:')
+                for move in player.score.history:
+                    print('   -', move)
+                print()
+            self._enter_to_continue('Press Enter to quit program...')
 
     def _prompt_user(self, question):
         while True:
@@ -479,13 +485,10 @@ class RPSGame(PromptMixin):
                     keep_playing = False
                     break
 
-        self._display_goodbye_msg()
         self._display_history()
+        self._display_goodbye_msg()
 
 RPSGame().play()
 
 # TODO:
-# - Improve UI for game results, display method of winning etc.
-# - scoreboard display at top for each round
-# - Choose to see game history
 # - Daneel choice improvements? Is it worth the time?
