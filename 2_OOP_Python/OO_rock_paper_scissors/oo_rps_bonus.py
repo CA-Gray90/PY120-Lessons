@@ -101,8 +101,10 @@ class Score:
         self._total_points += 1
 
     def add_moves(self, move, other_move):
-        self._own_move_history.append(str(move))
-        self._other_move_history.append(str(other_move))
+        own_history = self._own_move_history
+        other_history = self._other_move_history
+        own_history.append(move)
+        other_history.append(other_move)
     
     def reset_points(self):
         self._game_points = 0
