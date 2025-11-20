@@ -5,8 +5,8 @@ import time
 
 class Move:
     def __init__(self):
-        self._beats = None
-        self._visual_display = None
+        self._beats = set()
+        self._visual_display = {}
         self._winning_methods = {}
 
     @staticmethod
@@ -253,7 +253,7 @@ class Human(PromptMixin, Player):
             if choice in Player.CHOICES_ABBREV:
                 choice = Player.CHOICES_ABBREV[choice]
 
-            if choice in Player.CHOICES.keys():
+            if choice in Player.CHOICES:
                 self.move = Player.CHOICES[choice]
                 break
 
@@ -327,7 +327,7 @@ class RPSGame(PromptMixin):
 
         while True:
             choice = input(f'{self._prompt('Enter choice: ')}')
-            if choice in self.OPPONENTS.keys():
+            if choice in self.OPPONENTS:
                 break
             print('Invalid input. Enter either 1, 2, 3 or 4.')
 
@@ -362,7 +362,7 @@ class RPSGame(PromptMixin):
         human_move = self._human.move
         computer_move = self._computer.move
 
-        # winner and add points
+        # Determine winner and add points
         if human_move > computer_move:
             self._human.score.add_point()
             return self._human
