@@ -1,6 +1,6 @@
-import random
-import os
 import json
+import os
+import random
 import time
 
 class Move:
