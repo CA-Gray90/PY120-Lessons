@@ -395,7 +395,7 @@ class RPSGame(PromptMixin):
             print("It's a Tie!")
             print()
 
-    def _determine_overall_winner(self):
+    def _overall_winner(self):
         if self._human.score.points == RPSGame.POINTS_TO_WIN:
             return 'human'
         
@@ -405,22 +405,20 @@ class RPSGame(PromptMixin):
         return None
     
     def _display_overall_winner(self, winner):
-        if self._human.score.points == RPSGame.POINTS_TO_WIN:
-            print('You are the overall winner!')
-            print()
-            print(f'{self._computer.name}:\n{self._computer.losing_comment()}')
-            print()
-            # return True
-
-        if self._computer.score.points == RPSGame.POINTS_TO_WIN:
-            print(f'{self._computer} is the overall winner!')
-            print()
-            print(
-                f'{self._computer.name}:\n{self._computer.winning_comment()}')
-            print()
-            # return True
-
-        # return False
+        match winner:
+            case 'human':
+                print('You are the overall winner!')
+                print()
+                print(f'{self._computer.name}:\n'
+                      f'{self._computer.losing_comment()}')
+                print()
+            case 'computer':
+                print(f'{self._computer} is the overall winner!')
+                print()
+                print(
+                    f'{self._computer.name}:\n'
+                    f'{self._computer.winning_comment()}')
+                print()
 
     def _display_scoreboard(self):
         human_score = self._human.score.points
@@ -515,17 +513,22 @@ class RPSGame(PromptMixin):
 
             while True:
                 self._play_round()
-                if not self._display_overall_winner():
+                overall_winner = self._overall_winner()
+
+                if not overall_winner:
                     print('Ready for the next round?')
                     self._enter_to_continue()
 
-                elif self._prompt_user('Play again? (y/n)'):
-                    self._reset()
-                    break
-
                 else:
-                    keep_playing = False
-                    break
+                    self._display_overall_winner(overall_winner)
+
+                    if self._prompt_user('Play again? (y/n)'):
+                        self._reset()
+                        break
+
+                    else:
+                        keep_playing = False
+                        break
 
         self._display_history()
         self._display_goodbye_msg()
