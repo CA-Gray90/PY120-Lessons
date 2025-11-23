@@ -395,13 +395,22 @@ class RPSGame(PromptMixin):
             print("It's a Tie!")
             print()
 
-    def _display_overall_winner(self):
+    def _determine_overall_winner(self):
+        if self._human.score.points == RPSGame.POINTS_TO_WIN:
+            return 'human'
+        
+        if self._computer.score.points == RPSGame.POINTS_TO_WIN:
+            return 'computer'
+        
+        return None
+    
+    def _display_overall_winner(self, winner):
         if self._human.score.points == RPSGame.POINTS_TO_WIN:
             print('You are the overall winner!')
             print()
             print(f'{self._computer.name}:\n{self._computer.losing_comment()}')
             print()
-            return True
+            # return True
 
         if self._computer.score.points == RPSGame.POINTS_TO_WIN:
             print(f'{self._computer} is the overall winner!')
@@ -409,9 +418,9 @@ class RPSGame(PromptMixin):
             print(
                 f'{self._computer.name}:\n{self._computer.winning_comment()}')
             print()
-            return True
+            # return True
 
-        return False
+        # return False
 
     def _display_scoreboard(self):
         human_score = self._human.score.points
@@ -522,3 +531,4 @@ class RPSGame(PromptMixin):
         self._display_goodbye_msg()
 
 RPSGame().play()
+# Change display overall winner function
