@@ -36,7 +36,7 @@ How are things inherited?
 """
 
 # class Cat:
-#     counter = 0 # class variable
+#     counter = 0
 
 #     def __init__(self):
 #         self.__class__.counter = self.__class__.counter + 1
@@ -44,7 +44,6 @@ How are things inherited?
 # class GoodCat(Cat):
 #     pass
 
-# # print(vars(GoodCat))
 # a_cat = GoodCat()
 
 # print(Cat.counter)      # 0
