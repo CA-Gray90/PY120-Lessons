@@ -1,4 +1,5 @@
 import random
+import pdb
 
 class Square:
     EMPTY = ('    ', '    ')
@@ -11,6 +12,10 @@ class Square:
     @property
     def mark(self):
         return self._mark
+    
+    @property
+    def simple_mark(self):
+        return 'x' if self._mark == Square.X_MARK else 'o'
     
     @mark.setter
     def mark(self, marker):
@@ -40,6 +45,12 @@ class Board:
     # Keeps track of all the marks
     # Is it able to determine a winner, tie, etc?
     # A way to display itself to the terminal?
+
+    def count_markers_for(self, player, keys):
+        markers = [self._squares[key].simple_mark for key in keys]
+        pdb.set_trace()
+        return markers.count(player.marker)
+    
     def display(self):
         print()
         print(f'{self._squares[1].mark[0]}|{self._squares[2].mark[0]}|{self._squares[3].mark[0]}')
@@ -58,6 +69,12 @@ class Board:
     def unused_squares(self):
         return tuple(key for key, square in self._squares.items()
                      if square.is_unused())
+    
+    def is_full(self):
+        if len(self.unused_squares()) == 0:
+            print('Board is full')
+            return True
+        return False
 
 class Row:
     def __init__(self):
@@ -110,6 +127,12 @@ class Computer(Player):
     # difficulty/strategy?
 
 class TTTGame:
+    WINNING_COMBOS = (
+        (1, 2, 3), (4, 5, 6), (7, 8, 9),    # Rows
+        (1, 4, 7), (2, 5, 8), (3, 6, 9),    # Columns
+        (1, 5, 9), (3, 5, 7)                # Diagonals
+    )
+
     def __init__(self):
         # STUBS:
         # Need a board and two players
@@ -132,7 +155,6 @@ class TTTGame:
 
         while True:
             choice = input(f'Choose a square {valid_choices}: ')
-            # Better way to display choices left? 1, 2, or 3 for example
             if choice in [str(n) for n in valid_choices]:
                 break
             else:
@@ -145,6 +167,19 @@ class TTTGame:
         self._board.mark_square_at(choice, Computer.COMPUTER_MARK)
 
     def _game_is_over(self):
+        return self._board.is_full() or self._someone_won()
+
+    def _three_in_a_row(self, player, combo):
+        return self._board.count_markers_for(player, combo) == 3
+
+    def _someone_won(self):
+        for combo in TTTGame.WINNING_COMBOS:
+            if self._three_in_a_row(self._human, combo):
+                print('Human got 3 in a row')
+                return True
+            elif self._three_in_a_row(self._computer, combo):
+                ('Computer got 3 in a row')
+                return True
         return False
 
     def play(self):
@@ -174,6 +209,6 @@ game = TTTGame()
 game.play()
 
 # TODO:
-# Moves can currently overwrite each other.
-# Game currently loops indefinitely, there is no break condition yet
+# Display for choices for player could be cleaned up: 1, 2, or 4 (for example)
+# Game currently loops indefinitely, raises error when we get to a full board
 # NOTE Human mark and computer mark are defined as constants in Human and Computer class respectively
