@@ -1,18 +1,47 @@
 class Square:
-    def __init__(self):
-        pass
+    EMPTY = ['    ', '    ']
+    X_MARK = [r' \/ ', r' /\ ']
+    O_MARK = [r' /\ ', r' \/ ']
+
+    def __init__(self, marker):
+        match marker:
+            case 'x':
+                self._mark = Square.X_MARK
+            case 'o':
+                self._mark = Square.O_MARK
+            case None:
+                self._mark = Square.EMPTY
+    
+    @property
+    def mark(self):
+        return self._mark
+
     # STUB
     # Does the square keep track of its marker?
 
 class Board:
     def __init__(self):
-        pass
+        self._squares = {
+            n : Square(None) for n in range(1, 10)
+        }
+
     # STUB
     # Board has squares? 
     # Rows, columns?
     # Keeps track of all the marks
     # Is it able to determine a winner, tie, etc?
     # A way to display itself to the terminal?
+    def display(self):
+        print()
+        print(f'{self._squares[1].mark[0]}|{self._squares[2].mark[0]}|{self._squares[3].mark[0]}')
+        print(f'{self._squares[1].mark[1]}|{self._squares[2].mark[1]}|{self._squares[3].mark[0]}')
+        print(f'----+----+----')
+        print(f'{self._squares[4].mark[0]}|{self._squares[5].mark[0]}|{self._squares[6].mark[0]}')
+        print(f'{self._squares[4].mark[1]}|{self._squares[5].mark[1]}|{self._squares[6].mark[1]}')
+        print(f'----+----+----')
+        print(f'{self._squares[7].mark[0]}|{self._squares[8].mark[0]}|{self._squares[9].mark[0]}')
+        print(f'{self._squares[7].mark[1]}|{self._squares[8].mark[1]}|{self._squares[9].mark[1]}')
+        print()
 
 class Row:
     def __init__(self):
@@ -65,34 +94,36 @@ class Computer(Player):
 
 class TTTGame:
     def __init__(self):
-        # STUB:
+        # STUBS:
         # Main orchestration engine of the game
         # Need a board and two players
+        self._board = Board()
         pass
+        
+    def _display_welcome_msg(self):
+        print('Welcome to Tic Tac Toe!')
+
+    def _display_goodbye_msg(self):
+        print('Thanks for playing Tic Tac Toe. Goodbye!')
+
+    def _display_results(self):
+        pass
+
+    def _first_player_move(self):
+        pass
+
+    def _second_player_move(self):
+        pass
+
+    def _game_is_over(self):
+        return False
 
     def play(self):
         # Sets off the game. Main orchestration of the game
-
-        # Spike:
-        '''
-        - Displays welcome message
-        - Rules?
-        > Repeat until game is over:
-            - Display current state of board
-            - 1st Player marks a square
-            - If there is a winner: Exit the loop
-            - 2nd Player makrs a square
-            - If there is a winner: Exit the loop
-            
-        - Display current state of board
-        - Declare winner, display final result
-        - Exit Game
-        '''
-
         self._display_welcome_msg()
 
         while True:
-            self._display_board()
+            self._board.display()
 
             self._first_player_move()
             if self._game_is_over():
@@ -104,30 +135,9 @@ class TTTGame:
 
             break # Loop executes only once for now
 
-        self._display_board()
+        self._board.display()
         self._display_results()
         self._display_goodbye_msg()
-        
-    def _display_welcome_msg(self):
-        print('Welcome to Tic Tac Toe!')
-
-    def _display_goodbye_msg(self):
-        print('Thanks for playing Tic Tac Toe. Goodbye!')
-
-    def _display_results(self):
-        pass
-
-    def _display_board(self):
-        pass
-
-    def _first_player_move(self):
-        pass
-
-    def _second_player_move(self):
-        pass
-
-    def _game_is_over(self):
-        return False
     
 game = TTTGame()
 game.play()
