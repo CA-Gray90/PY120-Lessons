@@ -1,4 +1,8 @@
 import random
+import os
+
+def clear_screen():
+    os.system('clear')
 
 class Square:
     EMPTY = ''
@@ -77,12 +81,6 @@ class Board:
             return True
         return False
 
-class Row:
-    def __init__(self):
-        pass
-    # STUB:
-    # Need a way to identify 3 squares in a row, what a row is
-
 class Player:
     def __init__(self, marker):
         self._marker = marker
@@ -143,6 +141,7 @@ class TTTGame:
         pass
         
     def _display_welcome_msg(self):
+        clear_screen()
         print('Welcome to Tic Tac Toe!')
 
     def _display_goodbye_msg(self):
@@ -203,10 +202,12 @@ class TTTGame:
             self._computer_moves()
             if self._game_is_over():
                 break
-        
+            
             # Currently loops indefinitly
+            clear_screen()
 
-        # self._board.display()
+        clear_screen()
+        self._board.display()
         self._display_results()
         self._display_goodbye_msg()
     
