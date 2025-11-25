@@ -1,9 +1,9 @@
 class Square:
-    EMPTY = ['    ', '    ']
-    X_MARK = [r' \/ ', r' /\ ']
-    O_MARK = [r' /\ ', r' \/ ']
+    EMPTY = ('    ', '    ')
+    X_MARK = (r' \/ ', r' /\ ')
+    O_MARK = (r' /\ ', r' \/ ')
 
-    def __init__(self, marker):
+    def __init__(self, marker=None):
         match marker:
             case 'x':
                 self._mark = Square.X_MARK
@@ -22,7 +22,7 @@ class Square:
 class Board:
     def __init__(self):
         self._squares = {
-            n : Square(None) for n in range(1, 10)
+            n : Square() for n in range(1, 10)
         }
 
     # STUB
