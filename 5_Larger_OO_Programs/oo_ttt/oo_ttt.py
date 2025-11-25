@@ -21,6 +21,9 @@ class Square:
                 self._mark = Square.O_MARK
             case None:
                 self._mark = Square.EMPTY
+    
+    def is_unused(self):
+        return self._mark == Square.EMPTY
 
     # STUB
     # Does the square keep track of its marker?
@@ -52,22 +55,15 @@ class Board:
     def mark_square_at(self, key, marker):
         self._squares[key].mark = marker
 
+    def unused_squares(self):
+        return tuple(key for key, square in self._squares.items()
+                     if square.is_unused())
+
 class Row:
     def __init__(self):
         pass
     # STUB:
     # Need a way to identify 3 squares in a row, what a row is
-
-# class Marker:
-#     HUMAN_MARK = 'x'
-#     COMPUTER_MARK = 'o'
-#     # Maybe we can set these later
-
-#     def __init__(self):
-#         pass
-#     # STUB:
-#     # A mark object, either X or O.
-#     # IDentifies as belonging to either player
 
 class Player:
     def __init__(self, marker):
@@ -91,9 +87,6 @@ class Player:
     def mark(self):
         # A way to mark the board. 
         # Both players have a particular mark
-        pass
-
-    def play(self):
         pass
 
 class Human(Player):
@@ -135,9 +128,12 @@ class TTTGame:
         pass
 
     def _human_moves(self):
+        valid_choices = self._board.unused_squares()
+
         while True:
-            choice = input('Choose between 1 and 9: ')
-            if choice in [str(n) for n in range(1, 10)]:
+            choice = input(f'Choose a square {valid_choices}: ')
+            # Better way to display choices left? 1, 2, or 3 for example
+            if choice in [str(n) for n in valid_choices]:
                 break
             else:
                 print('Invalid choice. Try again.')
@@ -145,7 +141,7 @@ class TTTGame:
         self._board.mark_square_at(int(choice), Human.HUMAN_MARK)
 
     def _computer_moves(self):
-        choice = random.randint(1, 9)
+        choice = random.choice(self._board.unused_squares())
         self._board.mark_square_at(choice, Computer.COMPUTER_MARK)
 
     def _game_is_over(self):
@@ -162,15 +158,15 @@ class TTTGame:
             if self._game_is_over():
                 break
 
-            self._board.display()
+            # self._board.display()
 
             self._computer_moves()
             if self._game_is_over():
                 break
+        
+            # Currently loops indefinitly
 
-            break # Loop executes only once for now
-
-        self._board.display()
+        # self._board.display()
         self._display_results()
         self._display_goodbye_msg()
     
@@ -179,4 +175,5 @@ game.play()
 
 # TODO:
 # Moves can currently overwrite each other.
+# Game currently loops indefinitely, there is no break condition yet
 # NOTE Human mark and computer mark are defined as constants in Human and Computer class respectively
