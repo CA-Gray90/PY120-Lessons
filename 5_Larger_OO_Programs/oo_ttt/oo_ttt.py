@@ -1,3 +1,5 @@
+import random
+
 class Square:
     EMPTY = ('    ', '    ')
     X_MARK = (r' \/ ', r' /\ ')
@@ -56,16 +58,16 @@ class Row:
     # STUB:
     # Need a way to identify 3 squares in a row, what a row is
 
-class Marker:
-    HUMAN_MARK = 'x'
-    COMPUTER_MARK = 'o'
-    # Maybe we can set these later
+# class Marker:
+#     HUMAN_MARK = 'x'
+#     COMPUTER_MARK = 'o'
+#     # Maybe we can set these later
 
-    def __init__(self):
-        pass
-    # STUB:
-    # A mark object, either X or O.
-    # IDentifies as belonging to either player
+#     def __init__(self):
+#         pass
+#     # STUB:
+#     # A mark object, either X or O.
+#     # IDentifies as belonging to either player
 
 class Player:
     def __init__(self, marker):
@@ -95,16 +97,19 @@ class Player:
         pass
 
 class Human(Player):
+    HUMAN_MARK = 'x'
+
     def __init__(self):
-        super().__init__(Marker.HUMAN_MARK)
+        super().__init__(Human.HUMAN_MARK)
         pass
 
     # STUB:
     # Human player can make choice of square to mark
 
 class Computer(Player):
+    COMPUTER_MARK = 'o'
     def __init__(self):
-        super().__init__(Marker.COMPUTER_MARK)
+        super().__init__(Computer.COMPUTER_MARK)
         pass
 
     # STUB:
@@ -137,10 +142,11 @@ class TTTGame:
             else:
                 print('Invalid choice. Try again.')
 
-        self._board.mark_square_at(int(choice), 'x')
+        self._board.mark_square_at(int(choice), Human.HUMAN_MARK)
 
     def _computer_moves(self):
-        print('Computer moves')
+        choice = random.randint(1, 9)
+        self._board.mark_square_at(choice, Computer.COMPUTER_MARK)
 
     def _game_is_over(self):
         return False
@@ -164,9 +170,13 @@ class TTTGame:
 
             break # Loop executes only once for now
 
-        # self._board.display()
+        self._board.display()
         self._display_results()
         self._display_goodbye_msg()
     
 game = TTTGame()
 game.play()
+
+# TODO:
+# Moves can currently overwrite each other.
+# NOTE Human mark and computer mark are defined as constants in Human and Computer class respectively
