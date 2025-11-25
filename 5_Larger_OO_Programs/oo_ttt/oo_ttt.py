@@ -16,19 +16,19 @@ class Square:
     def __init__(self, marker=''):
         self._ascii_mark = None
         self.mark = marker
-    
+
     def _set_ascii_mark(self, marker):
         self._ascii_mark = Square.ASCII_MARKS[marker]
 
     @property
     def mark(self):
         return self._mark
-    
+
     @mark.setter
     def mark(self, marker):
         self._mark = marker
         self._set_ascii_mark(marker)
-    
+
     @property
     def ascii_mark(self):
         return self._ascii_mark
@@ -46,7 +46,7 @@ class Board:
         }
 
     # STUB
-    # Board has squares? 
+    # Board has squares?
     # Rows, columns?
     # Keeps track of all the marks
     # Is it able to determine a winner, tie, etc?
@@ -55,17 +55,29 @@ class Board:
     def count_markers_for(self, player, keys):
         markers = [self._squares[key].mark for key in keys]
         return markers.count(player.marker)
-    
+
     def display(self):
         print()
-        print(f'{self._squares[1].ascii_mark[0]}|{self._squares[2].ascii_mark[0]}|{self._squares[3].ascii_mark[0]}')
-        print(f'{self._squares[1].ascii_mark[1]}|{self._squares[2].ascii_mark[1]}|{self._squares[3].ascii_mark[1]}')
-        print(f'----+----+----')
-        print(f'{self._squares[4].ascii_mark[0]}|{self._squares[5].ascii_mark[0]}|{self._squares[6].ascii_mark[0]}')
-        print(f'{self._squares[4].ascii_mark[1]}|{self._squares[5].ascii_mark[1]}|{self._squares[6].ascii_mark[1]}')
-        print(f'----+----+----')
-        print(f'{self._squares[7].ascii_mark[0]}|{self._squares[8].ascii_mark[0]}|{self._squares[9].ascii_mark[0]}')
-        print(f'{self._squares[7].ascii_mark[1]}|{self._squares[8].ascii_mark[1]}|{self._squares[9].ascii_mark[1]}')
+        print(f'{self._squares[1].ascii_mark[0]}|'
+              f'{self._squares[2].ascii_mark[0]}|'
+              f'{self._squares[3].ascii_mark[0]}')
+        print(f'{self._squares[1].ascii_mark[1]}|'
+              f'{self._squares[2].ascii_mark[1]}|'
+              f'{self._squares[3].ascii_mark[1]}')
+        print('----+----+----')
+        print(f'{self._squares[4].ascii_mark[0]}|'
+              f'{self._squares[5].ascii_mark[0]}|'
+              f'{self._squares[6].ascii_mark[0]}')
+        print(f'{self._squares[4].ascii_mark[1]}|'
+              f'{self._squares[5].ascii_mark[1]}|'
+              f'{self._squares[6].ascii_mark[1]}')
+        print('----+----+----')
+        print(f'{self._squares[7].ascii_mark[0]}|'
+              f'{self._squares[8].ascii_mark[0]}|'
+              f'{self._squares[9].ascii_mark[0]}')
+        print(f'{self._squares[7].ascii_mark[1]}|'
+              f'{self._squares[8].ascii_mark[1]}|'
+              f'{self._squares[9].ascii_mark[1]}')
         print()
 
     def mark_square_at(self, key, marker):
@@ -74,7 +86,7 @@ class Board:
     def unused_squares(self):
         return tuple(key for key, square in self._squares.items()
                      if square.is_unused())
-    
+
     def is_full(self):
         if len(self.unused_squares()) == 0:
             print('Board is full')
@@ -88,7 +100,7 @@ class Player:
     @property
     def marker(self):
         return self._marker
-    
+
     @marker.setter
     def marker(self, marker):
         self._marker = marker
@@ -97,20 +109,14 @@ class Player:
     # Players can be either computer or human
     # Human player can choose square to mark
     # computer choose automatically, perhaps has a difficulty level, etc
-    # Players can 'mark' a square 
+    # Players can 'mark' a square
     # Players have a score?
-
-    def mark(self):
-        # A way to mark the board. 
-        # Both players have a particular mark
-        pass
 
 class Human(Player):
     HUMAN_MARK = 'x'
 
     def __init__(self):
         super().__init__(Human.HUMAN_MARK)
-        pass
 
     # STUB:
     # Human player can make choice of square to mark
@@ -119,7 +125,6 @@ class Computer(Player):
     COMPUTER_MARK = 'o'
     def __init__(self):
         super().__init__(Computer.COMPUTER_MARK)
-        pass
 
     # STUB:
     # Computer player makes choices automatically, depending on different
@@ -138,8 +143,7 @@ class TTTGame:
         self._board = Board()
         self._human = Human()
         self._computer = Computer()
-        pass
-        
+
     def _display_welcome_msg(self):
         clear_screen()
         print('Welcome to Tic Tac Toe!')
@@ -168,8 +172,8 @@ class TTTGame:
             choice = input(f'Choose a square {valid_choices}: ')
             if choice in [str(n) for n in valid_choices]:
                 break
-            else:
-                print('Invalid choice. Try again.')
+
+            print('Invalid choice. Try again.')
 
         self._board.mark_square_at(int(choice), Human.HUMAN_MARK)
 
@@ -202,7 +206,7 @@ class TTTGame:
             self._computer_moves()
             if self._game_is_over():
                 break
-            
+
             # Currently loops indefinitly
             clear_screen()
 
@@ -210,12 +214,14 @@ class TTTGame:
         self._board.display()
         self._display_results()
         self._display_goodbye_msg()
-    
+
 game = TTTGame()
 game.play()
 
 # TODO:
 # Display for choices for player could be cleaned up: 1, 2, or 4 (for example)
-# Still may be some confusion around marks 'x' and 'o'. Perhaps Markers does need to be a class as a Mixin?
+# Still may be some confusion around marks 'x' and 'o'. Perhaps Markers does
+# need to be a class as a Mixin?
 # Game currently loops indefinitely, raises error when we get to a full board
-# NOTE Human mark and computer mark are defined as constants in Human and Computer class respectively
+# NOTE Human mark and computer mark are defined as constants in Human and
+# Computer class respectively
