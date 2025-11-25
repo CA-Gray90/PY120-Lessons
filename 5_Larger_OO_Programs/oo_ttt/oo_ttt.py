@@ -1,32 +1,34 @@
 import random
-import pdb
 
 class Square:
-    EMPTY = ('    ', '    ')
-    X_MARK = (r' \/ ', r' /\ ')
-    O_MARK = (r' /\ ', r' \/ ')
+    EMPTY = ''
 
-    def __init__(self, marker=None):
+    ASCII_MARKS = {
+        'x' : (r' \/ ', r' /\ '),
+        'o' : (r' /\ ', r' \/ '),
+        '' : ('    ', '    ')
+    }
+
+    def __init__(self, marker=''):
+        self._ascii_mark = None
         self.mark = marker
     
+    def _set_ascii_mark(self, marker):
+        self._ascii_mark = Square.ASCII_MARKS[marker]
+
     @property
     def mark(self):
         return self._mark
     
-    @property
-    def simple_mark(self):
-        return 'x' if self._mark == Square.X_MARK else 'o'
-    
     @mark.setter
     def mark(self, marker):
-        match marker:
-            case 'x':
-                self._mark = Square.X_MARK
-            case 'o':
-                self._mark = Square.O_MARK
-            case None:
-                self._mark = Square.EMPTY
+        self._mark = marker
+        self._set_ascii_mark(marker)
     
+    @property
+    def ascii_mark(self):
+        return self._ascii_mark
+
     def is_unused(self):
         return self._mark == Square.EMPTY
 
@@ -47,20 +49,19 @@ class Board:
     # A way to display itself to the terminal?
 
     def count_markers_for(self, player, keys):
-        markers = [self._squares[key].simple_mark for key in keys]
-        pdb.set_trace()
+        markers = [self._squares[key].mark for key in keys]
         return markers.count(player.marker)
     
     def display(self):
         print()
-        print(f'{self._squares[1].mark[0]}|{self._squares[2].mark[0]}|{self._squares[3].mark[0]}')
-        print(f'{self._squares[1].mark[1]}|{self._squares[2].mark[1]}|{self._squares[3].mark[1]}')
+        print(f'{self._squares[1].ascii_mark[0]}|{self._squares[2].ascii_mark[0]}|{self._squares[3].ascii_mark[0]}')
+        print(f'{self._squares[1].ascii_mark[1]}|{self._squares[2].ascii_mark[1]}|{self._squares[3].ascii_mark[1]}')
         print(f'----+----+----')
-        print(f'{self._squares[4].mark[0]}|{self._squares[5].mark[0]}|{self._squares[6].mark[0]}')
-        print(f'{self._squares[4].mark[1]}|{self._squares[5].mark[1]}|{self._squares[6].mark[1]}')
+        print(f'{self._squares[4].ascii_mark[0]}|{self._squares[5].ascii_mark[0]}|{self._squares[6].ascii_mark[0]}')
+        print(f'{self._squares[4].ascii_mark[1]}|{self._squares[5].ascii_mark[1]}|{self._squares[6].ascii_mark[1]}')
         print(f'----+----+----')
-        print(f'{self._squares[7].mark[0]}|{self._squares[8].mark[0]}|{self._squares[9].mark[0]}')
-        print(f'{self._squares[7].mark[1]}|{self._squares[8].mark[1]}|{self._squares[9].mark[1]}')
+        print(f'{self._squares[7].ascii_mark[0]}|{self._squares[8].ascii_mark[0]}|{self._squares[9].ascii_mark[0]}')
+        print(f'{self._squares[7].ascii_mark[1]}|{self._squares[8].ascii_mark[1]}|{self._squares[9].ascii_mark[1]}')
         print()
 
     def mark_square_at(self, key, marker):
@@ -147,8 +148,19 @@ class TTTGame:
     def _display_goodbye_msg(self):
         print('Thanks for playing Tic Tac Toe. Goodbye!')
 
+    def _is_winner(self, player):
+        for combo in TTTGame.WINNING_COMBOS:
+            if self._three_in_a_row(player, combo):
+                return True
+        return False
+
     def _display_results(self):
-        pass
+        if self._is_winner(self._human):
+            print('You won! Congratulations!')
+        elif self._is_winner(self._computer):
+            print('Computer won! You lost.')
+        else:
+            print('It is a tie!')
 
     def _human_moves(self):
         valid_choices = self._board.unused_squares()
@@ -173,14 +185,7 @@ class TTTGame:
         return self._board.count_markers_for(player, combo) == 3
 
     def _someone_won(self):
-        for combo in TTTGame.WINNING_COMBOS:
-            if self._three_in_a_row(self._human, combo):
-                print('Human got 3 in a row')
-                return True
-            elif self._three_in_a_row(self._computer, combo):
-                ('Computer got 3 in a row')
-                return True
-        return False
+        return self._is_winner(self._human) or self._is_winner(self._computer)
 
     def play(self):
         # Sets off the game. Main orchestration of the game
@@ -210,5 +215,6 @@ game.play()
 
 # TODO:
 # Display for choices for player could be cleaned up: 1, 2, or 4 (for example)
+# Still may be some confusion around marks 'x' and 'o'. Perhaps Markers does need to be a class as a Mixin?
 # Game currently loops indefinitely, raises error when we get to a full board
 # NOTE Human mark and computer mark are defined as constants in Human and Computer class respectively
