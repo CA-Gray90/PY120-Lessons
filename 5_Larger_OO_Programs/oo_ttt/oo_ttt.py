@@ -167,19 +167,17 @@ class TTTGame:
             print('It is a tie!')
 
     @staticmethod
-    def _join_or(seq, delim=', ', joining_word='or'):
-        if len(seq) < 2:
+    def _join_or(seq, delim=', ', join_word='or'):
+        if len(seq) == 1:
             return str(seq[0])
 
-        if len(seq) >= 2:
-            end_part = f'{seq[-2]} {joining_word} {seq[-1]}'
-            start_part = delim.join(str(ele) for ele in seq[:-2])
+        end_part = f'{seq[-2]} {join_word} {seq[-1]}'
 
-            if start_part:
-                start_part += delim
-                return start_part + end_part
+        if len(seq) > 2:
+            start_part = delim.join(str(ele) for ele in seq[:-2]) + delim
+            return start_part + end_part
 
-            return end_part
+        return end_part
 
     def _human_moves(self):
         valid_choices = self._board.unused_squares()
