@@ -204,6 +204,21 @@ class TTTGame:
     def _someone_won(self):
         return self._is_winner(self._human) or self._is_winner(self._computer)
 
+    def _play_again(self):
+        if self._yes_or_no('Do you want to play again?'):
+            return True
+        return False
+
+    @staticmethod
+    def _yes_or_no(prompt):
+        while True:
+            choice = input(f'{prompt} (y/n): ').lower()
+
+            if choice in ('y', 'n', 'yes', 'no'):
+                return choice[0] == 'y'
+
+            print('Invalid choice. Try again.')
+
     def play(self):
         # Sets off the game. Main orchestration of the game
         self._display_welcome_msg()
