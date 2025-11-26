@@ -329,8 +329,6 @@ game.play()
 # A way for human player to enter thier name?
 # A way to choose numpad for choosing moves instead?
 # GAme UI improvements, timings etc
-# Still may be some confusion around marks 'x' and 'o'. Perhaps Markers does
-# need to be a class as a Mixin?
 
 # NOTE Human mark and computer mark are defined as constants in Human and
 # Computer class respectively
