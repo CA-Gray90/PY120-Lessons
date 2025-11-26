@@ -1,3 +1,4 @@
+import pdb
 import random
 import os
 
@@ -165,14 +166,29 @@ class TTTGame:
         else:
             print('It is a tie!')
 
+    @staticmethod
+    def _join_or(seq, delim=', ', joining_word='or'):
+        if len(seq) < 2:
+            return str(seq[0])
+
+        if len(seq) >= 2:
+            end_part = f'{seq[-2]} {joining_word} {seq[-1]}'
+            start_part = delim.join(str(ele) for ele in seq[:-2])
+
+            if start_part:
+                start_part += delim
+                return start_part + end_part
+
+            return end_part
+
     def _human_moves(self):
         valid_choices = self._board.unused_squares()
 
         while True:
-            choice = input(f'Choose a square {valid_choices}: ')
+            choice = input('Choose a square from ('
+                           f'{self._join_or(valid_choices)}): ')
             if choice in [str(n) for n in valid_choices]:
                 break
-
             print('Invalid choice. Try again.')
 
         self._board.mark_square_at(int(choice), Human.HUMAN_MARK)
