@@ -261,34 +261,46 @@ class TTTGame:
             print('You got to 3 points. You won the game!')
         else:
             print('Computer got to 3 points first. You lost the game!')
+    
+    def _player_turn(self, goes_next):
+        if goes_next == self._human:
+            self._human_moves()
+        else:
+            self._computer_moves()
+    
+    def _toggle_player(self, player):
+        if player == self._human:
+            return self._computer
+        return self._human
 
-    def _play_match(self):
+    def _play_match(self, first_to_play):
         '''
         Plays a single match of TTT till a winner or tie.
         Adds point to winner.
         '''
 
+        goes_next = first_to_play
+
         while True:
                 self._display_score()
                 self._board.display()
 
-                self._human_moves()
+                self._player_turn(goes_next)
                 if self._game_is_over():
                     break
-
-                self._computer_moves()
-                if self._game_is_over():
-                    break
+                
+                goes_next = self._toggle_player(goes_next)
                 clear_screen()
 
         self._hand_out_points()
 
     def play(self):
-        keep_playing = True
+        starting_player = self._human
         self._display_welcome_msg()
 
-        while keep_playing:
-            self._play_match()
+        while True:
+            self._play_match(starting_player)
+
             clear_screen()
 
             self._display_score()
@@ -302,6 +314,7 @@ class TTTGame:
             if not self._play_again():
                 break
 
+            goes_first = self._toggle_player(goes_first)
             self._board.reset()
             clear_screen()
 
@@ -315,7 +328,7 @@ game.play()
 # Enter to continues, etc...
 # A way for human player to enter thier name?
 # A way to choose numpad for choosing moves instead?
-# GAme UI improvements
+# GAme UI improvements, timings etc
 # Still may be some confusion around marks 'x' and 'o'. Perhaps Markers does
 # need to be a class as a Mixin?
 
