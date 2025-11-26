@@ -134,6 +134,7 @@ class TTTGame:
         (1, 4, 7), (2, 5, 8), (3, 6, 9),    # Columns
         (1, 5, 9), (3, 5, 7)                # Diagonals
     )
+    MATCHES_TO_WIN = 3
 
     def __init__(self):
         # STUBS:
@@ -261,6 +262,15 @@ class TTTGame:
 
             print('Invalid choice. Try again.')
 
+    def _is_overall_winner(self):
+        return self._human.score == 3 or self._computer.score == 3
+    
+    def _display_overall_winner(self):
+        if self._human.score == 3:
+            print('You got to 3 points. You won the game!')
+        else:
+            print('Computer got to 3 points first. You lost the game!')
+
     def _play_match(self):
         '''
         Plays a single match of TTT till a winner or tie.
@@ -294,6 +304,10 @@ class TTTGame:
             self._board.display()
             self._display_results()
 
+            if self._is_overall_winner():
+                self._display_overall_winner()
+                break
+
             if not self._play_again():
                 break
 
@@ -306,7 +320,11 @@ game = TTTGame()
 game.play()
 
 # TODO:
+# Display rules, first to 3 etc
+# Enter to continues, etc...
 # A way for human player to enter thier name?
+# A way to choose numpad for choosing moves instead?
+# GAme UI improvements
 # Still may be some confusion around marks 'x' and 'o'. Perhaps Markers does
 # need to be a class as a Mixin?
 
