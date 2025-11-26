@@ -174,14 +174,6 @@ class TTTGame:
 
         self._board.mark_square_at(int(choice), Human.HUMAN_MARK)
     
-    # def _defensive_move(self):
-    #     for combo in TTTGame.WINNING_COMBOS:
-    #         if self._n_in_a_row(self._human, combo, 2):
-    #             for position in combo:
-    #                 if position in self._board.unused_squares():
-    #                     return position
-    #     return None
-    
     def _best_move(self, player):
         for combo in TTTGame.WINNING_COMBOS:
             if self._n_in_a_row(player, combo, 2):
