@@ -183,6 +183,9 @@ class TTTGame:
         return None
 
     def _computer_moves(self):
+        CENTRE_SQ = 5
+        unused_sqs = self._board.unused_squares()
+
         offensive_move = self._best_move(self._computer)
         defensive_move = self._best_move(self._human)
 
@@ -190,8 +193,10 @@ class TTTGame:
             choice = offensive_move
         elif defensive_move:
             choice = defensive_move
+        elif CENTRE_SQ in unused_sqs:
+            choice = CENTRE_SQ
         else:
-            choice = random.choice(self._board.unused_squares())
+            choice = random.choice(unused_sqs)
 
         self._board.mark_square_at(choice, Computer.COMPUTER_MARK)
 
