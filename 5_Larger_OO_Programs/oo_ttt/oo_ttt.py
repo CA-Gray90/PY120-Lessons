@@ -174,19 +174,29 @@ class TTTGame:
 
         self._board.mark_square_at(int(choice), Human.HUMAN_MARK)
     
-    def _computer_defense(self):
-            pass
+    def _defensive_move(self):
+        for combo in TTTGame.WINNING_COMBOS:
+            if self._n_in_a_row(self._human, combo, 2):
+                for position in combo:
+                    if position in self._board.unused_squares():
+                        return position
+        return None
 
     def _computer_moves(self):
-        choice = random.choice(self._board.unused_squares())
+        defensive_move = self._defensive_move()
+        if defensive_move:
+            choice = defensive_move
+        else:
+            choice = random.choice(self._board.unused_squares())
+
         self._board.mark_square_at(choice, Computer.COMPUTER_MARK)
 
-    def _three_in_a_row(self, player, combo):
-        return self._board.count_markers_for(player, combo) == 3
+    def _n_in_a_row(self, player, combo, n):
+        return self._board.count_markers_for(player, combo) == n
 
     def _is_winner(self, player):
         for combo in TTTGame.WINNING_COMBOS:
-            if self._three_in_a_row(player, combo):
+            if self._n_in_a_row(player, combo, 3):
                 return True
         return False
 

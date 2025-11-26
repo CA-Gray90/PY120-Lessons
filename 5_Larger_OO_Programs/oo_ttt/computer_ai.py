@@ -22,6 +22,13 @@ D:
 notes:
 
 A:
+The method should be able to receive a combo, check how many marks in there are
+the players, then if its 2 out of 3, return the move that the computer must play.
+
+Otherwise it should return None
+
+Then the computer will either choose the remaining square if the function returns
+a value, else choose randomly as before. Computer turn method should be updated.
 
 c?
 '''
