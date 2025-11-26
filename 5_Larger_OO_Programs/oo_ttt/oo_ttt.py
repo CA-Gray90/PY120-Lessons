@@ -158,7 +158,19 @@ class TTTGame:
             print('It is a tie!')
 
     def _display_score(self):
-        pass
+        human_score = self._human.score
+        computer_score = self._computer.score
+
+        max_length = len(max(f'Human : {human_score}', 
+                             f'Computer : {computer_score}', key=len))
+        border = f'+-{'-' * max_length}-+'
+
+        print()
+        print(border)
+        print(f'| {f'Human : {human_score}'.ljust(max_length, ' ')} |')
+        print(f'| {f'Computer : {computer_score}'.ljust(max_length, ' ')} |')
+        print(border)
+        print()
 
     @staticmethod
     def _join_or(seq, delim=', ', join_word='or'):
@@ -256,6 +268,7 @@ class TTTGame:
         '''
 
         while True:
+                self._display_score()
                 self._board.display()
 
                 self._human_moves()
@@ -275,9 +288,9 @@ class TTTGame:
 
         while keep_playing:
             self._play_match()
-            pdb.set_trace()
             clear_screen()
 
+            self._display_score()
             self._board.display()
             self._display_results()
 
@@ -293,7 +306,7 @@ game = TTTGame()
 game.play()
 
 # TODO:
-
+# A way for human player to enter thier name?
 # Still may be some confusion around marks 'x' and 'o'. Perhaps Markers does
 # need to be a class as a Mixin?
 
