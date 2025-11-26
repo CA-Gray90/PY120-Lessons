@@ -114,18 +114,11 @@ class Human(Player):
     def __init__(self):
         super().__init__(Human.HUMAN_MARK)
 
-    # STUB:
-    # Human player can make choice of square to mark
-
 class Computer(Player):
     COMPUTER_MARK = 'o'
 
     def __init__(self):
         super().__init__(Computer.COMPUTER_MARK)
-
-    # STUB:
-    # Computer player makes choices automatically, depending on different
-    # difficulty/strategy?
 
 class TTTGame:
     CENTRE_SQ = 5
@@ -137,8 +130,6 @@ class TTTGame:
     MATCHES_TO_WIN = 3
 
     def __init__(self):
-        # STUBS:
-        # Need a board and two players
         self._board = Board()
         self._human = Human()
         self._computer = Computer()
