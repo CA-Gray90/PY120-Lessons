@@ -37,20 +37,10 @@ class Square:
     def is_unused(self):
         return self._mark == Square.EMPTY
 
-    # STUB
-    # Does the square keep track of its marker?
-
 class Board:
     def __init__(self):
         self._squares = None
         self.reset()
-
-    # STUB
-    # Board has squares?
-    # Rows, columns?
-    # Keeps track of all the marks
-    # Is it able to determine a winner, tie, etc?
-    # A way to display itself to the terminal?
 
     def count_markers_for(self, player, keys):
         markers = [self._squares[key].mark for key in keys]
@@ -110,11 +100,6 @@ class Player:
     def marker(self, marker):
         self._marker = marker
 
-    # STUB:
-    # Players can be either computer or human
-    # Human player can choose square to mark
-    # computer choose automatically, perhaps has a difficulty level, etc
-    # Players can 'mark' a square
     # Players have a score?
 
 class Human(Player):
@@ -223,28 +208,32 @@ class TTTGame:
 
             print('Invalid choice. Try again.')
 
-    def play(self):
-        keep_playing = True
-        self._display_welcome_msg()
+    def _play_match(self):
+        '''
+        Plays a single match of TTT till a winner or tie.
+        '''
 
-        while keep_playing:
-            while True:
+        while True:
                 self._board.display()
 
                 self._human_moves()
                 if self._game_is_over():
                     break
 
-                # self._board.display()
-
                 self._computer_moves()
                 if self._game_is_over():
                     break
 
-                # Currently loops indefinitly
                 clear_screen()
 
+    def play(self):
+        keep_playing = True
+        self._display_welcome_msg()
+
+        while keep_playing:
+            self._play_match()
             clear_screen()
+
             self._board.display()
             self._display_results()
 
@@ -260,10 +249,9 @@ game = TTTGame()
 game.play()
 
 # TODO:
-# Clear board after we start a new game.
-# Display for choices for player could be cleaned up: 1, 2, or 4 (for example)
+
 # Still may be some confusion around marks 'x' and 'o'. Perhaps Markers does
 # need to be a class as a Mixin?
-# Game currently loops indefinitely, raises error when we get to a full board
+
 # NOTE Human mark and computer mark are defined as constants in Human and
 # Computer class respectively
