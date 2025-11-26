@@ -91,6 +91,7 @@ class Board:
 class Player:
     def __init__(self, marker):
         self._marker = marker
+        self._score = 0
 
     @property
     def marker(self):
@@ -100,7 +101,12 @@ class Player:
     def marker(self, marker):
         self._marker = marker
 
-    # Players have a score?
+    @property
+    def score(self):
+        return self._score
+
+    def add_point(self):
+        self._score += 1
 
 class Human(Player):
     HUMAN_MARK = 'x'
@@ -113,6 +119,7 @@ class Human(Player):
 
 class Computer(Player):
     COMPUTER_MARK = 'o'
+
     def __init__(self):
         super().__init__(Computer.COMPUTER_MARK)
 
@@ -149,6 +156,9 @@ class TTTGame:
             print('Computer won! You lost.')
         else:
             print('It is a tie!')
+
+    def _display_score(self):
+        pass
 
     @staticmethod
     def _join_or(seq, delim=', ', join_word='or'):
@@ -215,6 +225,15 @@ class TTTGame:
     def _game_is_over(self):
         return self._board.is_full() or self._someone_won()
 
+    def _hand_out_points(self):
+        if not self._someone_won():
+            return
+
+        if self._is_winner(self._human):
+            self._human.add_point()
+        else:
+            self._computer.add_point()
+
     def _play_again(self):
         if self._yes_or_no('Do you want to play again?'):
             return True
@@ -233,6 +252,7 @@ class TTTGame:
     def _play_match(self):
         '''
         Plays a single match of TTT till a winner or tie.
+        Adds point to winner.
         '''
 
         while True:
@@ -245,8 +265,9 @@ class TTTGame:
                 self._computer_moves()
                 if self._game_is_over():
                     break
-
                 clear_screen()
+
+        self._hand_out_points()
 
     def play(self):
         keep_playing = True
@@ -254,6 +275,7 @@ class TTTGame:
 
         while keep_playing:
             self._play_match()
+            pdb.set_trace()
             clear_screen()
 
             self._board.display()
