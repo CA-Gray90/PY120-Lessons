@@ -121,6 +121,7 @@ class Computer(Player):
     # difficulty/strategy?
 
 class TTTGame:
+    CENTRE_SQ = 5
     WINNING_COMBOS = (
         (1, 2, 3), (4, 5, 6), (7, 8, 9),    # Rows
         (1, 4, 7), (2, 5, 8), (3, 6, 9),    # Columns
@@ -174,7 +175,7 @@ class TTTGame:
 
         self._board.mark_square_at(int(choice), Human.HUMAN_MARK)
     
-    def _best_move(self, player):
+    def _best_move_for(self, player):
         for combo in TTTGame.WINNING_COMBOS:
             if self._n_in_a_row(player, combo, 2):
                 for position in combo:
@@ -183,18 +184,17 @@ class TTTGame:
         return None
 
     def _computer_moves(self):
-        CENTRE_SQ = 5
         unused_sqs = self._board.unused_squares()
 
-        offensive_move = self._best_move(self._computer)
-        defensive_move = self._best_move(self._human)
+        offensive_move = self._best_move_for(self._computer)
+        defensive_move = self._best_move_for(self._human)
 
         if offensive_move:
             choice = offensive_move
         elif defensive_move:
             choice = defensive_move
-        elif CENTRE_SQ in unused_sqs:
-            choice = CENTRE_SQ
+        elif TTTGame.CENTRE_SQ in unused_sqs:
+            choice = TTTGame.CENTRE_SQ
         else:
             choice = random.choice(unused_sqs)
 
