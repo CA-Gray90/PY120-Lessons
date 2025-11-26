@@ -42,9 +42,8 @@ class Square:
 
 class Board:
     def __init__(self):
-        self._squares = {
-            n : Square() for n in range(1, 10)
-        }
+        self._squares = None
+        self.reset()
 
     # STUB
     # Board has squares?
@@ -93,6 +92,11 @@ class Board:
             print('Board is full')
             return True
         return False
+
+    def reset(self):
+        self._squares = {
+            n : Square() for n in range(1, 10)
+        }
 
 class Player:
     def __init__(self, marker):
@@ -220,34 +224,43 @@ class TTTGame:
             print('Invalid choice. Try again.')
 
     def play(self):
-        # Sets off the game. Main orchestration of the game
+        keep_playing = True
         self._display_welcome_msg()
 
-        while True:
+        while keep_playing:
+            while True:
+                self._board.display()
+
+                self._human_moves()
+                if self._game_is_over():
+                    break
+
+                # self._board.display()
+
+                self._computer_moves()
+                if self._game_is_over():
+                    break
+
+                # Currently loops indefinitly
+                clear_screen()
+
+            clear_screen()
             self._board.display()
+            self._display_results()
 
-            self._human_moves()
-            if self._game_is_over():
+            if not self._play_again():
                 break
 
-            # self._board.display()
-
-            self._computer_moves()
-            if self._game_is_over():
-                break
-
-            # Currently loops indefinitly
+            self._board.reset()
             clear_screen()
 
-        clear_screen()
-        self._board.display()
-        self._display_results()
         self._display_goodbye_msg()
 
 game = TTTGame()
 game.play()
 
 # TODO:
+# Clear board after we start a new game.
 # Display for choices for player could be cleaned up: 1, 2, or 4 (for example)
 # Still may be some confusion around marks 'x' and 'o'. Perhaps Markers does
 # need to be a class as a Mixin?
