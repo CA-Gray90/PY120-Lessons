@@ -141,12 +141,6 @@ class TTTGame:
     def _display_goodbye_msg(self):
         print('Thanks for playing Tic Tac Toe. Goodbye!')
 
-    def _is_winner(self, player):
-        for combo in TTTGame.WINNING_COMBOS:
-            if self._three_in_a_row(player, combo):
-                return True
-        return False
-
     def _display_results(self):
         if self._is_winner(self._human):
             print('You won! Congratulations!')
@@ -179,19 +173,28 @@ class TTTGame:
             print('Invalid choice. Try again.')
 
         self._board.mark_square_at(int(choice), Human.HUMAN_MARK)
+    
+    def _computer_defense(self):
+            pass
 
     def _computer_moves(self):
         choice = random.choice(self._board.unused_squares())
         self._board.mark_square_at(choice, Computer.COMPUTER_MARK)
 
-    def _game_is_over(self):
-        return self._board.is_full() or self._someone_won()
-
     def _three_in_a_row(self, player, combo):
         return self._board.count_markers_for(player, combo) == 3
 
+    def _is_winner(self, player):
+        for combo in TTTGame.WINNING_COMBOS:
+            if self._three_in_a_row(player, combo):
+                return True
+        return False
+
     def _someone_won(self):
         return self._is_winner(self._human) or self._is_winner(self._computer)
+
+    def _game_is_over(self):
+        return self._board.is_full() or self._someone_won()
 
     def _play_again(self):
         if self._yes_or_no('Do you want to play again?'):
