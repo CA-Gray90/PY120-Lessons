@@ -124,7 +124,7 @@ class Computer(Player):
     
     @staticmethod
     def think():
-        pause = random.choice([0.2, 0.4, 0.6, 0.8])
+        pause = random.choice([0.2, 0.3, 0.4, 0.5])
         time.sleep(pause)
 
 class TTTGame:
@@ -362,7 +362,7 @@ class TTTGame:
             if not self._play_again():
                 break
 
-            goes_first = self._toggle_player(goes_first)
+            starting_player = self._toggle_player(starting_player)
             self._board.reset()
             clear_screen()
 
@@ -372,7 +372,6 @@ game = TTTGame()
 game.play()
 
 # TODO:
-# Enter to continues, etc...
 # A way for human player to enter thier name?
 # A way to choose numpad for choosing moves instead?
 # GAme UI improvements, timings etc
