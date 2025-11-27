@@ -164,6 +164,7 @@ class TTTGame:
 
             print()
             self._enter_to_continue('Hit Enter if you are ready to play...')
+            clear_screen()
 
     def _display_goodbye_msg(self):
         print('Thanks for playing Tic Tac Toe. Goodbye!')
