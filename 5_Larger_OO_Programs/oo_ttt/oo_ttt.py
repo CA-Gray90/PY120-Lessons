@@ -2,6 +2,7 @@ import pdb
 import random
 import os
 import json
+import time
 
 def clear_screen():
     os.system('clear')
@@ -120,6 +121,11 @@ class Computer(Player):
 
     def __init__(self):
         super().__init__(Computer.COMPUTER_MARK)
+    
+    @staticmethod
+    def think():
+        pause = random.choice([0.2, 0.4, 0.6, 0.8])
+        time.sleep(pause)
 
 class TTTGame:
     CENTRE_SQ = 5
@@ -306,6 +312,7 @@ class TTTGame:
         if goes_next == self._human:
             self._human_moves()
         else:
+            self._computer.think()
             self._computer_moves()
     
     def _toggle_player(self, player):
@@ -365,7 +372,6 @@ game = TTTGame()
 game.play()
 
 # TODO:
-# Display rules, first to 3 etc
 # Enter to continues, etc...
 # A way for human player to enter thier name?
 # A way to choose numpad for choosing moves instead?
