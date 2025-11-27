@@ -139,21 +139,20 @@ class TTTGame:
         clear_screen()
         print('Welcome to Tic Tac Toe!')
     
-    def _display_rules(self):
-        if self._yes_or_no('Do you wish to see the rules?'):
-            with open('TTTrules.json', 'r') as file:
-                general_rules = json.load(file)['general_rules_msgs']
-            
-            with open('TTTrules.json', 'r') as file:
-                choice_layout = json.load(file)['choice_layout_msgs']
+    def _display_general_rules(self):
+        with open('TTTrules.json', 'r') as file:
+            general_rules = json.load(file)['general_rules_msgs']
 
-            print()
-            for rule in general_rules.values():
-                print(rule)
-            print()
-            self._enter_to_continue()
-            print()
-            for line in choice_layout.values():
+        print()
+        for rule in general_rules.values():
+            print(rule)
+        print()
+
+    def _display_choice_layout(self):
+        with open('TTTrules.json', 'r') as file:
+            choice_layout = json.load(file)['choice_layout_msgs']
+
+        for line in choice_layout.values():
                 if isinstance(line, list):
                     print()
                     for nested_line in line:
@@ -162,6 +161,12 @@ class TTTGame:
                 else:
                     print(line)
 
+    def _display_rules(self):
+        if self._yes_or_no('Do you wish to see the rules?'):
+            self._display_general_rules()
+            self._enter_to_continue()
+            print()
+            self._display_choice_layout()
             print()
             self._enter_to_continue('Hit Enter if you are ready to play...')
             clear_screen()
