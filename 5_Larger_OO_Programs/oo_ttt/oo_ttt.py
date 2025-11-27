@@ -115,6 +115,15 @@ class Human(Player):
 
     def __init__(self):
         super().__init__(Human.HUMAN_MARK)
+        self.name = None
+    
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, name):
+        self._name = name
 
 class Computer(Player):
     COMPUTER_MARK = 'o'
@@ -182,7 +191,7 @@ class TTTGame:
 
     def _display_results(self):
         if self._is_winner(self._human):
-            print('You won! Congratulations!')
+            print(f'You won! Congratulations!')
         elif self._is_winner(self._computer):
             print('Computer won! You lost.')
         else:
@@ -192,13 +201,13 @@ class TTTGame:
         human_score = self._human.score
         computer_score = self._computer.score
 
-        max_length = len(max(f'Human : {human_score}', 
+        max_length = len(max(f'{self._human.name} : {human_score}', 
                              f'Computer : {computer_score}', key=len))
         border = f'+-{'-' * max_length}-+'
 
         print()
         print(border)
-        print(f'| {f'Human : {human_score}'.ljust(max_length, ' ')} |')
+        print(f'| {f'{self._human.name} : {human_score}'.ljust(max_length, ' ')} |')
         print(f'| {f'Computer : {computer_score}'.ljust(max_length, ' ')} |')
         print(border)
         print()
@@ -304,7 +313,7 @@ class TTTGame:
     
     def _display_overall_winner(self):
         if self._human.score == 3:
-            print('You got to 3 points. You won the game!')
+            print('Congratualtions you got to 3 points first. You won the game!')
         else:
             print('Computer got to 3 points first. You lost the game!')
     
@@ -319,6 +328,17 @@ class TTTGame:
         if player == self._human:
             return self._computer
         return self._human
+    
+    def _set_player_name(self):
+        while True:
+            name = input('Enter your name: ')
+            if not all([c.isalpha() for c in name]):
+                print('Please use alphabetic characters only.')
+            else:
+                break
+        print()
+        print(f'Welcome {name}!')
+        self._human.name = name
 
     def _play_match(self, first_to_play):
         '''
@@ -344,6 +364,7 @@ class TTTGame:
     def play(self):
         starting_player = self._human
         self._display_welcome_msg()
+        self._set_player_name()
         self._display_rules()
 
         while True:
@@ -372,6 +393,7 @@ game = TTTGame()
 game.play()
 
 # TODO:
+# Add in main title display
 # A way for human player to enter thier name?
 # A way to choose numpad for choosing moves instead?
 # GAme UI improvements, timings etc

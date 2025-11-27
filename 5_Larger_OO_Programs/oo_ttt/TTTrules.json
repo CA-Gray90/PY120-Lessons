@@ -1,6 +1,5 @@
 {
     "general_rules_msgs" : {
-        "welcome" : "Welcome player!\n",
         "opening_lines" : "In this game, you will play Tic Tac Toe against a computer player.",
         "rules_1" : "This game will assume that you are familiar with the gameplay and rules of Tic Tac Toe.\n",
         "rules_2" : "RULES:\n - First to win 3 points wins the game.\n - You win a point by winning an individual Tic Tac Toe match.\n - Who goes first gets swapped for each new match.",
