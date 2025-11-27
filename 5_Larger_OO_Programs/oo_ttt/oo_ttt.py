@@ -1,6 +1,7 @@
 import pdb
 import random
 import os
+import json
 
 def clear_screen():
     os.system('clear')
@@ -137,6 +138,32 @@ class TTTGame:
     def _display_welcome_msg(self):
         clear_screen()
         print('Welcome to Tic Tac Toe!')
+    
+    def _display_rules(self):
+        if self._yes_or_no('Do you wish to see the rules?'):
+            with open('TTTrules.json', 'r') as file:
+                general_rules = json.load(file)['general_rules_msgs']
+            
+            with open('TTTrules.json', 'r') as file:
+                choice_layout = json.load(file)['choice_layout_msgs']
+
+            print()
+            for rule in general_rules.values():
+                print(rule)
+            print()
+            self._enter_to_continue()
+            print()
+            for line in choice_layout.values():
+                if isinstance(line, list):
+                    print()
+                    for nested_line in line:
+                        print(nested_line)
+                    print() 
+                else:
+                    print(line)
+
+            print()
+            self._enter_to_continue('Hit Enter if you are ready to play...')
 
     def _display_goodbye_msg(self):
         print('Thanks for playing Tic Tac Toe. Goodbye!')
@@ -252,6 +279,13 @@ class TTTGame:
                 return choice[0] == 'y'
 
             print('Invalid choice. Try again.')
+    
+    @staticmethod
+    def _enter_to_continue(prompt=None):
+        if not prompt:
+            input('Press Enter to continue...')
+        else:
+            input(f'{prompt}')
 
     def _is_overall_winner(self):
         return self._human.score == 3 or self._computer.score == 3
@@ -297,6 +331,7 @@ class TTTGame:
     def play(self):
         starting_player = self._human
         self._display_welcome_msg()
+        self._display_rules()
 
         while True:
             self._play_match(starting_player)
