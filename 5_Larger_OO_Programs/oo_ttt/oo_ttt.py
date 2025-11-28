@@ -3,7 +3,6 @@ import random
 import os
 import json
 import time
-from TTT_main_title_seq import title_seq
 
 def clear_screen():
     os.system('clear')
@@ -151,9 +150,24 @@ class TTTGame:
         self._human = Human()
         self._computer = Computer()
 
+    @staticmethod
+    def _title_seq():
+        with open('TTT_Title.json', 'r') as file:
+            tictactoe = json.load(file)
+            
+        tic, tac, toe = tictactoe['tic'], tictactoe['tac'], tictactoe['toe']
+
+        for word in (tic, tac, toe):
+            os.system('clear')
+            print(f'{'  Welcome to:  '.center(80, '*')}')
+            print()
+            for line in word:
+                print(line.center(80, ' '))
+            time.sleep(0.5)
+
     def _display_welcome_msg(self):
         clear_screen()
-        title_seq()
+        self._title_seq()
     
     def _display_general_rules(self):
         with open('TTTrules.json', 'r') as file:
