@@ -3,6 +3,7 @@ import random
 import os
 import json
 import time
+from TTT_main_title_seq import title_seq
 
 def clear_screen():
     os.system('clear')
@@ -152,7 +153,7 @@ class TTTGame:
 
     def _display_welcome_msg(self):
         clear_screen()
-        print('Welcome to Tic Tac Toe!')
+        print(f'{'  Welcome to:  '.center(80, '*')}')
     
     def _display_general_rules(self):
         with open('TTTrules.json', 'r') as file:
