@@ -394,9 +394,9 @@ game.play()
 
 # TODO:
 # Add in main title display
-# A way for human player to enter thier name?
+
 # A way to choose numpad for choosing moves instead?
-# GAme UI improvements, timings etc
+# GAme UI improvements, timings etc, keep it fairly basic
 
 # NOTE Human mark and computer mark are defined as constants in Human and
 # Computer class respectively
