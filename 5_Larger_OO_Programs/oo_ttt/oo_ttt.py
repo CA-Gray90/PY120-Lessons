@@ -153,7 +153,7 @@ class TTTGame:
 
     def _display_welcome_msg(self):
         clear_screen()
-        print(f'{'  Welcome to:  '.center(80, '*')}')
+        title_seq()
     
     def _display_general_rules(self):
         with open('TTTrules.json', 'r') as file:

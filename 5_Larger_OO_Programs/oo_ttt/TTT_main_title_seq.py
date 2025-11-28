@@ -10,6 +10,8 @@ def title_seq():
 
     for word in (tic, tac, toe):
         os.system('clear')
+        print(f'{'  Welcome to:  '.center(80, '*')}')
+        print()
         for line in word:
-            print(line)
+            print(line.center(80, ' '))
         time.sleep(0.5)
