@@ -6,8 +6,10 @@
         "rules_3" : " - You will always go first when you first play the game\n - Your mark will always be 'x'\n - Computers mark will always be 'o'"
     },
     "choice_layout_msgs" : {
-        "opening_line" : "To choose a square to mark, use the following guide:",
-        "square_guide" : [" 1 | 2 | 3", "---+---+---", " 4 | 5 | 6", "---+---+---", " 7 | 8 | 9"],
-        "concluding_line" : "Each number corresponds to its square in the grid.\nWhen it is your turn to choose, pick the number that corresponds to the square on which you want to place your mark."
+        "opening_line" : "To choose a square to mark, pick a number that corresponds to its square on the board.",
+        "choice_given" : "You will be given the choice to choose the conventional number layout or the numpad layout after these rules.",
+        "square_guide" : ["Conventional Layout:", " 1 | 2 | 3", "---+---+---", " 4 | 5 | 6", "---+---+---", " 7 | 8 | 9"],
+        "numpad_guide" : ["Numpad Layout:", " 7 | 8 | 9", "---+---+---", " 4 | 5 | 6", "---+---+---", " 1 | 2 | 3"],
+        "concluding_line" : "Your square will be marked with an 'x' once you make your choice."
     }
 }

@@ -44,7 +44,7 @@ Squares are numbered as above:
 
 Optional numpad layout?
 
- 7 | 8 | 9
+ 7 | 8 | 9 
 ---+---+---
  4 | 5 | 6
 ---+---+---

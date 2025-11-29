@@ -211,18 +211,6 @@ class TTTGame:
                 else:
                     print(line)
 
-    def _set_numpad(self):
-        while True:
-            choice = input('Would you like to use the conventional (c) number' \
-            'layout for your move choices or numpad (n) layout? (c/n): ').lower()
-            if choice not in ('c', 'n'):
-                print('Invalid choice. Try again.')
-            else:
-                break
-        
-        if choice == 'n':
-            self._numpad = True
-
     def _display_rules(self):
         if self._yes_or_no('Do you wish to see the rules?'):
             self._display_general_rules()
@@ -230,8 +218,24 @@ class TTTGame:
             print()
             self._display_choice_layout()
             print()
-        self._enter_to_continue('Hit Enter if you are ready to play...')
-        clear_screen()
+            self._enter_to_continue()
+
+    def _set_numpad(self):
+        while True:
+            choice = input('Would you like to use the conventional (c) '\
+            ' number layout for your move choices or numpad (n)'\
+            ' layout? (c/n): ').lower()
+
+            if choice not in ('c', 'n'):
+                print('Invalid choice. Try again.')
+            else:
+                break
+        
+        if choice == 'n':
+            self._numpad = True
+        print()
+        print(f'You have chosen: {'Numpad' if choice == 'n' else 'Conventional'}')
+        print()
 
     def _display_game_countdown(self):
         print()
@@ -302,20 +306,13 @@ class TTTGame:
             print('Invalid choice. Try again.')
         
         return choice
+
     def _human_moves(self):
         unused_sqs = self._board.unused_squares()
         if self._numpad:
-            valid_choices = tuple([self.NORMAL_TO_NUMPAD[n] for n in unused_sqs])
+            valid_choices = tuple(sorted([self.NORMAL_TO_NUMPAD[n] for n in unused_sqs]))
         else:
             valid_choices = unused_sqs
-
-        # while True:
-        #     choice = input('Choose a square from ('
-        #                    f'{self._join_or(valid_choices)}): ')
-        #     if choice in [str(n) for n in valid_choices]:
-        #         choice = int(choice)
-        #         break
-        #     print('Invalid choice. Try again.')
 
         choice = self._get_humans_choice(valid_choices)
 
@@ -453,8 +450,9 @@ class TTTGame:
         starting_player = self._human
         self._display_welcome_msg()
         self._set_player_name()
-        self._set_numpad()
         self._display_rules()
+        self._set_numpad()
+        self._enter_to_continue('Press Enter if you are ready to play...')
         self._display_game_countdown()
 
         while True:
