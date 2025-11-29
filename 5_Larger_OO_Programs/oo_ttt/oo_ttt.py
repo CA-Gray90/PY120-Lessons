@@ -145,11 +145,23 @@ class TTTGame:
     )
     MATCHES_TO_WIN = 3
     GAME_TITLE = '  Tic Tac Toe!  '
+    NUMPAD_CONVERSION = {
+        1 : 7,
+        2 : 8,
+        3 : 9,
+        4 : 4,
+        5 : 5,
+        6 : 6,
+        7 : 1,
+        8 : 2,
+        9 : 3
+    }
 
     def __init__(self):
         self._board = Board()
         self._human = Human()
         self._computer = Computer()
+        self._numpad = False
 
     @staticmethod
     def _title_seq():
@@ -196,6 +208,17 @@ class TTTGame:
                     print() 
                 else:
                     print(line)
+    def _numpad_choice(self):
+        while True:
+            choice = input('Would you like to use the conventional (c) number' \
+            'layout for your move choices or numpad (n) layout? (c/n): ').lower()
+            if choice not in ('c', 'n'):
+                print('Invalid choice. Try again.')
+            else:
+                break
+        
+        if choice == 'n':
+            self._numpad = True
 
     def _display_rules(self):
         if self._yes_or_no('Do you wish to see the rules?'):
@@ -253,6 +276,16 @@ class TTTGame:
             return start_part + end_part
 
         return end_part
+    
+    def _convert_from_numpad(self, num):
+        '''
+        Returns conventional number from numpad number given.
+        '''
+        return self.NUMPAD_CONVERSION[num]
+
+    def _convert_to_numpad(self, num):
+        inverted = {val : key for key, val in self.NUMPAD_CONVERSION.items()}
+        return inverted[num]
 
     def _human_moves(self):
         valid_choices = self._board.unused_squares()
@@ -425,8 +458,6 @@ game = TTTGame()
 game.play()
 
 # TODO:
-# Add in main title display
-
 # A way to choose numpad for choosing moves instead?
 # GAme UI improvements, timings etc, keep it fairly basic
 
