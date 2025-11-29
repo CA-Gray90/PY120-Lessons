@@ -156,7 +156,8 @@ class TTTGame:
             tictactoe = json.load(file)
             
         tic, tac, toe = tictactoe['tic'], tictactoe['tac'], tictactoe['toe']
-
+        print(f'{'  Welcome to:  '.center(80, '*')}')
+        time.sleep(0.5)
         for word in (tic, tac, toe):
             os.system('clear')
             print(f'{'  Welcome to:  '.center(80, '*')}')
@@ -168,6 +169,7 @@ class TTTGame:
     def _display_welcome_msg(self):
         clear_screen()
         self._title_seq()
+        print()
     
     def _display_general_rules(self):
         with open('TTTrules.json', 'r') as file:
