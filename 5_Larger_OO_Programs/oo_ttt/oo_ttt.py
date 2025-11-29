@@ -145,7 +145,7 @@ class TTTGame:
     )
     MATCHES_TO_WIN = 3
     GAME_TITLE = '  Tic Tac Toe!  '
-    NUMPAD_CONVERSION = {
+    NUMPAD_TO_NORMAL = {
         1 : 7,
         2 : 8,
         3 : 9,
@@ -156,6 +156,8 @@ class TTTGame:
         8 : 2,
         9 : 3
     }
+
+    NORMAL_TO_NUMPAD = {v : k for k, v in NUMPAD_TO_NORMAL.items()}
 
     def __init__(self):
         self._board = Board()
@@ -208,7 +210,8 @@ class TTTGame:
                     print() 
                 else:
                     print(line)
-    def _numpad_choice(self):
+
+    def _set_numpad(self):
         while True:
             choice = input('Would you like to use the conventional (c) number' \
             'layout for your move choices or numpad (n) layout? (c/n): ').lower()
@@ -281,23 +284,45 @@ class TTTGame:
         '''
         Returns conventional number from numpad number given.
         '''
-        return self.NUMPAD_CONVERSION[num]
+        return self.NUMPAD_TO_NORMAL[num]
 
     def _convert_to_numpad(self, num):
-        inverted = {val : key for key, val in self.NUMPAD_CONVERSION.items()}
-        return inverted[num]
+        '''
+        Returns numpad number from conventional number given.
+        '''
+        return self.NORMAL_TO_NUMPAD[num]
 
-    def _human_moves(self):
-        valid_choices = self._board.unused_squares()
-
+    def _get_humans_choice(self, valid_choices):
         while True:
             choice = input('Choose a square from ('
                            f'{self._join_or(valid_choices)}): ')
             if choice in [str(n) for n in valid_choices]:
+                choice = int(choice)
                 break
             print('Invalid choice. Try again.')
+        
+        return choice
+    def _human_moves(self):
+        unused_sqs = self._board.unused_squares()
+        if self._numpad:
+            valid_choices = tuple([self.NORMAL_TO_NUMPAD[n] for n in unused_sqs])
+        else:
+            valid_choices = unused_sqs
 
-        self._board.mark_square_at(int(choice), Human.HUMAN_MARK)
+        # while True:
+        #     choice = input('Choose a square from ('
+        #                    f'{self._join_or(valid_choices)}): ')
+        #     if choice in [str(n) for n in valid_choices]:
+        #         choice = int(choice)
+        #         break
+        #     print('Invalid choice. Try again.')
+
+        choice = self._get_humans_choice(valid_choices)
+
+        if self._numpad:
+            self._board.mark_square_at(self.NUMPAD_TO_NORMAL[choice], Human.HUMAN_MARK)
+        else:
+            self._board.mark_square_at(choice, Human.HUMAN_MARK)
     
     def _best_move_for(self, player):
         for combo in TTTGame.WINNING_COMBOS:
@@ -428,6 +453,7 @@ class TTTGame:
         starting_player = self._human
         self._display_welcome_msg()
         self._set_player_name()
+        self._set_numpad()
         self._display_rules()
         self._display_game_countdown()
 
