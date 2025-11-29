@@ -144,6 +144,7 @@ class TTTGame:
         (1, 5, 9), (3, 5, 7)                # Diagonals
     )
     MATCHES_TO_WIN = 3
+    GAME_TITLE = '  Tic Tac Toe!  '
 
     def __init__(self):
         self._board = Board()
@@ -165,6 +166,9 @@ class TTTGame:
             for line in word:
                 print(line.center(80, ' '))
             time.sleep(0.5)
+
+    def _display_game_title(self):
+        print(f'{self.GAME_TITLE.center(80, '*')}')
 
     def _display_welcome_msg(self):
         clear_screen()
@@ -200,8 +204,16 @@ class TTTGame:
             print()
             self._display_choice_layout()
             print()
-            self._enter_to_continue('Hit Enter if you are ready to play...')
-            clear_screen()
+        self._enter_to_continue('Hit Enter if you are ready to play...')
+        clear_screen()
+
+    def _display_game_countdown(self):
+        print()
+        print('Game will start in 1 second...')
+        time.sleep(1)
+        print('Game Start!')
+        time.sleep(1)
+        clear_screen()
 
     def _display_goodbye_msg(self):
         print('Thanks for playing Tic Tac Toe. Goodbye!')
@@ -366,6 +378,7 @@ class TTTGame:
         goes_next = first_to_play
 
         while True:
+                self._display_game_title()
                 self._display_score()
                 self._board.display()
 
@@ -383,12 +396,14 @@ class TTTGame:
         self._display_welcome_msg()
         self._set_player_name()
         self._display_rules()
+        self._display_game_countdown()
 
         while True:
             self._play_match(starting_player)
 
             clear_screen()
 
+            self._display_game_title()
             self._display_score()
             self._board.display()
             self._display_results()
