@@ -48,28 +48,28 @@ class Board:
         markers = [self._squares[key].mark for key in keys]
         return markers.count(player.marker)
 
-    def display(self):
+    def display(self, length=0):
         print()
         print(f'{self._squares[1].ascii_mark[0]}|'
               f'{self._squares[2].ascii_mark[0]}|'
-              f'{self._squares[3].ascii_mark[0]}')
+              f'{self._squares[3].ascii_mark[0]}'.center(length, ' '))
         print(f'{self._squares[1].ascii_mark[1]}|'
               f'{self._squares[2].ascii_mark[1]}|'
-              f'{self._squares[3].ascii_mark[1]}')
-        print('----+----+----')
+              f'{self._squares[3].ascii_mark[1]}'.center(length, ' '))
+        print('----+----+----'.center(length, ' '))
         print(f'{self._squares[4].ascii_mark[0]}|'
               f'{self._squares[5].ascii_mark[0]}|'
-              f'{self._squares[6].ascii_mark[0]}')
+              f'{self._squares[6].ascii_mark[0]}'.center(length, ' '))
         print(f'{self._squares[4].ascii_mark[1]}|'
               f'{self._squares[5].ascii_mark[1]}|'
-              f'{self._squares[6].ascii_mark[1]}')
-        print('----+----+----')
+              f'{self._squares[6].ascii_mark[1]}'.center(length, ' '))
+        print('----+----+----'.center(length, ' '))
         print(f'{self._squares[7].ascii_mark[0]}|'
               f'{self._squares[8].ascii_mark[0]}|'
-              f'{self._squares[9].ascii_mark[0]}')
+              f'{self._squares[9].ascii_mark[0]}'.center(length, ' '))
         print(f'{self._squares[7].ascii_mark[1]}|'
               f'{self._squares[8].ascii_mark[1]}|'
-              f'{self._squares[9].ascii_mark[1]}')
+              f'{self._squares[9].ascii_mark[1]}'.center(length, ' '))
         print()
 
     def mark_square_at(self, key, marker):
@@ -145,6 +145,7 @@ class TTTGame:
     )
     MATCHES_TO_WIN = 3
     GAME_TITLE = '  Tic Tac Toe!  '
+    TITLE_LENGTH = len(GAME_TITLE.center(80, ' '))
     NUMPAD_TO_NORMAL = {
         1 : 7,
         2 : 8,
@@ -222,7 +223,7 @@ class TTTGame:
 
     def _set_numpad(self):
         while True:
-            choice = input('Would you like to use the conventional (c) '\
+            choice = input('Would you like to use the conventional (c)'\
             ' number layout for your move choices or numpad (n)'\
             ' layout? (c/n): ').lower()
 
@@ -265,10 +266,10 @@ class TTTGame:
         border = f'+-{'-' * max_length}-+'
 
         print()
-        print(border)
-        print(f'| {f'{self._human.name} : {human_score}'.ljust(max_length, ' ')} |')
-        print(f'| {f'Computer : {computer_score}'.ljust(max_length, ' ')} |')
-        print(border)
+        print(border.center(self.TITLE_LENGTH, ' '))
+        print(f'| {f'{self._human.name} : {human_score}'.ljust(max_length, ' ')} |'.center(self.TITLE_LENGTH, ' '))
+        print(f'| {f'Computer : {computer_score}'.ljust(max_length, ' ')} |'.center(self.TITLE_LENGTH, ' '))
+        print(border.center(self.TITLE_LENGTH, ' '))
         print()
 
     @staticmethod
@@ -372,7 +373,7 @@ class TTTGame:
             self._computer.add_point()
 
     def _play_again(self):
-        if self._yes_or_no('Do you want to play again?'):
+        if self._yes_or_no('Do you want to play the next round?'):
             return True
         return False
 
@@ -436,7 +437,7 @@ class TTTGame:
         while True:
                 self._display_game_title()
                 self._display_score()
-                self._board.display()
+                self._board.display(self.TITLE_LENGTH)
 
                 self._player_turn(goes_next)
                 if self._game_is_over():
@@ -463,11 +464,13 @@ class TTTGame:
 
             self._display_game_title()
             self._display_score()
-            self._board.display()
+            self._board.display(self.TITLE_LENGTH)
             self._display_results()
 
             if self._is_overall_winner():
                 self._display_overall_winner()
+                print()
+                self._enter_to_continue('Press Enter to exit the game...')
                 break
 
             if not self._play_again():
@@ -484,7 +487,7 @@ game.play()
 
 # TODO:
 # Display who goes first for each match?
-# Centre the displays
+
 # Finishing touches to game
 # Refactor main game function
 # Reorganise files into new folder
