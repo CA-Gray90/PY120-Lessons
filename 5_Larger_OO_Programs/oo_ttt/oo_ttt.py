@@ -307,14 +307,15 @@ class TTTGame:
         
         return choice
 
-    def _human_moves(self):
+    def _get_valid_choices(self):
         unused_sqs = self._board.unused_squares()
-        if self._numpad:
-            valid_choices = tuple(sorted([self.NORMAL_TO_NUMPAD[n] for n in unused_sqs]))
-        else:
-            valid_choices = unused_sqs
 
-        choice = self._get_humans_choice(valid_choices)
+        if self._numpad:
+            return tuple(sorted([self.NORMAL_TO_NUMPAD[n] for n in unused_sqs]))
+        return unused_sqs
+
+    def _human_moves(self):
+        choice = self._get_humans_choice(self._get_valid_choices())
 
         if self._numpad:
             self._board.mark_square_at(self.NUMPAD_TO_NORMAL[choice], Human.HUMAN_MARK)
@@ -482,8 +483,9 @@ game = TTTGame()
 game.play()
 
 # TODO:
-# A way to choose numpad for choosing moves instead?
-# GAme UI improvements, timings etc, keep it fairly basic
-
-# NOTE Human mark and computer mark are defined as constants in Human and
-# Computer class respectively
+# Display who goes first for each match?
+# Centre the displays
+# Finishing touches to game
+# Refactor main game function
+# Reorganise files into new folder
+# Pylint
