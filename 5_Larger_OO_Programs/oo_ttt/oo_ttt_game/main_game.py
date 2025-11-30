@@ -1,7 +1,6 @@
-import pdb
-import random
-import os
 import json
+import os
+import random
 import time
 
 def clear_screen():
@@ -116,7 +115,7 @@ class Human(Player):
     def __init__(self):
         super().__init__(Human.HUMAN_MARK)
         self.name = None
-    
+
     @property
     def name(self):
         return self._name
@@ -135,7 +134,7 @@ class Computer(Player):
     @property
     def name(self):
         return self._name
-    
+
     @staticmethod
     def think():
         pause = random.choice([0.2, 0.3, 0.4, 0.5])
@@ -148,6 +147,7 @@ class TTTGame:
         (1, 4, 7), (2, 5, 8), (3, 6, 9),    # Columns
         (1, 5, 9), (3, 5, 7)                # Diagonals
     )
+
     MATCHES_TO_WIN = 3
     GAME_TITLE = '  Tic Tac Toe!  '
     TITLE_LENGTH = len(GAME_TITLE.center(80, ' '))
@@ -175,7 +175,7 @@ class TTTGame:
     def _title_seq():
         with open('TTT_Title.json', 'r') as file:
             tictactoe = json.load(file)
-            
+
         tic, tac, toe = tictactoe['tic'], tictactoe['tac'], tictactoe['toe']
         print(f'{'  Welcome to:  '.center(80, '*')}')
         time.sleep(0.5)
@@ -194,7 +194,7 @@ class TTTGame:
         clear_screen()
         self._title_seq()
         print()
-    
+
     def _display_general_rules(self):
         with open('TTTrules.json', 'r') as file:
             general_rules = json.load(file)['general_rules_msgs']
@@ -209,13 +209,13 @@ class TTTGame:
             choice_layout = json.load(file)['choice_layout_msgs']
 
         for line in choice_layout.values():
-                if isinstance(line, list):
-                    print()
-                    for nested_line in line:
-                        print(nested_line)
-                    print() 
-                else:
-                    print(line)
+            if isinstance(line, list):
+                print()
+                for nested_line in line:
+                    print(nested_line)
+                print()
+            else:
+                print(line)
 
     def _display_rules(self):
         if self._yes_or_no('Do you wish to see the rules?'):
@@ -225,23 +225,6 @@ class TTTGame:
             self._display_choice_layout()
             print()
             self._enter_to_continue()
-
-    def _set_numpad(self):
-        while True:
-            choice = input('Would you like to use the conventional (c)'\
-            ' number layout for your move choices or numpad (n)'\
-            ' layout? (c/n): ').lower()
-
-            if choice not in ('c', 'n'):
-                print('Invalid choice. Try again.')
-            else:
-                break
-        
-        if choice == 'n':
-            self._numpad = True
-        print()
-        print(f'You have chosen: {'Numpad' if choice == 'n' else 'Conventional'}')
-        print()
 
     def _display_game_countdown(self):
         print()
@@ -256,26 +239,69 @@ class TTTGame:
 
     def _display_results(self):
         if self._is_winner(self._human):
-            print(f'You won! Congratulations!')
+            print('You won! Congratulations!')
         elif self._is_winner(self._computer):
             print('Computer won! You lost.')
         else:
             print('It is a tie!')
 
     def _display_score(self):
-        human_score = self._human.score
-        computer_score = self._computer.score
+        h_score = self._human.score
+        c_score = self._computer.score
+        max_length = len(max(f'{self._human.name} : {h_score}',
+                             f'Computer : {c_score}', key=len))
 
-        max_length = len(max(f'{self._human.name} : {human_score}', 
-                             f'Computer : {computer_score}', key=len))
         border = f'+-{'-' * max_length}-+'
+        human_line = f'{self._human.name} : {h_score}'.ljust(max_length, ' ')
+        comp_line = f'Computer : {c_score}'.ljust(max_length, ' ')
 
         print()
         print(border.center(self.TITLE_LENGTH, ' '))
-        print(f'| {f'{self._human.name} : {human_score}'.ljust(max_length, ' ')} |'.center(self.TITLE_LENGTH, ' '))
-        print(f'| {f'Computer : {computer_score}'.ljust(max_length, ' ')} |'.center(self.TITLE_LENGTH, ' '))
+        print(f'| {human_line} |'.center(self.TITLE_LENGTH, ' '))
+        print(f'| {comp_line} |'.center(self.TITLE_LENGTH, ' '))
         print(border.center(self.TITLE_LENGTH, ' '))
         print()
+
+    def _set_player_name(self):
+        while True:
+            name = input('Enter your name: ')
+            if not all([c.isalpha() or c.isspace() for c in name]):
+                print('Please use alphabetic characters only.')
+            else:
+                break
+        print()
+        print(f'Welcome {name}!')
+        self._human.name = name
+
+    def _set_numpad(self):
+        while True:
+            choice = input('Would you like to use the conventional (c)'\
+            ' number layout for your move choices or numpad (n)'\
+            ' layout? (c/n): ').lower()
+
+            if choice not in ('c', 'n'):
+                print('Invalid choice. Try again.')
+            else:
+                break
+
+        if choice == 'n':
+            self._numpad = True
+        print()
+        print(f'You have chosen: {'Numpad' if choice == 'n' \
+                                  else 'Conventional'}')
+        print()
+
+    def _convert_from_numpad(self, num):
+        '''
+        Returns conventional number from numpad number given.
+        '''
+        return self.NUMPAD_TO_NORMAL[num]
+
+    def _convert_to_numpad(self, num):
+        '''
+        Returns numpad number from conventional number given.
+        '''
+        return self.NORMAL_TO_NUMPAD[num]
 
     @staticmethod
     def _join_or(seq, delim=', ', join_word='or'):
@@ -289,18 +315,6 @@ class TTTGame:
             return start_part + end_part
 
         return end_part
-    
-    def _convert_from_numpad(self, num):
-        '''
-        Returns conventional number from numpad number given.
-        '''
-        return self.NUMPAD_TO_NORMAL[num]
-
-    def _convert_to_numpad(self, num):
-        '''
-        Returns numpad number from conventional number given.
-        '''
-        return self.NORMAL_TO_NUMPAD[num]
 
     def _get_humans_choice(self, valid_choices):
         while True:
@@ -310,24 +324,27 @@ class TTTGame:
                 choice = int(choice)
                 break
             print('Invalid choice. Try again.')
-        
+
         return choice
 
     def _get_valid_choices(self):
         unused_sqs = self._board.unused_squares()
 
         if self._numpad:
-            return tuple(sorted([self.NORMAL_TO_NUMPAD[n] for n in unused_sqs]))
+            return tuple(sorted([self.NORMAL_TO_NUMPAD[n]
+                                 for n in unused_sqs]))
         return unused_sqs
 
     def _human_moves(self):
         choice = self._get_humans_choice(self._get_valid_choices())
 
         if self._numpad:
-            self._board.mark_square_at(self.NUMPAD_TO_NORMAL[choice], Human.HUMAN_MARK)
+            self._board.mark_square_at(
+                self.NUMPAD_TO_NORMAL[choice], Human.HUMAN_MARK
+                )
         else:
             self._board.mark_square_at(choice, Human.HUMAN_MARK)
-    
+
     def _best_move_for(self, player):
         for combo in TTTGame.WINNING_COMBOS:
             if self._n_in_a_row(player, combo, 2):
@@ -391,7 +408,7 @@ class TTTGame:
                 return choice[0] == 'y'
 
             print('Invalid choice. Try again.')
-    
+
     @staticmethod
     def _enter_to_continue(prompt=None):
         if not prompt:
@@ -401,35 +418,25 @@ class TTTGame:
 
     def _is_overall_winner(self):
         return self._human.score == 3 or self._computer.score == 3
-    
+
     def _display_overall_winner(self):
         if self._human.score == 3:
-            print('Congratualtions you got to 3 points first. You won the game!')
+            print('Congratualtions you got to 3 points first. '
+                  'You won the game!')
         else:
             print('Computer got to 3 points first. You lost the game!')
-    
+
     def _player_turn(self, goes_next):
         if goes_next == self._human:
             self._human_moves()
         else:
             self._computer.think()
             self._computer_moves()
-    
+
     def _toggle_player(self, player):
         if player == self._human:
             return self._computer
         return self._human
-    
-    def _set_player_name(self):
-        while True:
-            name = input('Enter your name: ')
-            if not all([c.isalpha() or c.isspace() for c in name]):
-                print('Please use alphabetic characters only.')
-            else:
-                break
-        print()
-        print(f'Welcome {name}!')
-        self._human.name = name
 
     def _play_match(self, first_to_play):
         '''
@@ -440,17 +447,17 @@ class TTTGame:
         goes_next = first_to_play
 
         while True:
-                self._display_game_title()
-                self._display_score()
-                self._board.display(self.TITLE_LENGTH)
-                print(f"{goes_next.name}'s turn.")
+            self._display_game_title()
+            self._display_score()
+            self._board.display(self.TITLE_LENGTH)
+            print(f"{goes_next.name}'s turn.")
 
-                self._player_turn(goes_next)
-                if self._game_is_over():
-                    break
-                
-                goes_next = self._toggle_player(goes_next)
-                clear_screen()
+            self._player_turn(goes_next)
+            if self._game_is_over():
+                break
+
+            goes_next = self._toggle_player(goes_next)
+            clear_screen()
 
         self._hand_out_points()
 
@@ -497,9 +504,3 @@ class TTTGame:
 
 game = TTTGame()
 game.play()
-
-# TODO:
-# Refactor main game function
-# incorrect input checks
-# Reorganise files into new folder
-# Pylint
