@@ -130,6 +130,11 @@ class Computer(Player):
 
     def __init__(self):
         super().__init__(Computer.COMPUTER_MARK)
+        self._name = 'Computer'
+
+    @property
+    def name(self):
+        return self._name
     
     @staticmethod
     def think():
@@ -438,6 +443,7 @@ class TTTGame:
                 self._display_game_title()
                 self._display_score()
                 self._board.display(self.TITLE_LENGTH)
+                print(f"{goes_next.name}'s turn.")
 
                 self._player_turn(goes_next)
                 if self._game_is_over():
@@ -477,6 +483,10 @@ class TTTGame:
                 break
 
             starting_player = self._toggle_player(starting_player)
+
+            print(f'{starting_player.name} will go first.')
+            self._enter_to_continue()
+
             self._board.reset()
             clear_screen()
 
@@ -486,8 +496,6 @@ game = TTTGame()
 game.play()
 
 # TODO:
-# Display who goes first for each match?
-
 # Finishing touches to game
 # Refactor main game function
 # Reorganise files into new folder
