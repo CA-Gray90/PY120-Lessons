@@ -454,8 +454,7 @@ class TTTGame:
 
         self._hand_out_points()
 
-    def play(self):
-        starting_player = self._human
+    def _start_up_seq(self):
         self._display_welcome_msg()
         self._set_player_name()
         self._display_rules()
@@ -463,15 +462,20 @@ class TTTGame:
         self._enter_to_continue('Press Enter if you are ready to play...')
         self._display_game_countdown()
 
+    def _match_over_seq(self):
+        clear_screen()
+        self._display_game_title()
+        self._display_score()
+        self._board.display(self.TITLE_LENGTH)
+        self._display_results()
+
+    def play(self):
+        starting_player = self._human
+        self._start_up_seq()
+
         while True:
             self._play_match(starting_player)
-
-            clear_screen()
-
-            self._display_game_title()
-            self._display_score()
-            self._board.display(self.TITLE_LENGTH)
-            self._display_results()
+            self._match_over_seq()
 
             if self._is_overall_winner():
                 self._display_overall_winner()
@@ -486,7 +490,6 @@ class TTTGame:
 
             print(f'{starting_player.name} will go first.')
             self._enter_to_continue()
-
             self._board.reset()
             clear_screen()
 
@@ -496,7 +499,7 @@ game = TTTGame()
 game.play()
 
 # TODO:
-# Finishing touches to game
 # Refactor main game function
+# incorrect input checks
 # Reorganise files into new folder
 # Pylint
