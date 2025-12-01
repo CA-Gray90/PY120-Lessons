@@ -60,13 +60,35 @@ class Card:
     pass
 
 class Hand:
+    COURT_CARD_VALUE = 10
+
     def __init__(self):
         self._card1 = 'empty'
         self._card2 = 'empty'
+    
+    def _non_ace_card_value(self, card):
+        return int(card.rank) if card.rank.isdigit() else self.COURT_CARD_VALUE
+
+    @staticmethod
+    def _ace_value(total):
+        return 1 if total >= 11 else 11
 
     @property
     def total(self):
-        pass
+        cards = [self._card1, self._card2]
+        total_value = 0
+        aces = 0
+
+        for card in cards:
+            if card.rank != 'A':
+                total_value += self._non_ace_card_value(card)
+            else:
+                aces += 1
+        
+        for _ in range(aces):
+            total_value += self._ace_value(total_value)
+        
+        return total_value
 
     def __str__(self):
         return str([self._card1, self._card2])
@@ -195,15 +217,16 @@ class TOGame:
     def _display_goodbye_msg(self):
         print('Thank you for playing Twenty One! Goodbye.')
 
+    def _show_cards(self):
+        print(f'{self._dealer.hand} : {self._dealer.hand.total}')
+        print(f'{self._player.hand} : {self._player.hand.total}')
+
     def play(self):
         self._display_welcome_msg()
         self._dealer.shuffle_cards()
         self._dealer.deal_cards(self._player)
 
-        print(self._dealer.hand)
-        print(self._player.hand)
-        # self._deal_cards() #?
-        # self._show_cards()
+        self._show_cards()
         # self._players_turn()
         # self._dealers_turn()
         # self._display_result()
