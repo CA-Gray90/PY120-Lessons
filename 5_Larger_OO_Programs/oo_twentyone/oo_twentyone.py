@@ -17,8 +17,9 @@ class Deck:
         return [Card(rank, suite) for suite in self.SUITES
                                   for rank in self.RANKS]
 
-    def deal(self):
-        return self._deck.pop()
+    def deal_one(self):
+        if self._deck:
+            return self._deck.pop()
     
     def __str__(self):
         return str(self._deck)
@@ -103,10 +104,6 @@ class Hand:
         else:
             self._card2 = card
 
-    def _calculate_aces(self):
-        # STUB: Help calculate aces?
-        pass
-
     # STUB:
     # Knows how to work with Card objects. Dependency?
     # has two cards, knows total
@@ -154,8 +151,8 @@ class Dealer(Participant):
     def deal_cards(self, other):
         # STUB: Must deal card to self and player
         for _ in range(2):
-            self._hand.add_card(self._deck.deal())
-            other._hand.add_card(self._deck.deal())
+            self._hand.add_card(self._deck.deal_one())
+            other._hand.add_card(self._deck.deal_one())
 
     def hide_hand(self):
         pass
