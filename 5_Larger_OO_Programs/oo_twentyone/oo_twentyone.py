@@ -17,10 +17,8 @@ class Deck:
         return [Card(rank, suite) for suite in self.SUITES
                                   for rank in self.RANKS]
 
-    @property
-    def card(self):
-        # STUB: Pops a card from deck and returns it, else None
-        pass
+    def deal(self):
+        return self._deck.pop()
     
     def __str__(self):
         return str(self._deck)
@@ -63,20 +61,25 @@ class Card:
 
 class Hand:
     def __init__(self):
-        self._card1 = None
-        self._card2 = None
+        self._card1 = 'empty'
+        self._card2 = 'empty'
 
     @property
     def total(self):
         pass
 
+    def __str__(self):
+        return str([self._card1, self._card2])
+
     def discard_cards(self):
         # STUB: Discards cards, resets instance variables.
         pass
-    
+
     def add_card(self, card):
-        # STUB: Adds a card to each instance variable
-        pass
+        if self._card1 == 'empty':
+            self._card1 = card
+        else:
+            self._card2 = card
 
     def _calculate_aces(self):
         # STUB: Help calculate aces?
@@ -101,6 +104,10 @@ class Participant:
         self._hand = Hand()
         self._score = 0         # Overall score; game wins.
 
+    @property
+    def hand(self):
+        return self._hand
+
     def hit_or_stay(self):
         pass
 
@@ -122,8 +129,11 @@ class Dealer(Participant):
     def shuffle_cards(self):
         self._deck.shuffle()
 
-    def deal_cards(self):
-        pass
+    def deal_cards(self, other):
+        # STUB: Must deal card to self and player
+        for _ in range(2):
+            self._hand.add_card(self._deck.deal())
+            other._hand.add_card(self._deck.deal())
 
     def hide_hand(self):
         pass
@@ -187,11 +197,11 @@ class TOGame:
 
     def play(self):
         self._display_welcome_msg()
-        print(self._dealer._deck)
         self._dealer.shuffle_cards()
-        print('Shuffled cards:')
-        print(self._dealer._deck)
+        self._dealer.deal_cards(self._player)
 
+        print(self._dealer.hand)
+        print(self._player.hand)
         # self._deal_cards() #?
         # self._show_cards()
         # self._players_turn()
