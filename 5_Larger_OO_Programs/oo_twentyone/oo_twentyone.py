@@ -20,6 +20,7 @@ class Deck:
     def deal_one(self):
         if self._deck:
             return self._deck.pop()
+        return None
     
     def __str__(self):
         return str(self._deck)
@@ -102,7 +103,7 @@ class Hand:
         
         for _ in range(aces):
             total_value += self._ace_value(total_value)
-        
+
         return total_value
 
     def __str__(self):
@@ -146,9 +147,7 @@ class Participant:
         pass
 
     def is_busted(self):
-        # STUB:
-        # Checks hand if busted?
-        pass
+        return self._hand.total > 21
 
     def points(self):
         self._hand.total
@@ -231,6 +230,13 @@ class TOGame:
         for _ in range(2):
             player1.hand.add_card(self._deck.deal_one())
             player2.hand.add_card(self._deck.deal_one())
+    
+    def _deal_one_card(self):
+        card = self._deck.deal_one()
+        if card:
+            return card
+        else:
+            print('Deck is empty!')
 
     def _show_cards(self):
         dealers = self._dealer.hand
@@ -243,9 +249,20 @@ class TOGame:
         # Player can choose hit or stay
         # Player can bust if goes over the total
         # Give player option to choose or stay, does hand need to be list??
-        choice = self._player.hit_or_stay()
-        print(f'Player {choice}!')
-        pass
+        # loop?
+        player = self._player
+        while True:
+            choice = player.hit_or_stay()
+            print(f'Player {choice}!')
+            if choice == 'hits':
+                player.hand.add_card(self._deck.deal_one())
+            else:
+                break
+
+            if player.is_busted():
+                print('Player Busts!')
+                break
+            self._show_cards()
 
     def play(self):
         self._display_welcome_msg()
@@ -253,7 +270,9 @@ class TOGame:
         self._deal_cards(self._player, self._dealer)
 
         self._show_cards()
+
         self._players_turn()
+        
         # self._dealers_turn()
         # self._display_result()
         # self._play_again()
