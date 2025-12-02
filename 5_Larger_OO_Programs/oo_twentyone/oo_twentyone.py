@@ -198,7 +198,7 @@ class Player(Participant):
         while True:
             choice = input('Player chooses either hit or stay: ').lower()
             if choice in {'h', 's', 'hit', 'stay'}:
-                return 'hit' if choice[0] == 'h' else 'stays'
+                return 'hits' if choice[0] == 'h' else 'stays'
             else:
                 print('Invalid input, please try again.')
 
