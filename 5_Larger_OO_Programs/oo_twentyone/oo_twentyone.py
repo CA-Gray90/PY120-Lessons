@@ -68,19 +68,23 @@ class Hand:
     ACE_VALUE = 11
 
     def __init__(self):
-        self._card1 = 'empty'
-        self._card2 = 'empty'
+        # self._card1 = 'empty'
+        # self._card2 = 'empty'
+        self._cards = []
     
     def _non_ace_card_value(self, card):
         return int(card.rank) if card.rank.isdigit() else self.COURT_CARD_VALUE
 
     @staticmethod
     def _ace_value(total):
+        '''
+        Returns 11 or 1 which are the possible values of an Ace.
+        '''
         return 1 if total >= 11 else 11
 
     @property
     def hidden_total(self):
-        card2 = self._card2
+        card2 = self._cards[1]
         if card2.rank != 'A':
             return self._non_ace_card_value(card2)
         else: 
@@ -88,7 +92,7 @@ class Hand:
 
     @property
     def total(self):
-        cards = [self._card1, self._card2]
+        cards = self._cards
         total_value = 0
         aces = 0
 
@@ -104,21 +108,18 @@ class Hand:
         return total_value
 
     def __str__(self):
-        return str([self._card1, self._card2])
+        return str([self._cards])
     
     @property
     def hidden_hand(self):
-        return str([self._card1.hide(), self._card2])
+        return str([self._cards[0].hide()] + [self._cards[1]])
 
     def discard_cards(self):
         # STUB: Discards cards, resets instance variables.
         pass
 
     def add_card(self, card):
-        if self._card1 == 'empty':
-            self._card1 = card
-        else:
-            self._card2 = card
+        self._cards.append(card)
 
     # STUB:
     # Knows how to work with Card objects. Dependency?
@@ -191,7 +192,6 @@ class Dealer(Participant):
     # Has:
         # A Deck of cards
         # points
-    pass
 
 class Player(Participant):
     def __init__(self):
@@ -250,6 +250,7 @@ class TOGame:
         # Player can choose hit or stay
         # Player can bust if goes over the total
         # Give player option to choose or stay, does hand need to be list??
+        pass
 
     def play(self):
         self._display_welcome_msg()
