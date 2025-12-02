@@ -143,9 +143,6 @@ class Participant:
     def hand(self):
         return self._hand
 
-    def hit_or_stay(self):
-        pass
-
     def is_busted(self):
         return self._hand.total > 21
 
@@ -155,11 +152,16 @@ class Participant:
     pass
 
 class Dealer(Participant):
+    STAY_LIMIT = 17
+
     def __init__(self):
         super().__init__()
 
     def hit_or_stay(self):
-        pass
+        if self._hand.total >= Dealer.STAY_LIMIT:
+            return 'stays'
+        else:
+            return 'hits'
 
     # Can shuffle
     # Can deal
@@ -195,6 +197,7 @@ class Player(Participant):
     pass
 
 class TOGame:
+    DEALER_STAY_LIMIT = 17
     # STUB:
     # main orchestration function of the game
     # has:
@@ -231,17 +234,21 @@ class TOGame:
             player1.hand.add_card(self._deck.deal_one())
             player2.hand.add_card(self._deck.deal_one())
     
-    def _deal_one_card(self):
-        card = self._deck.deal_one()
-        if card:
-            return card
-        else:
-            print('Deck is empty!')
+    # def _deal_one_card(self):
+    #     card = self._deck.deal_one()
+    #     if card:
+    #         return card
+    #     else:
+    #         print('Deck is empty!')
 
-    def _show_cards(self):
+    def _show_cards(self, reveal=False):
         dealers = self._dealer.hand
         players = self._player.hand
-        print(f'{dealers.hidden_hand} : {dealers.hidden_total}')
+
+        if reveal:
+            print(f'{dealers} : {dealers.total}')
+        else:
+            print(f'{dealers.hidden_hand} : {dealers.hidden_total}')
         print(f'{players} : {players.total}')
 
     def _players_turn(self):
@@ -264,6 +271,24 @@ class TOGame:
                 break
             self._show_cards()
 
+    def _dealers_turn(self):
+        dealer = self._dealer
+        print('Dealers Hand revealed:')
+        self._show_cards(reveal=True)
+
+        while True:
+            choice = dealer.hit_or_stay()
+            print(f'Dealer {choice}!')
+            if choice == 'hits':
+                dealer.hand.add_card(self._deck.deal_one())
+            else:
+                break
+
+            if dealer.is_busted():
+                print('Dealer busts!')
+                break
+            self._show_cards(reveal=True)
+
     def play(self):
         self._display_welcome_msg()
         self._shuffle_cards()
@@ -273,7 +298,7 @@ class TOGame:
 
         self._players_turn()
         
-        # self._dealers_turn()
+        self._dealers_turn()
         # self._display_result()
         # self._play_again()
         self._display_goodbye_msg()
@@ -281,3 +306,5 @@ class TOGame:
 
 game = TOGame()
 game.play()
+
+# Busted outcome doesnt end game yet
