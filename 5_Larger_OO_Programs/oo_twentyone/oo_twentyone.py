@@ -28,8 +28,6 @@ class Deck:
     def shuffle(self):
         random.shuffle(self._deck)
 
-    pass
-
 class Card:
     # STUB:
     # has rank and suite
@@ -82,14 +80,6 @@ class Hand:
         return 1 if total >= 11 else 11
 
     @property
-    def hidden_total(self):
-        card2 = self._cards[1]
-        if card2.rank != 'A':
-            return self._non_ace_card_value(card2)
-        else: 
-            return self.ACE_VALUE
-
-    @property
     def total(self):
         cards = self._cards
         total_value = 0
@@ -106,12 +96,21 @@ class Hand:
 
         return total_value
 
-    def __str__(self):
-        return str([self._cards])
-    
+    @property
+    def hidden_total(self):
+        card2 = self._cards[1]
+        if card2.rank != 'A':
+            return self._non_ace_card_value(card2)
+        else: 
+            return self.ACE_VALUE
+
     @property
     def hidden_hand(self):
         return str([self._cards[0].hide()] + [self._cards[1]])
+
+    # Currently this is how the hand is displayed:
+    def __str__(self):
+        return str([self._cards])
 
     def discard_cards(self):
         # STUB: Discards cards, resets instance variables.
@@ -130,6 +129,7 @@ class Hand:
     pass
 
 class Participant:
+    BLACKJACK = 21
     # STUB:
     # Can Hit or Stay
     # Bust
@@ -144,7 +144,7 @@ class Participant:
         return self._hand
 
     def is_busted(self):
-        return self._hand.total > 21
+        return self._hand.total > Participant.BLACKJACK
 
     def points(self):
         self._hand.total
@@ -308,3 +308,6 @@ game = TOGame()
 game.play()
 
 # Busted outcome doesnt end game yet
+# Perhaps change way main orchestration method reveals hands. 'Asks' players to
+# reveal hand that belongs to them?
+# Dealers turn and players turn very similar, some shared functionality.
