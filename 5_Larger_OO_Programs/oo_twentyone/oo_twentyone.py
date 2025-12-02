@@ -49,6 +49,9 @@ class Card:
     
     def __repr__(self):
         return f'Card({self._rank}, {self._suite})'
+    
+    def hide(self):
+        return 'Card is Hidden'
 
     def display_hidden(self):
         pass
@@ -62,6 +65,7 @@ class Card:
 
 class Hand:
     COURT_CARD_VALUE = 10
+    ACE_VALUE = 11
 
     def __init__(self):
         self._card1 = 'empty'
@@ -73,6 +77,14 @@ class Hand:
     @staticmethod
     def _ace_value(total):
         return 1 if total >= 11 else 11
+
+    @property
+    def hidden_total(self):
+        card2 = self._card2
+        if card2.rank != 'A':
+            return self._non_ace_card_value(card2)
+        else: 
+            return self.ACE_VALUE
 
     @property
     def total(self):
@@ -93,6 +105,10 @@ class Hand:
 
     def __str__(self):
         return str([self._card1, self._card2])
+    
+    @property
+    def hidden_hand(self):
+        return str([self._card1.hide(), self._card2])
 
     def discard_cards(self):
         # STUB: Discards cards, resets instance variables.
@@ -154,11 +170,20 @@ class Dealer(Participant):
             self._hand.add_card(self._deck.deal_one())
             other._hand.add_card(self._deck.deal_one())
 
-    def hide_hand(self):
-        pass
+    # @property
+    # def hand(self, hidden=True):
+    #     if hidden:
+    #         return self.hand.hidden()
+    #     return self.hand
 
-    def reveal_hand(self):
-        pass
+    # def hidden_hand(self):
+    #     return self.hand.hidden()
+
+    # def revealed_hand(self):
+    #     return self.hand
+    
+    # def hidden_total(self):
+    #     return self._hand.
 
     # Can shuffle
     # Can deal
@@ -215,8 +240,10 @@ class TOGame:
         print('Thank you for playing Twenty One! Goodbye.')
 
     def _show_cards(self):
-        print(f'{self._dealer.hand} : {self._dealer.hand.total}')
-        print(f'{self._player.hand} : {self._player.hand.total}')
+        dealers = self._dealer.hand
+        players = self._player.hand
+        print(f'{dealers.hidden_hand} : {dealers.hidden_total}')
+        print(f'{players} : {players.total}')
 
     def play(self):
         self._display_welcome_msg()
