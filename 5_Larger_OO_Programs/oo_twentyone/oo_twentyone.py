@@ -171,20 +171,8 @@ class Dealer(Participant):
             self._hand.add_card(self._deck.deal_one())
             other._hand.add_card(self._deck.deal_one())
 
-    # @property
-    # def hand(self, hidden=True):
-    #     if hidden:
-    #         return self.hand.hidden()
-    #     return self.hand
-
-    # def hidden_hand(self):
-    #     return self.hand.hidden()
-
-    # def revealed_hand(self):
-    #     return self.hand
-    
-    # def hidden_total(self):
-    #     return self._hand.
+    def hit_or_stay(self):
+        pass
 
     # Can shuffle
     # Can deal
@@ -205,6 +193,14 @@ class Player(Participant):
     @wallet.setter
     def wallet(self, amount):
         self._wallet = amount
+    
+    def hit_or_stay(self):
+        while True:
+            choice = input('Player chooses either hit or stay: ').lower()
+            if choice in {'h', 's', 'hit', 'stay'}:
+                return 'hit' if choice[0] == 'h' else 'stays'
+            else:
+                print('Invalid input, please try again.')
 
     # Hit or stay etc
     # Has a hand
@@ -244,12 +240,14 @@ class TOGame:
         players = self._player.hand
         print(f'{dealers.hidden_hand} : {dealers.hidden_total}')
         print(f'{players} : {players.total}')
-    
+
     def _players_turn(self):
         # STUB:
         # Player can choose hit or stay
         # Player can bust if goes over the total
         # Give player option to choose or stay, does hand need to be list??
+        choice = self._player.hit_or_stay()
+        print(f'Player {choice}!')
         pass
 
     def play(self):
