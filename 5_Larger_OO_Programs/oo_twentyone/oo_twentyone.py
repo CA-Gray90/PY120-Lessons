@@ -244,6 +244,12 @@ class TOGame:
         players = self._player.hand
         print(f'{dealers.hidden_hand} : {dealers.hidden_total}')
         print(f'{players} : {players.total}')
+    
+    def _players_turn(self):
+        # STUB:
+        # Player can choose hit or stay
+        # Player can bust if goes over the total
+        # Give player option to choose or stay, does hand need to be list??
 
     def play(self):
         self._display_welcome_msg()
@@ -251,7 +257,7 @@ class TOGame:
         self._dealer.deal_cards(self._player)
 
         self._show_cards()
-        # self._players_turn()
+        self._players_turn()
         # self._dealers_turn()
         # self._display_result()
         # self._play_again()
