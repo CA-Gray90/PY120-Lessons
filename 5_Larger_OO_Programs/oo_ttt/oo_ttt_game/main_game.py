@@ -264,9 +264,9 @@ class TTTGame:
 
     def _set_player_name(self):
         while True:
-            name = input('Enter your name: ')
-            if not all([c.isalpha() or c.isspace() for c in name]):
-                print('Please use alphabetic characters only.')
+            name = input('Enter your name: ').strip()
+            if not name or not all([c.isalpha() or c.isspace() for c in name]):
+                    print('Please use alphabetic characters only.')
             else:
                 break
         print()
