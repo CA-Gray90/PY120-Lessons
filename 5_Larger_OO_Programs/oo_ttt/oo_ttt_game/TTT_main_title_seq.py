@@ -5,7 +5,7 @@ import json
 def title_seq():
     with open('TTT_Title.json', 'r') as file:
         tictactoe = json.load(file)
-        
+
     tic, tac, toe = tictactoe['tic'], tictactoe['tac'], tictactoe['toe']
 
     for word in (tic, tac, toe):

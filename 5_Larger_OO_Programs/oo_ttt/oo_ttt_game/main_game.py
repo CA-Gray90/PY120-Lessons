@@ -417,10 +417,11 @@ class TTTGame:
             input(f'{prompt}')
 
     def _is_overall_winner(self):
-        return self._human.score == 3 or self._computer.score == 3
+        return self._human.score == self.MATCHES_TO_WIN or \
+            self._computer.score == self.MATCHES_TO_WIN
 
     def _display_overall_winner(self):
-        if self._human.score == 3:
+        if self._human.score == self.MATCHES_TO_WIN:
             print('Congratualtions you got to 3 points first. '
                   'You won the game!')
         else:
