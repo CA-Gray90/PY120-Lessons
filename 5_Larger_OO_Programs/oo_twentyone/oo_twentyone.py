@@ -3,10 +3,7 @@ import random
 class Deck:
     RANKS = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
     SUITES = ['diamonds', 'clubs', 'hearts', 'spades']
-    # STUB:
-    # Has 52 cards (another class?)
-        # A dictionary of card objects?
-    # Can shuffle?
+
     # Maybe returns None if empty? Some way of returning empty. Dealer must
         # instantiate new deck when empty
 
@@ -29,14 +26,6 @@ class Deck:
         random.shuffle(self._deck)
 
 class Card:
-    # STUB:
-    # has rank and suite
-    # knows how to display visually
-        # knows how to hide
-    # has value (rank)
-    # knows how to add?
-    # how does Aces work...?
-
     def __init__(self, rank, suite):
         self._rank = rank
         self._suite = suite
@@ -120,25 +109,9 @@ class Hand:
         # STUB: Discards cards, resets instance variables.
         pass
 
-    # def add_card(self, card):
-    #     self._cards.append(card)
-
-    # STUB:
-    # Knows how to work with Card objects. Dependency?
-    # has two cards, knows total
-    # Can add a card
-    # Can reset? (Discard cards?)
-    # knows how to calculate aces?
-    # Maybe don't need it?
-    pass
-
 class Participant:
     BLACKJACK = 21
-    # STUB:
-    # Can Hit or Stay
-    # Bust
-    # Has points
-    # has hand (own class?)
+
     def __init__(self):
         self._hand = Hand()
         self._score = 0         # Overall score; game wins.
@@ -181,13 +154,6 @@ class Dealer(Participant):
     def hidden_total(self):
         return self._hand.hidden_total
 
-    # Can shuffle
-    # Can deal
-    # Can hide, reveal hand
-    # Has:
-        # A Deck of cards
-        # points
-
 class Player(Participant):
     def __init__(self):
         super().__init__()
@@ -208,11 +174,6 @@ class Player(Participant):
                 return 'hits' if choice[0] == 'h' else 'stays'
             else:
                 print('Invalid input, please try again.')
-
-    # Hit or stay etc
-    # Has a hand
-    # Has dollar amount
-    pass
 
 class TOGame:
     DEALER_STAY_LIMIT = 17
@@ -251,13 +212,6 @@ class TOGame:
         for _ in range(2):
             player1.add_card(self._deck.deal_one())
             player2.add_card(self._deck.deal_one())
-    
-    # def _deal_one_card(self):
-    #     card = self._deck.deal_one()
-    #     if card:
-    #         return card
-    #     else:
-    #         print('Deck is empty!')
 
     def _show_cards(self, reveal=False):
         dealer = self._dealer
@@ -270,11 +224,6 @@ class TOGame:
         print(f'{player.hand} : {player.hand_total}')
 
     def _players_turn(self):
-        # STUB:
-        # Player can choose hit or stay
-        # Player can bust if goes over the total
-        # Give player option to choose or stay, does hand need to be list??
-        # loop?
         player = self._player
         while True:
             choice = player.hit_or_stay()
