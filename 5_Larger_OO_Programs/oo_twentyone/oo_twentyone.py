@@ -256,6 +256,19 @@ class TOGame:
                 break
             self._show_cards(reveal=True)
 
+    def _display_results(self):
+        self._show_cards(self)
+        if self._player.is_busted():
+            print(f'Player lost game via a Bust! Dealer wins')
+        elif self._dealer.is_busted():
+            print('Dealer loses via Bust! Player wins the game!')
+        elif self._player.hand_total > self._dealer.hand_total:
+            print('Player has the higher score. Player wins!')
+        elif self._player.hand_total < self._dealer.hand_total:
+            print('Dealer has the higher score. Player loses game!')
+        else:
+            print('Its a draw! No one wins this game.')
+
     def play(self):
         self._display_welcome_msg()
         self._shuffle_cards()
@@ -268,7 +281,7 @@ class TOGame:
         if not self._player.is_busted():
             self._dealers_turn()
 
-        # self._display_result()
+        self._display_results()
         # self._play_again()
         self._display_goodbye_msg()
     pass
@@ -279,6 +292,7 @@ game.play()
 # Busted outcome doesnt end game yet
     # If Player busts, dealer will still play
     # busted outcome must end game
+    # Still want to display cards if bust
 # Perhaps change way main orchestration method reveals hands. 'Asks' players to
 # reveal hand that belongs to them?
 # Dealers turn and players turn very similar, some shared functionality.
