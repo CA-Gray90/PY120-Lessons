@@ -264,8 +264,10 @@ class TOGame:
         self._show_cards()
 
         self._players_turn()
-        
-        self._dealers_turn()
+
+        if not self._player.is_busted():
+            self._dealers_turn()
+
         # self._display_result()
         # self._play_again()
         self._display_goodbye_msg()
