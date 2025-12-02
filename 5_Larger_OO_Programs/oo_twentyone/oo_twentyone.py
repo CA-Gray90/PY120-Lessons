@@ -68,8 +68,6 @@ class Hand:
     ACE_VALUE = 11
 
     def __init__(self):
-        # self._card1 = 'empty'
-        # self._card2 = 'empty'
         self._cards = []
     
     def _non_ace_card_value(self, card):
@@ -160,16 +158,6 @@ class Participant:
 class Dealer(Participant):
     def __init__(self):
         super().__init__()
-        # self._deck = Deck()
-
-    # def shuffle_cards(self):
-    #     self._deck.shuffle()
-
-    # def deal_cards(self, other):
-    #     # STUB: Must deal card to self and player
-    #     for _ in range(2):
-    #         self._hand.add_card(self._deck.deal_one())
-    #         other._hand.add_card(self._deck.deal_one())
 
     def hit_or_stay(self):
         pass
