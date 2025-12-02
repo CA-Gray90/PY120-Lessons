@@ -69,6 +69,10 @@ class Hand:
     def __init__(self):
         self._cards = []
     
+    @property
+    def cards(self):
+        return self._cards
+
     def _non_ace_card_value(self, card):
         return int(card.rank) if card.rank.isdigit() else self.COURT_CARD_VALUE
 
@@ -116,8 +120,8 @@ class Hand:
         # STUB: Discards cards, resets instance variables.
         pass
 
-    def add_card(self, card):
-        self._cards.append(card)
+    # def add_card(self, card):
+    #     self._cards.append(card)
 
     # STUB:
     # Knows how to work with Card objects. Dependency?
@@ -148,8 +152,9 @@ class Participant:
 
     def points(self):
         self._hand.total
-
-    pass
+    
+    def add_card(self, card):
+        self._hand.cards.append(card)
 
 class Dealer(Participant):
     STAY_LIMIT = 17
@@ -231,8 +236,8 @@ class TOGame:
     
     def _deal_cards(self, player1, player2):
         for _ in range(2):
-            player1.hand.add_card(self._deck.deal_one())
-            player2.hand.add_card(self._deck.deal_one())
+            player1.add_card(self._deck.deal_one())
+            player2.add_card(self._deck.deal_one())
     
     # def _deal_one_card(self):
     #     card = self._deck.deal_one()
@@ -262,7 +267,7 @@ class TOGame:
             choice = player.hit_or_stay()
             print(f'Player {choice}!')
             if choice == 'hits':
-                player.hand.add_card(self._deck.deal_one())
+                player.add_card(self._deck.deal_one())
             else:
                 break
 
@@ -280,7 +285,7 @@ class TOGame:
             choice = dealer.hit_or_stay()
             print(f'Dealer {choice}!')
             if choice == 'hits':
-                dealer.hand.add_card(self._deck.deal_one())
+                dealer.add_card(self._deck.deal_one())
             else:
                 break
 
