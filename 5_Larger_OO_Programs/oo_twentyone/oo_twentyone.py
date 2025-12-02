@@ -146,6 +146,10 @@ class Participant:
     @property
     def hand(self):
         return self._hand
+    
+    @property
+    def hand_total(self):
+        return self._hand.total
 
     def is_busted(self):
         return self._hand.total > Participant.BLACKJACK
@@ -167,6 +171,15 @@ class Dealer(Participant):
             return 'stays'
         else:
             return 'hits'
+
+    # TOGame 'asks' Dealer to show hands, doesn't access hand objects directly
+    @property
+    def hidden_hand(self):
+        return self._hand.hidden_hand
+
+    @property
+    def hidden_total(self):
+        return self._hand.hidden_total
 
     # Can shuffle
     # Can deal
@@ -247,14 +260,14 @@ class TOGame:
     #         print('Deck is empty!')
 
     def _show_cards(self, reveal=False):
-        dealers = self._dealer.hand
-        players = self._player.hand
+        dealer = self._dealer
+        player = self._player
 
         if reveal:
-            print(f'{dealers} : {dealers.total}')
+            print(f'{dealer.hand} : {dealer.hand_total}')
         else:
-            print(f'{dealers.hidden_hand} : {dealers.hidden_total}')
-        print(f'{players} : {players.total}')
+            print(f'{dealer.hidden_hand} : {dealer.hidden_total}')
+        print(f'{player.hand} : {player.hand_total}')
 
     def _players_turn(self):
         # STUB:
@@ -313,6 +326,8 @@ game = TOGame()
 game.play()
 
 # Busted outcome doesnt end game yet
+    # If Player busts, dealer will still play
+    # busted outcome must end game
 # Perhaps change way main orchestration method reveals hands. 'Asks' players to
 # reveal hand that belongs to them?
 # Dealers turn and players turn very similar, some shared functionality.
