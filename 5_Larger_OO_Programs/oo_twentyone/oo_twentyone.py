@@ -160,16 +160,16 @@ class Participant:
 class Dealer(Participant):
     def __init__(self):
         super().__init__()
-        self._deck = Deck()
+        # self._deck = Deck()
 
-    def shuffle_cards(self):
-        self._deck.shuffle()
+    # def shuffle_cards(self):
+    #     self._deck.shuffle()
 
-    def deal_cards(self, other):
-        # STUB: Must deal card to self and player
-        for _ in range(2):
-            self._hand.add_card(self._deck.deal_one())
-            other._hand.add_card(self._deck.deal_one())
+    # def deal_cards(self, other):
+    #     # STUB: Must deal card to self and player
+    #     for _ in range(2):
+    #         self._hand.add_card(self._deck.deal_one())
+    #         other._hand.add_card(self._deck.deal_one())
 
     def hit_or_stay(self):
         pass
@@ -228,12 +228,21 @@ class TOGame:
     def __init__(self):
         self._dealer = Dealer()
         self._player = Player()
+        self._deck = Deck()
 
     def _display_welcome_msg(self):
         print('Welcome to Twenty One!')
 
     def _display_goodbye_msg(self):
         print('Thank you for playing Twenty One! Goodbye.')
+
+    def _shuffle_cards(self):
+        self._deck.shuffle()
+    
+    def _deal_cards(self, player1, player2):
+        for _ in range(2):
+            player1.hand.add_card(self._deck.deal_one())
+            player2.hand.add_card(self._deck.deal_one())
 
     def _show_cards(self):
         dealers = self._dealer.hand
@@ -252,8 +261,8 @@ class TOGame:
 
     def play(self):
         self._display_welcome_msg()
-        self._dealer.shuffle_cards()
-        self._dealer.deal_cards(self._player)
+        self._shuffle_cards()
+        self._deal_cards(self._player, self._dealer)
 
         self._show_cards()
         self._players_turn()
