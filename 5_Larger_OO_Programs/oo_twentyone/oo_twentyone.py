@@ -115,6 +115,7 @@ class Participant:
     def __init__(self):
         self._hand = Hand()
         self._score = 0         # Overall score; game wins.
+        self._name = f'{self.__class__.__name__}'
 
     @property
     def hand(self):
@@ -223,6 +224,24 @@ class TOGame:
             print(f'{dealer.hidden_hand} : {dealer.hidden_total}')
         print(f'{player.hand} : {player.hand_total}')
 
+    def _participants_turn(self, participant):
+        while True:
+            choice = participant.hit_or_stay()
+            print(f'{participant.name} {choice}!')
+            if choice == 'hits':
+                participant.add_card(self._deck.deal_one())
+            else:
+                break
+
+            if participant.is_busted():
+                print(f'{participant.name} Busts!')
+                break
+
+            if participant == self._dealer:
+                self._show_cards(reveal=True)
+            else:
+                self._show_cards()
+
     def _players_turn(self):
         player = self._player
         while True:
@@ -290,9 +309,5 @@ game = TOGame()
 game.play()
 
 # Busted outcome doesnt end game yet
-    # If Player busts, dealer will still play
-    # busted outcome must end game
-    # Still want to display cards if bust
-# Perhaps change way main orchestration method reveals hands. 'Asks' players to
-# reveal hand that belongs to them?
+
 # Dealers turn and players turn very similar, some shared functionality.
