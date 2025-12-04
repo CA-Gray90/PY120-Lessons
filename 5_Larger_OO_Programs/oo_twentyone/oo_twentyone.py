@@ -14,13 +14,14 @@ class Deck:
         return [Card(rank, suite) for suite in self.SUITES
                                   for rank in self.RANKS]
 
+    @property
+    def deck(self):
+        return self._deck
+
     def deal_one(self):
         if self._deck:
             return self._deck.pop()
         return None
-    
-    def __str__(self):
-        return str(self._deck)
 
     def shuffle(self):
         random.shuffle(self._deck)
@@ -185,6 +186,7 @@ class Player(Participant):
 
 class TOGame:
     DEALER_STAY_LIMIT = 17
+    HALF_DECK = 26
     # STUB:
     # main orchestration function of the game
     # has:
@@ -217,9 +219,18 @@ class TOGame:
         self._deck.shuffle()
     
     def _deal_cards(self, player1, player2):
+        self._check_deck()
         for _ in range(2):
             player1.add_card(self._deck.deal_one())
             player2.add_card(self._deck.deal_one())
+    
+    def _check_deck(self):
+        deck = self._deck.deck
+        if len(deck) < self.HALF_DECK:
+            print('Half of deck has already been dealt, shuffling'
+                  ' new deck in.')
+            self._deck = Deck()
+            self._shuffle_cards()
 
     def _show_cards(self, reveal=False):
         dealer = self._dealer
