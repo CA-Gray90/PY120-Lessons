@@ -56,11 +56,15 @@ class Hand:
     ACE_VALUE = 11
 
     def __init__(self):
-        self._cards = []
+        self.cards = []
     
     @property
     def cards(self):
         return self._cards
+    
+    @cards.setter
+    def cards(self, value):
+        self._cards = value
 
     def _non_ace_card_value(self, card):
         return int(card.rank) if card.rank.isdigit() else self.COURT_CARD_VALUE
@@ -105,10 +109,6 @@ class Hand:
     def __str__(self):
         return str([self._cards])
 
-    def discard_cards(self):
-        # STUB: Discards cards, resets instance variables.
-        pass
-
 class Participant:
     BLACKJACK = 21
 
@@ -137,6 +137,9 @@ class Participant:
     
     def add_card(self, card):
         self._hand.cards.append(card)
+    
+    def discard_cards(self):
+        self._hand.cards = []
 
 class Dealer(Participant):
     STAY_LIMIT = 17
@@ -267,20 +270,46 @@ class TOGame:
         else:
             print('Its a draw! No one wins this game.')
 
+    @staticmethod
+    def _yes_or_no(prompt):
+        while True:
+            choice = input(f'{prompt} (y/n): ').lower()
+
+            if choice in ('y', 'n', 'yes', 'no'):
+                return choice[0] == 'y'
+
+            print('Invalid choice. Try again.')
+    
+    def _play_again(self):
+        # if self._player.is_broke():
+            # skip play again
+        # if self._player.is_rich():
+            # skip play again
+
+        if self._yes_or_no('Would you like to play again?'):
+            self._player.discard_cards()
+            self._dealer.discard_cards()
+            return True
+
+        return False
+
     def play(self):
         self._display_welcome_msg()
-        self._shuffle_cards()
-        self._deal_cards(self._player, self._dealer)
+        while True:
+            self._shuffle_cards()
+            self._deal_cards(self._player, self._dealer)
 
-        self._show_cards()
+            self._show_cards()
 
-        self._players_turn()
+            self._players_turn()
 
-        if not self._player.is_busted():
-            self._dealers_turn()
+            if not self._player.is_busted():
+                self._dealers_turn()
 
-        self._display_results()
-        # self._play_again()
+            self._display_results()
+            if not self._play_again():
+                break
+        # self._display_player_winnings()
         self._display_goodbye_msg()
     pass
 
@@ -293,6 +322,7 @@ game.play()
         # Player loses
     # If Player has Natural Blackjack: wins
 
-# Dealers turn and players turn very similar, some shared functionality.
+# Deck must be reset if run out of cards
 # Enter to continues
+# Improved UX, UI with clear terminal etc.
 # displaying cards at better points in the game
