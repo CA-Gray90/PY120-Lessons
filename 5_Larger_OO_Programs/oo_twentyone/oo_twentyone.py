@@ -163,6 +163,27 @@ class Dealer(Participant):
     def hidden_total(self):
         return self._hand.hidden_total
 
+class Wallet:
+    def __init__(self, initial_amount):
+        self.amount = initial_amount
+    
+    def add_cash(self, amount):
+        self._amount += amount
+    
+    def deduct_cash(self, amount):
+        if self._amount <= 0:
+            print('No cash left in wallet!')
+        else:
+            self._amount -= amount
+    
+    @property
+    def amount(self):
+        return self._amount
+
+    @amount.setter
+    def amount(self, amount):
+        self._amount = amount
+
 class Player(Participant):
     def __init__(self):
         super().__init__()
