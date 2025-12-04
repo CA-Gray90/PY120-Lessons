@@ -239,6 +239,13 @@ class TOGame:
 
     def _display_welcome_msg(self):
         print('Welcome to Twenty One!')
+    
+    def _display_player_cash(self):
+        cash = self._player.wallet
+        if cash < self.STARTING_CASH:
+            print(f'You have ${cash} left.')
+        else:
+            print(f'You have ${cash} in your wallet.')
 
     def _display_goodbye_msg(self):
         print('Thank you for playing Twenty One! Goodbye.')
@@ -289,12 +296,26 @@ class TOGame:
                 self._show_cards()
 
     def _players_turn(self):
+        self._display_player_cash()
         self._participants_turn(self._player)
 
     def _dealers_turn(self):
         print('Dealers Hand revealed:')
         self._show_cards(reveal=True)
         self._participants_turn(self._dealer)
+
+    def _determine_winner(self):
+        self._show_cards(self)
+        if self._player.is_busted():
+            return ()
+        elif self._dealer.is_busted():
+            print('Dealer loses via Bust! Player wins the game!')
+        elif self._player.hand_total > self._dealer.hand_total:
+            print('Player has the higher score. Player wins!')
+        elif self._player.hand_total < self._dealer.hand_total:
+            print('Dealer has the higher score. Player loses game!')
+        else:
+            print('Its a draw! No one wins this game.')
 
     def _display_results(self):
         self._show_cards(self)
@@ -318,7 +339,14 @@ class TOGame:
                 return choice[0] == 'y'
 
             print('Invalid choice. Try again.')
-    
+
+    @staticmethod
+    def _enter_to_continue(prompt=None):
+        if not prompt:
+            input('Press Enter to continue...')
+        else:
+            input(f'{prompt}')
+
     def _play_again(self):
         # if self._player.is_broke():
             # skip play again
@@ -334,6 +362,9 @@ class TOGame:
 
     def play(self):
         self._display_welcome_msg()
+        self._display_player_cash()
+        self._enter_to_continue('Ready to start the game?\n'
+                                'Press Enter to continue...')
         while True:
             self._shuffle_cards()
             self._deal_cards(self._player, self._dealer)
@@ -355,13 +386,12 @@ class TOGame:
 game = TOGame()
 game.play()
 
-# Busted outcome doesnt end game yet
 # Blackjack should end the game
     # If dealer has (Natural) blackjack from the start, should end the game
         # Player loses
     # If Player has Natural Blackjack: wins
 
-# Deck must be reset if run out of cards
 # Enter to continues
-# Improved UX, UI with clear terminal etc.
+# Improved UX, UI with clear terminal etc, time delays etc
 # displaying cards at better points in the game
+# Display simplified rules
