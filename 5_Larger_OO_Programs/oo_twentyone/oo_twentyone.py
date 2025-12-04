@@ -164,13 +164,13 @@ class Dealer(Participant):
         return self._hand.hidden_total
 
 class Wallet:
-    def __init__(self, initial_amount):
+    def __init__(self, initial_amount=0):
         self.amount = initial_amount
     
-    def add_cash(self, amount):
+    def deposit(self, amount):
         self._amount += amount
     
-    def deduct_cash(self, amount):
+    def withdraw(self, amount):
         if self._amount <= 0:
             print('No cash left in wallet!')
         else:
@@ -185,17 +185,19 @@ class Wallet:
         self._amount = amount
 
 class Player(Participant):
-    def __init__(self):
+    def __init__(self, starting_amount):
         super().__init__()
-        self.wallet = None
+        self._wallet = Wallet(starting_amount)
     
     @property
     def wallet(self):
-        return self._wallet
+        return self._wallet.amount
     
-    @wallet.setter
-    def wallet(self, amount):
-        self._wallet = amount
+    def add_cash(self, amount):
+        self._wallet.deposit(amount)
+    
+    def remove_cash(self, amount):
+        self._wallet.withdraw(amount)
     
     def hit_or_stay(self):
         while True:
@@ -204,10 +206,15 @@ class Player(Participant):
                 return 'hits' if choice[0] == 'h' else 'stays'
             else:
                 print('Invalid input, please try again.')
+    
+    def is_broke(self):
+        return self._wallet.amount <= 0
 
 class TOGame:
     DEALER_STAY_LIMIT = 17
     HALF_DECK = 26
+    STARTING_CASH = 5
+    RICH_LIMIT = 10
     # STUB:
     # main orchestration function of the game
     # has:
@@ -227,7 +234,7 @@ class TOGame:
 
     def __init__(self):
         self._dealer = Dealer()
-        self._player = Player()
+        self._player = Player(self.STARTING_CASH)
         self._deck = Deck()
 
     def _display_welcome_msg(self):
