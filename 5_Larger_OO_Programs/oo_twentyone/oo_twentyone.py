@@ -124,6 +124,10 @@ class Participant:
     @property
     def hand_total(self):
         return self._hand.total
+    
+    @property
+    def name(self):
+        return self._name
 
     def is_busted(self):
         return self._hand.total > Participant.BLACKJACK
@@ -243,37 +247,12 @@ class TOGame:
                 self._show_cards()
 
     def _players_turn(self):
-        player = self._player
-        while True:
-            choice = player.hit_or_stay()
-            print(f'Player {choice}!')
-            if choice == 'hits':
-                player.add_card(self._deck.deal_one())
-            else:
-                break
-
-            if player.is_busted():
-                print('Player Busts!')
-                break
-            self._show_cards()
+        self._participants_turn(self._player)
 
     def _dealers_turn(self):
-        dealer = self._dealer
         print('Dealers Hand revealed:')
         self._show_cards(reveal=True)
-
-        while True:
-            choice = dealer.hit_or_stay()
-            print(f'Dealer {choice}!')
-            if choice == 'hits':
-                dealer.add_card(self._deck.deal_one())
-            else:
-                break
-
-            if dealer.is_busted():
-                print('Dealer busts!')
-                break
-            self._show_cards(reveal=True)
+        self._participants_turn(self._dealer)
 
     def _display_results(self):
         self._show_cards(self)
@@ -309,5 +288,11 @@ game = TOGame()
 game.play()
 
 # Busted outcome doesnt end game yet
+# Blackjack should end the game
+    # If dealer has (Natural) blackjack from the start, should end the game
+        # Player loses
+    # If Player has Natural Blackjack: wins
 
 # Dealers turn and players turn very similar, some shared functionality.
+# Enter to continues
+# displaying cards at better points in the game
