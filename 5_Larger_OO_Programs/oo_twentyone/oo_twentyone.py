@@ -4,9 +4,6 @@ class Deck:
     RANKS = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
     SUITES = ['diamonds', 'clubs', 'hearts', 'spades']
 
-    # Maybe returns None if empty? Some way of returning empty. Dealer must
-        # instantiate new deck when empty
-
     def __init__(self):
         self._deck = self._initialize_new_deck()
     
@@ -305,17 +302,7 @@ class TOGame:
         self._participants_turn(self._dealer)
 
     def _determine_winner(self):
-        self._show_cards(self)
-        if self._player.is_busted():
-            return ()
-        elif self._dealer.is_busted():
-            print('Dealer loses via Bust! Player wins the game!')
-        elif self._player.hand_total > self._dealer.hand_total:
-            print('Player has the higher score. Player wins!')
-        elif self._player.hand_total < self._dealer.hand_total:
-            print('Dealer has the higher score. Player loses game!')
-        else:
-            print('Its a draw! No one wins this game.')
+        pass
 
     def _display_results(self):
         self._show_cards(self)
