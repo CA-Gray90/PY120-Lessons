@@ -206,40 +206,42 @@ class Player(Participant):
     
     def is_broke(self):
         return self._wallet.amount <= 0
-class MatchInfo:
-    #STUB:
-    # Match info object should have information about:
-        # Who won, who lost. Method of winning and method of losing
-    # Match object can be used for displaying results, distributing winnings
-    # Matchinfo object is instantiated by a method that determines a winner
 
-    def __init__(self, winner, win_method, loser, lose_method):
-        self._winner = winner
-        self._win_method = win_method
-        self._loser = loser
-        self._lose_method = lose_method
+# class MatchInfo:
+#     #STUB:
+#     # Match info object should have information about:
+#         # Who won, who lost. Method of winning and method of losing
+#     # Match object can be used for displaying results, distributing winnings
+#     # Matchinfo object is instantiated by a method that determines a winner
+
+#     def __init__(self, winner, win_method, loser, lose_method):
+#         self._winner = winner
+#         self._win_method = win_method
+#         self._loser = loser
+#         self._lose_method = lose_method
     
-    @property
-    def winner(self):
-        return self._winner
+#     @property
+#     def winner(self):
+#         return self._winner
     
-    @property
-    def winning_method(self):
-        return self._win_method
+#     @property
+#     def winning_method(self):
+#         return self._win_method
     
-    @property
-    def loser(self):
-        return self._loser
+#     @property
+#     def loser(self):
+#         return self._loser
     
-    @property
-    def losing_method(self):
-        return self._lose_method
+#     @property
+#     def losing_method(self):
+#         return self._lose_method
 
 class TOGame:
     DEALER_STAY_LIMIT = 17
     HALF_DECK = 26
     STARTING_CASH = 5
     RICH_LIMIT = 10
+    BET = 1
     # STUB:
     # main orchestration function of the game
     # has:
@@ -259,7 +261,7 @@ class TOGame:
 
     def __init__(self):
         self._dealer = Dealer()
-        self._player = Player(self.STARTING_CASH)
+        self._player = Player(TOGame.STARTING_CASH)
         self._deck = Deck()
 
     def _display_welcome_msg(self):
@@ -267,7 +269,7 @@ class TOGame:
     
     def _display_player_cash(self):
         cash = self._player.wallet
-        if cash < self.STARTING_CASH:
+        if cash < TOGame.STARTING_CASH:
             print(f'You have ${cash} left.')
         else:
             print(f'You have ${cash} in your wallet.')
@@ -286,7 +288,7 @@ class TOGame:
     
     def _check_deck(self):
         deck = self._deck.deck
-        if len(deck) < self.HALF_DECK:
+        if len(deck) < TOGame.HALF_DECK:
             print('Half of deck has already been dealt, shuffling'
                   ' new deck in.')
             self._deck = Deck()
@@ -329,19 +331,22 @@ class TOGame:
         self._show_cards(reveal=True)
         self._participants_turn(self._dealer)
 
-    def _determine_winner(self):
-        pass
+    def _determine_and_display_results(self):
+        bet = TOGame.BET
 
-    def _display_results(self):
         self._show_cards(self)
         if self._player.is_busted():
-            print(f'Player lost game via a Bust! Dealer wins')
+            self._player.remove_cash(bet)
+            print(f'Player lost game via a Bust and loses ${bet}! Dealer wins')
         elif self._dealer.is_busted():
-            print('Dealer loses via Bust! Player wins the game!')
+            self._player.add_cash(bet)
+            print(f'Dealer loses game via Bust! Player wins ${bet}!')
         elif self._player.hand_total > self._dealer.hand_total:
-            print('Player has the higher score. Player wins!')
+            self._player.add_cash(bet)
+            print(f'Player has the higher score. Player wins ${bet}!')
         elif self._player.hand_total < self._dealer.hand_total:
-            print('Dealer has the higher score. Player loses game!')
+            self._player.remove_cash(bet)
+            print(f'Dealer has the higher score. Player loses ${bet}!')
         else:
             print('Its a draw! No one wins this game.')
 
@@ -362,11 +367,15 @@ class TOGame:
         else:
             input(f'{prompt}')
 
+    @staticmethod
+    def _too_rich(player):
+        return player.wallet >= TOGame.RICH_LIMIT
+
     def _play_again(self):
-        # if self._player.is_broke():
-            # skip play again
-        # if self._player.is_rich():
-            # skip play again
+        if self._player.is_broke():
+            return False
+        if self._too_rich(self._player):
+            return False
 
         if self._yes_or_no('Would you like to play again?'):
             self._player.discard_cards()
@@ -374,6 +383,24 @@ class TOGame:
             return True
 
         return False
+
+    def _display_player_winnings(self):
+        difference = abs(TOGame.STARTING_CASH - self._player.wallet)
+        if self._player.is_broke():
+            print('Game ending early because Player is broke!\n' \
+            'You lost all your cash...')
+        elif self._player.wallet < TOGame.STARTING_CASH:
+            print(
+                f"You've finished the game with {self._player.wallet} left.\n"
+                f"You lost ${difference} overall."
+                )
+        elif self._player.wallet == TOGame.STARTING_CASH:
+            print('You finished with the same amount of cash that you started '
+                  'with.')
+        elif self._player.wallet > TOGame.STARTING_CASH:
+            print(f"Congratulations, you've finished with "
+                  f"${self._player.wallet}!")
+            print(f"You made ${difference} profit!")
 
     def play(self):
         self._display_welcome_msg()
@@ -391,10 +418,10 @@ class TOGame:
             if not self._player.is_busted():
                 self._dealers_turn()
 
-            self._display_results()
+            self._determine_and_display_results()
             if not self._play_again():
                 break
-        # self._display_player_winnings()
+        self._display_player_winnings()
         self._display_goodbye_msg()
     pass
 
