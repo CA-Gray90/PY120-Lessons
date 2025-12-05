@@ -397,6 +397,11 @@ class TOGame:
         elif self._player.wallet == TOGame.STARTING_CASH:
             print('You finished with the same amount of cash that you started '
                   'with.')
+        elif self._player.wallet == TOGame.RICH_LIMIT:
+            print("You've reached the limit for what this casino is willing "
+                  "to pay out!")
+            print(f"You've finished with ${self._player.wallet} in the wallet "
+                  f"and ${difference} in profit!")
         elif self._player.wallet > TOGame.STARTING_CASH:
             print(f"Congratulations, you've finished with "
                   f"${self._player.wallet}!")
