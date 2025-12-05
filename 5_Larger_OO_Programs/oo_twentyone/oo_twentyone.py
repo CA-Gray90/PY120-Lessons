@@ -278,7 +278,6 @@ class TOGame:
                 self._show_cards()
 
     def _players_turn(self):
-        self._display_player_cash()
         self._participants_turn(self._player)
 
     def _dealers_turn(self):
@@ -346,7 +345,7 @@ class TOGame:
             'You lost all your cash...')
         elif self._player.wallet < TOGame.STARTING_CASH:
             print(
-                f"You've finished the game with {self._player.wallet} left.\n"
+                f"You've finished the game with ${self._player.wallet} left.\n"
                 f"You lost ${difference} overall."
                 )
         elif self._player.wallet == TOGame.STARTING_CASH:
@@ -370,7 +369,7 @@ class TOGame:
         while True:
             self._shuffle_cards()
             self._deal_cards(self._player, self._dealer)
-
+            self._display_player_cash()
             self._show_cards()
 
             self._players_turn()
@@ -379,6 +378,7 @@ class TOGame:
                 self._dealers_turn()
 
             self._determine_and_display_results()
+            self._display_player_cash()
             if not self._play_again():
                 break
         self._display_player_winnings()
