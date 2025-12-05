@@ -206,6 +206,34 @@ class Player(Participant):
     
     def is_broke(self):
         return self._wallet.amount <= 0
+class MatchInfo:
+    #STUB:
+    # Match info object should have information about:
+        # Who won, who lost. Method of winning and method of losing
+    # Match object can be used for displaying results, distributing winnings
+    # Matchinfo object is instantiated by a method that determines a winner
+
+    def __init__(self, winner, win_method, loser, lose_method):
+        self._winner = winner
+        self._win_method = win_method
+        self._loser = loser
+        self._lose_method = lose_method
+    
+    @property
+    def winner(self):
+        return self._winner
+    
+    @property
+    def winning_method(self):
+        return self._win_method
+    
+    @property
+    def loser(self):
+        return self._loser
+    
+    @property
+    def losing_method(self):
+        return self._lose_method
 
 class TOGame:
     DEALER_STAY_LIMIT = 17
