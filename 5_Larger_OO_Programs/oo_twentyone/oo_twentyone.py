@@ -109,8 +109,6 @@ class Hand:
         return str([self._cards])
 
 class Participant:
-    BLACKJACK = 21
-
     def __init__(self):
         self._hand = Hand()
         self._score = 0         # Overall score; game wins.
@@ -129,11 +127,11 @@ class Participant:
         return self._name
 
     def is_busted(self):
-        return self._hand.total > Participant.BLACKJACK
+        return self._hand.total > TOGame.BLACKJACK
     
     def has_blackjack(self):
         # Has 21 with two cards
-        return self._hand.total == Participant.BLACKJACK and \
+        return self._hand.total == TOGame.BLACKJACK and \
         len(self._hand.cards) == 2
 
     def points(self):
@@ -149,13 +147,11 @@ class Participant:
         return self._name
 
 class Dealer(Participant):
-    STAY_LIMIT = 17
-
     def __init__(self):
         super().__init__()
 
     def hit_or_stay(self):
-        if self._hand.total >= Dealer.STAY_LIMIT:
+        if self._hand.total >= TOGame.DEALER_STAY_LIMIT:
             return 'stays'
         else:
             return 'hits'
@@ -217,11 +213,12 @@ class Player(Participant):
         return self._wallet.amount <= 0
 
 class TOGame:
-    DEALER_STAY_LIMIT = 17
     HALF_DECK = 26
     STARTING_CASH = 5
     RICH_LIMIT = 10
     BET = 1
+    BLACKJACK = 21
+    DEALER_STAY_LIMIT = 17
 
     def __init__(self):
         self._dealer = Dealer()
@@ -270,15 +267,20 @@ class TOGame:
 
     def _participants_turn(self, participant):
         while True:
+            if participant.hand_total == TOGame.BLACKJACK:
+                print(f"{participant}'s hand total has reached 21. This is "
+                      'an automatic stay.')
+                break
+
             choice = participant.hit_or_stay()
-            print(f'{participant.name} {choice}!')
+            print(f'{participant} {choice}!')
             if choice == 'hits':
                 participant.add_card(self._deck.deal_one())
             else:
                 break
 
             if participant.is_busted():
-                print(f'{participant.name} Busts!')
+                print(f'{participant} Busts!')
                 break
 
             if participant == self._dealer:
@@ -377,7 +379,7 @@ class TOGame:
                 print(f'{self._player} loses ${bet}.')
             case 'draw':
                 print(
-                    'Since the game was a draw, no winnings are distributed.'
+                    'A draw results in no winnings being distributed.'
                     )
         self._display_player_cash()
 
@@ -465,16 +467,10 @@ class TOGame:
 game = TOGame()
 game.play()
 
-# Blackjack should end the game
-    # If dealer has (Natural) blackjack from the start, should end the game
-        # Player loses
-    # If Player has Natural Blackjack: wins
-
 # Enter to continues
 # Improved UX, UI with clear terminal etc, time delays etc
 # displaying cards at better points in the game
 # Display simplified rules
 # Player able to place bet?
-# Seperate out functionality for giving out winnings
-# If player busts, dealer still plays. Should skip
+
 # Should automatically stay if players total reaches 21
