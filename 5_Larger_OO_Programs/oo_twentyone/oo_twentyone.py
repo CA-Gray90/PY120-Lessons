@@ -143,6 +143,9 @@ class Participant:
     
     def discard_cards(self):
         self._hand.cards = []
+    
+    def __str__(self):
+        return self._name
 
 class Dealer(Participant):
     STAY_LIMIT = 17
@@ -293,27 +296,84 @@ class TOGame:
         self._show_cards(reveal=True)
         self._participants_turn(self._dealer)
 
+    def _someone_busts(self):
+        for player in (self._player, self._dealer):
+            if player.is_busted():
+                return player
+        return None
+
+    def _someone_has_blackjack(self):
+        if self._player.has_blackjack() and self._dealer.has_blackjack():
+            return 'draw'
+
+        for player in (self._player, self._dealer):
+            if player.has_blackjack():
+                return player
+        return None
+    
+    def _win_by_totals(self):
+        player = self._player
+        dealer = self._dealer
+
+        if player.hand_total > dealer.hand_total:
+            return player
+        elif player.hand_total < dealer.hand_total:
+            return player
+        else:
+            return 'draw'
+
     def _determine_and_display_results(self):
-        bet = TOGame.BET
+        player = self._player
+        dealer = self._dealer
 
         self._show_cards(self)
-        if self._player.has_blackjack():
-            self._player.add_cash(bet)
-            print(f'Player won the game with a Blackjack!')
-        elif self._player.is_busted():
-            self._player.remove_cash(bet)
-            print(f'Player lost game via a Bust and loses ${bet}! Dealer wins')
-        elif self._dealer.is_busted():
-            self._player.add_cash(bet)
-            print(f'Dealer loses game via Bust! Player wins ${bet}!')
-        elif self._player.hand_total > self._dealer.hand_total:
-            self._player.add_cash(bet)
-            print(f'Player has the higher score. Player wins ${bet}!')
-        elif self._player.hand_total < self._dealer.hand_total:
-            self._player.remove_cash(bet)
-            print(f'Dealer has the higher score. Player loses ${bet}!')
+
+        busted = self._someone_busts()
+        if busted:
+            other = player if busted == dealer else dealer
+            print(f'{busted} has lost the game via a bust! {other} wins!')
+            return
+
+        bj_winner = self._someone_has_blackjack()
+        if bj_winner:
+            if bj_winner != 'draw':
+                print(f'{bj_winner} wins with a Natural Blackjack!')
+            else:
+                print("It's a draw! Both players had a Blackjack.")
+            return
+
+        totals_winner = self._win_by_totals()
+        if totals_winner != 'draw':
+            other = player if totals_winner == dealer else dealer
+            print(f'{totals_winner} won via a higher total! {other} loses '
+                  'this hand.')
         else:
-            print('Its a draw! No one wins this game.')
+            print("It's a draw! No one wins this hand")
+
+    # def _determine_and_display_results(self):
+    #     bet = TOGame.BET
+
+    #     self._show_cards(self)
+    #     if self._player.has_blackjack():
+    #         self._player.add_cash(bet)
+    #         print(f'Player won the game with a Blackjack!')
+    #     elif self._player.is_busted():
+    #         self._player.remove_cash(bet)
+    #         print(f'Player lost game via a Bust and loses ${bet}! Dealer wins')
+    #     elif self._dealer.is_busted():
+    #         self._player.add_cash(bet)
+    #         print(f'Dealer loses game via Bust! Player wins ${bet}!')
+    #     elif self._player.hand_total > self._dealer.hand_total:
+    #         self._player.add_cash(bet)
+    #         print(f'Player has the higher score. Player wins ${bet}!')
+    #     elif self._player.hand_total < self._dealer.hand_total:
+    #         self._player.remove_cash(bet)
+    #         print(f'Dealer has the higher score. Player loses ${bet}!')
+    #     else:
+    #         print('Its a draw! No one wins this game.')
+
+    def _distribute_winnings(self, winner):
+        pass
 
     @staticmethod
     def _yes_or_no(prompt):
@@ -410,3 +470,5 @@ game.play()
 # displaying cards at better points in the game
 # Display simplified rules
 # Player able to place bet?
+# Seperate out functionality for giving out winnings
+# If player busts, dealer still plays. Should skip
