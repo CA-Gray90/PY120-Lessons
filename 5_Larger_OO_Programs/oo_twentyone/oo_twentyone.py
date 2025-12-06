@@ -1,3 +1,4 @@
+import pdb
 import random
 
 class Deck:
@@ -444,8 +445,7 @@ class TOGame:
             self._show_cards()
 
             self._players_turn()
-
-            if not self._player.is_busted() or \
+            if not self._player.is_busted() and \
                 not self._player.has_blackjack():
                 self._dealers_turn()
 
@@ -472,3 +472,4 @@ game.play()
 # Player able to place bet?
 # Seperate out functionality for giving out winnings
 # If player busts, dealer still plays. Should skip
+# Should automatically stay if players total reaches 21
