@@ -129,6 +129,11 @@ class Participant:
 
     def is_busted(self):
         return self._hand.total > Participant.BLACKJACK
+    
+    def has_blackjack(self):
+        # Has 21 with two cards
+        return self._hand.total == Participant.BLACKJACK and \
+        len(self._hand.cards) == 2
 
     def points(self):
         self._hand.total
@@ -278,7 +283,10 @@ class TOGame:
                 self._show_cards()
 
     def _players_turn(self):
-        self._participants_turn(self._player)
+        if not self._player.has_blackjack():
+            self._participants_turn(self._player)
+        else:
+            print('Player has a natural Blackjack! This is an automatic stay.')
 
     def _dealers_turn(self):
         print('Dealers Hand revealed:')
@@ -289,7 +297,10 @@ class TOGame:
         bet = TOGame.BET
 
         self._show_cards(self)
-        if self._player.is_busted():
+        if self._player.has_blackjack():
+            self._player.add_cash(bet)
+            print(f'Player won the game with a Blackjack!')
+        elif self._player.is_busted():
             self._player.remove_cash(bet)
             print(f'Player lost game via a Bust and loses ${bet}! Dealer wins')
         elif self._dealer.is_busted():
@@ -374,7 +385,8 @@ class TOGame:
 
             self._players_turn()
 
-            if not self._player.is_busted():
+            if not self._player.is_busted() or \
+                not self._player.has_blackjack():
                 self._dealers_turn()
 
             self._determine_and_display_results()
@@ -397,3 +409,4 @@ game.play()
 # Improved UX, UI with clear terminal etc, time delays etc
 # displaying cards at better points in the game
 # Display simplified rules
+# Player able to place bet?
