@@ -1,5 +1,10 @@
 import pdb
 import random
+import time
+import os
+
+def clear_screen():
+    os.system('clear')
 
 class Deck:
     RANKS = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
@@ -276,6 +281,20 @@ class TOGame:
 
     def _participants_turn(self, participant):
         while True:
+            if participant == self._dealer:
+                self._show_cards(reveal=True)
+            else:
+                self._show_cards()
+            
+            if participant.has_blackjack():
+                print(f'{participant} has a natural Blackjack! This is an '
+                      'automatic stay.')
+                break
+
+            if participant.is_busted():
+                print(f'{participant} Busts!')
+                break
+
             if participant.hand_total == TOGame.BLACKJACK:
                 print(f"{participant}'s hand total has reached 21. This is "
                       'an automatic stay.')
@@ -287,15 +306,6 @@ class TOGame:
                 participant.add_card(self._deck.deal_one())
             else:
                 break
-
-            if participant.is_busted():
-                print(f'{participant} Busts!')
-                break
-
-            if participant == self._dealer:
-                self._show_cards(reveal=True)
-            else:
-                self._show_cards()
     
     def _place_bet(self):
         bet_max = self._player.wallet
@@ -317,18 +327,16 @@ class TOGame:
                     raise ValueError
             except ValueError:
                 print("That's not a valid bet, please try again.")
+                continue
 
             self._player.bet = choice
             break
 
     def _players_turn(self):
-        if not self._player.has_blackjack():
-            self._participants_turn(self._player)
-        else:
-            print('Player has a natural Blackjack! This is an automatic stay.')
+        self._participants_turn(self._player)
 
     def _dealers_turn(self):
-        print('Dealers Hand revealed:')
+        print('Dealers Hand revealed.')
         self._show_cards(reveal=True)
         self._participants_turn(self._dealer)
 
@@ -362,7 +370,7 @@ class TOGame:
         player = self._player
         dealer = self._dealer
 
-        self._show_cards(self)
+        # self._show_cards(self)
 
         busted = self._someone_busts()
         if busted:
@@ -371,12 +379,19 @@ class TOGame:
             return
 
         bj_winner = self._someone_has_blackjack()
-        if bj_winner:
-            if bj_winner != 'draw':
-                print(f'{bj_winner} wins with a Natural Blackjack!')
-            else:
+        match bj_winner:
+            case self._player:
+                print(f'{self._player} wins with a Natural Blackjack!')
+                return
+            case self._dealer:
+                if self._player.hand_total == TOGame.BLACKJACK:
+                    print(f"It's a draw! Both players have a total of 21.")
+                else:
+                    print(f"Dealer wins with a Natural Blackjack!")
+                return
+            case 'draw':
                 print("It's a draw! Both players had a Blackjack.")
-            return
+                return
 
         totals_winner = self._win_by_totals()
         if totals_winner != 'draw':
@@ -474,16 +489,18 @@ class TOGame:
             print(f"You made ${difference} profit!")
 
     def play(self):
+        clear_screen()
         self._display_welcome_msg()
-        self._display_player_cash()
+        # self._display_rules()
         self._enter_to_continue('Ready to start the game?\n'
                                 'Press Enter to continue...')
         while True:
+            clear_screen()
             self._shuffle_cards()
             self._deal_cards(self._player, self._dealer)
             self._display_player_cash()
             self._place_bet()
-            self._show_cards()
+            # self._show_cards()
 
             self._players_turn()
             if not self._player.is_busted() and \
@@ -505,4 +522,3 @@ game.play()
 # Improved UX, UI with clear terminal etc, time delays etc
 # displaying cards at better points in the game
 # Display simplified rules
-# Player able to place bet?
