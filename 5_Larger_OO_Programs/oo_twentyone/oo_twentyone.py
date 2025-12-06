@@ -263,10 +263,10 @@ class TOGame:
         player = self._player
 
         if reveal:
-            print(f'{dealer.hand} : {dealer.hand_total}')
+            print(f'Dealers Hand:\n{dealer.hand} : {dealer.hand_total}')
         else:
-            print(f'{dealer.hidden_hand} : {dealer.hidden_total}')
-        print(f'{player.hand} : {player.hand_total}')
+            print(f'Dealers Hand:\n{dealer.hidden_hand} : {dealer.hidden_total}')
+        print(f'Players Hand:\n{player.hand} : {player.hand_total}')
 
     def _participants_turn(self, participant):
         while True:
@@ -319,7 +319,7 @@ class TOGame:
         if player.hand_total > dealer.hand_total:
             return player
         elif player.hand_total < dealer.hand_total:
-            return player
+            return dealer
         else:
             return 'draw'
 
@@ -351,30 +351,35 @@ class TOGame:
         else:
             print("It's a draw! No one wins this hand")
 
-    # def _determine_and_display_results(self):
-    #     bet = TOGame.BET
+    def _get_winner(self):
+        player = self._player
+        dealer = self._dealer
+        
+        if player.is_busted():
+            return dealer
+        if dealer.is_busted():
+            return player
+        
+        bj_winner = self._someone_has_blackjack()
+        if bj_winner:
+            return bj_winner
+        
+        return self._win_by_totals()
 
-    #     self._show_cards(self)
-    #     if self._player.has_blackjack():
-    #         self._player.add_cash(bet)
-    #         print(f'Player won the game with a Blackjack!')
-    #     elif self._player.is_busted():
-    #         self._player.remove_cash(bet)
-    #         print(f'Player lost game via a Bust and loses ${bet}! Dealer wins')
-    #     elif self._dealer.is_busted():
-    #         self._player.add_cash(bet)
-    #         print(f'Dealer loses game via Bust! Player wins ${bet}!')
-    #     elif self._player.hand_total > self._dealer.hand_total:
-    #         self._player.add_cash(bet)
-    #         print(f'Player has the higher score. Player wins ${bet}!')
-    #     elif self._player.hand_total < self._dealer.hand_total:
-    #         self._player.remove_cash(bet)
-    #         print(f'Dealer has the higher score. Player loses ${bet}!')
-    #     else:
-    #         print('Its a draw! No one wins this game.')
-
-    def _distribute_winnings(self, winner):
-        pass
+    def _distribute_and_display_winnings(self, winner):
+        bet = TOGame.BET
+        match winner:
+            case self._player:
+                self._player.add_cash(bet)
+                print(f'{self._player} wins ${bet}!')
+            case self._dealer:
+                self._player.remove_cash(bet)
+                print(f'{self._player} loses ${bet}.')
+            case 'draw':
+                print(
+                    'Since the game was a draw, no winnings are distributed.'
+                    )
+        self._display_player_cash()
 
     @staticmethod
     def _yes_or_no(prompt):
@@ -425,7 +430,7 @@ class TOGame:
                   'with.')
         elif self._player.wallet == TOGame.RICH_LIMIT:
             print("You've reached the limit for what this casino is willing "
-                  "to pay out!")
+                  "to pay out.\nYou've been kicked out!")
             print(f"You've finished with ${self._player.wallet} in the wallet "
                   f"and ${difference} in profit!")
         elif self._player.wallet > TOGame.STARTING_CASH:
@@ -450,7 +455,7 @@ class TOGame:
                 self._dealers_turn()
 
             self._determine_and_display_results()
-            self._display_player_cash()
+            self._distribute_and_display_winnings(self._get_winner())
             if not self._play_again():
                 break
         self._display_player_winnings()
