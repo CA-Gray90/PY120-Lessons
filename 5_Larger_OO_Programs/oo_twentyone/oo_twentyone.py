@@ -190,11 +190,20 @@ class Player(Participant):
     def __init__(self, starting_amount):
         super().__init__()
         self._wallet = Wallet(starting_amount)
+        self._bet = 0
     
     @property
     def wallet(self):
         return self._wallet.amount
     
+    @property
+    def bet(self):
+        return self._bet
+    
+    @bet.setter
+    def bet(self, value):
+        self._bet = value
+
     def add_cash(self, amount):
         self._wallet.deposit(amount)
     
@@ -216,7 +225,7 @@ class TOGame:
     HALF_DECK = 26
     STARTING_CASH = 5
     RICH_LIMIT = 10
-    BET = 1
+    # BET = 1
     BLACKJACK = 21
     DEALER_STAY_LIMIT = 17
 
@@ -287,6 +296,30 @@ class TOGame:
                 self._show_cards(reveal=True)
             else:
                 self._show_cards()
+    
+    def _place_bet(self):
+        bet_max = self._player.wallet
+        bet_min = 1
+
+        if bet_max == 1:
+            print('Since you only have $1 left, your bet will be set to $1')
+            self._player.bet = 1
+            return
+
+        print('How much would you like to bet?')
+        while True:
+            print(f'Choose between ${bet_min} and ${bet_max}')
+            choice = input('Place bet: ')
+
+            try:
+                choice = int(choice)
+                if choice not in range(bet_min, bet_max + 1):
+                    raise ValueError
+            except ValueError:
+                print("That's not a valid bet, please try again.")
+
+            self._player.bet = choice
+            break
 
     def _players_turn(self):
         if not self._player.has_blackjack():
@@ -369,7 +402,7 @@ class TOGame:
         return self._win_by_totals()
 
     def _distribute_and_display_winnings(self, winner):
-        bet = TOGame.BET
+        bet = self._player.bet
         match winner:
             case self._player:
                 self._player.add_cash(bet)
@@ -430,7 +463,7 @@ class TOGame:
         elif self._player.wallet == TOGame.STARTING_CASH:
             print('You finished with the same amount of cash that you started '
                   'with.')
-        elif self._player.wallet == TOGame.RICH_LIMIT:
+        elif self._player.wallet >= TOGame.RICH_LIMIT:
             print("You've reached the limit for what this casino is willing "
                   "to pay out.\nYou've been kicked out!")
             print(f"You've finished with ${self._player.wallet} in the wallet "
@@ -449,6 +482,7 @@ class TOGame:
             self._shuffle_cards()
             self._deal_cards(self._player, self._dealer)
             self._display_player_cash()
+            self._place_bet()
             self._show_cards()
 
             self._players_turn()
@@ -472,5 +506,3 @@ game.play()
 # displaying cards at better points in the game
 # Display simplified rules
 # Player able to place bet?
-
-# Should automatically stay if players total reaches 21
