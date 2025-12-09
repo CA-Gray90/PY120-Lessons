@@ -230,7 +230,6 @@ class TOGame:
     HALF_DECK = 26
     STARTING_CASH = 5
     RICH_LIMIT = 10
-    # BET = 1
     BLACKJACK = 21
     DEALER_STAY_LIMIT = 17
 
@@ -281,6 +280,7 @@ class TOGame:
 
     def _participants_turn(self, participant):
         while True:
+            clear_screen()
             if participant == self._dealer:
                 self._show_cards(reveal=True)
             else:
@@ -306,6 +306,8 @@ class TOGame:
                 participant.add_card(self._deck.deal_one())
             else:
                 break
+
+            self._enter_to_continue()
     
     def _place_bet(self):
         bet_max = self._player.wallet
@@ -314,6 +316,8 @@ class TOGame:
         if bet_max == 1:
             print('Since you only have $1 left, your bet will be set to $1')
             self._player.bet = 1
+            self._enter_to_continue('Ready to see the cards? Press Enter to '
+                                'continue...')
             return
 
         print('How much would you like to bet?')
@@ -331,6 +335,9 @@ class TOGame:
 
             self._player.bet = choice
             break
+        print(f'You have placed a ${choice} bet!')
+        self._enter_to_continue('Ready to see the cards? Press Enter to '
+                                'continue...')
 
     def _players_turn(self):
         self._participants_turn(self._player)
@@ -338,6 +345,7 @@ class TOGame:
     def _dealers_turn(self):
         print('Dealers Hand revealed.')
         self._show_cards(reveal=True)
+        self._enter_to_continue()
         self._participants_turn(self._dealer)
 
     def _someone_busts(self):
@@ -369,8 +377,6 @@ class TOGame:
     def _determine_and_display_results(self):
         player = self._player
         dealer = self._dealer
-
-        # self._show_cards(self)
 
         busted = self._someone_busts()
         if busted:
@@ -487,20 +493,28 @@ class TOGame:
             print(f"Congratulations, you've finished with "
                   f"${self._player.wallet}!")
             print(f"You made ${difference} profit!")
+    
+    def _start_game(self):
+        clear_screen()
+        print('Shuffling cards...')
+        self._shuffle_cards()
+        time.sleep(1)
+        print('Dealing Cards...')
+        self._deal_cards(self._player, self._dealer)
+        time.sleep(1)
 
     def play(self):
         clear_screen()
         self._display_welcome_msg()
-        # self._display_rules()
         self._enter_to_continue('Ready to start the game?\n'
                                 'Press Enter to continue...')
         while True:
             clear_screen()
-            self._shuffle_cards()
-            self._deal_cards(self._player, self._dealer)
             self._display_player_cash()
             self._place_bet()
-            # self._show_cards()
+            # self._shuffle_cards()
+            # self._deal_cards(self._player, self._dealer)
+            self._start_game()
 
             self._players_turn()
             if not self._player.is_busted() and \
@@ -520,5 +534,5 @@ game.play()
 
 # Enter to continues
 # Improved UX, UI with clear terminal etc, time delays etc
-# displaying cards at better points in the game
+# displaying ascii cards
 # Display simplified rules
