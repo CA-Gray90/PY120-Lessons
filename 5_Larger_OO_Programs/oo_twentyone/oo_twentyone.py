@@ -1,4 +1,3 @@
-import pdb
 import random
 import time
 import os
@@ -13,7 +12,7 @@ class Deck:
 
     def __init__(self):
         self._deck = self._initialize_new_deck()
-    
+
     def _initialize_new_deck(self):
         return [Card(rank, suite) for suite in self.SUITES
                                   for rank in self.RANKS]
@@ -33,14 +32,14 @@ class Deck:
 class CardAscii:
     with open('TO_card_ascii.json', 'r') as file:
         ASCII_SUITES = json.load(file)
-    
+
     def __init__(self):
         self._diamond_ascii = CardAscii.ASCII_SUITES['diamonds']
         self._clubs_ascii = CardAscii.ASCII_SUITES['clubs']
         self._hearts_ascii = CardAscii.ASCII_SUITES['hearts']
         self._spades_ascii = CardAscii.ASCII_SUITES['spades']
         self._back_ascii = CardAscii.ASCII_SUITES['back']
-    
+
     def card_ascii(self, suite=None, rank=None):
         match suite:
             case 'diamonds':
@@ -53,7 +52,7 @@ class CardAscii:
                 suite_ascii = self._spades_ascii
             case _:
                 suite_ascii = self._back_ascii
-    
+
         return [self._card_edge()]       + \
                [self._card_top(rank)]    + \
                suite_ascii               + \
@@ -78,11 +77,11 @@ class Card:
         self._rank = rank
         self._suite = suite
         self._ascii_display = CardAscii()
-    
+
     @property
     def rank(self):
         return self._rank
-    
+
     def __repr__(self):
         return f'Card({self._rank}, {self._suite})'
 
@@ -100,11 +99,11 @@ class Hand:
 
     def __init__(self):
         self.cards = []
-    
+
     @property
     def cards(self):
         return self._cards
-    
+
     @cards.setter
     def cards(self, value):
         self._cards = value
@@ -130,7 +129,7 @@ class Hand:
                 total_value += self._non_ace_card_value(card)
             else:
                 aces += 1
-        
+
         for _ in range(aces):
             total_value += self._ace_value(total_value)
 
@@ -141,15 +140,14 @@ class Hand:
         card2 = self._cards[1]
         if card2.rank != 'A':
             return self._non_ace_card_value(card2)
-        else: 
-            return self.ACE_VALUE
+        return self.ACE_VALUE
 
     def hidden_hand_display(self):
         card1, card2 = self._cards[0], self._cards[1]
 
         card1.display(hidden=True)
         card2.display()
-    
+
     def hand_display(self):
         for card in self._cards:
             card.display()
@@ -163,32 +161,29 @@ class Participant:
     @property
     def hand(self):
         return self._hand
-    
+
     @property
     def hand_total(self):
         return self._hand.total
-    
+
     @property
     def name(self):
         return self._name
 
     def is_busted(self):
         return self._hand.total > TOGame.BLACKJACK
-    
+
     def has_blackjack(self):
         # Has 21 with two cards
         return self._hand.total == TOGame.BLACKJACK and \
         len(self._hand.cards) == 2
 
-    def points(self):
-        self._hand.total
-    
     def add_card(self, card):
         self._hand.cards.append(card)
-    
+
     def discard_cards(self):
         self._hand.cards = []
-    
+
     def display_hand(self):
         self._hand.hand_display()
 
@@ -202,8 +197,7 @@ class Dealer(Participant):
     def hit_or_stay(self):
         if self._hand.total >= TOGame.DEALER_STAY_LIMIT:
             return 'stays'
-        else:
-            return 'hits'
+        return 'hits'
 
     def display_hidden_hand(self):
         return self._hand.hidden_hand_display()
@@ -215,16 +209,16 @@ class Dealer(Participant):
 class Wallet:
     def __init__(self, initial_amount=0):
         self.amount = initial_amount
-    
+
     def deposit(self, amount):
         self._amount += amount
-    
+
     def withdraw(self, amount):
         if self._amount <= 0:
             print('No cash left in wallet!')
         else:
             self._amount -= amount
-    
+
     @property
     def amount(self):
         return self._amount
@@ -238,33 +232,32 @@ class Player(Participant):
         super().__init__()
         self._wallet = Wallet(starting_amount)
         self._bet = 0
-    
+
     @property
     def wallet(self):
         return self._wallet.amount
-    
+
     @property
     def bet(self):
         return self._bet
-    
+
     @bet.setter
     def bet(self, value):
         self._bet = value
 
     def add_cash(self, amount):
         self._wallet.deposit(amount)
-    
+
     def remove_cash(self, amount):
         self._wallet.withdraw(amount)
-    
+
     def hit_or_stay(self):
         while True:
             choice = input('Player chooses either hit or stay: ').lower()
             if choice in {'h', 's', 'hit', 'stay'}:
                 return 'hits' if choice[0] == 'h' else 'stays'
-            else:
-                print('Invalid input, please try again.')
-    
+            print('Invalid input, please try again.')
+
     def is_broke(self):
         return self._wallet.amount <= 0
 
@@ -280,7 +273,7 @@ class TOGame:
         self._dealer = Dealer()
         self._player = Player(TOGame.STARTING_CASH)
         self._deck = Deck()
-    
+
     @staticmethod
     def _display_welcome_msg():
         with open('TO_ascii_title.json', 'r') as file:
@@ -322,13 +315,13 @@ class TOGame:
 
     def _shuffle_cards(self):
         self._deck.shuffle()
-    
+
     def _deal_cards(self, player1, player2):
         self._check_deck()
         for _ in range(2):
             player1.add_card(self._deck.deal_one())
             player2.add_card(self._deck.deal_one())
-    
+
     def _check_deck(self):
         deck = self._deck.deck
         if len(deck) < TOGame.HALF_DECK:
@@ -351,7 +344,7 @@ class TOGame:
             print(f'Dealer Total: {dealer.hidden_total}')
 
         print()
-        print(f'Players Hand:')
+        print('Players Hand:')
         player.display_hand()
         print(f'Players Total: {player.hand_total}')
         print()
@@ -363,7 +356,7 @@ class TOGame:
                 self._show_cards(reveal=True)
             else:
                 self._show_cards()
-            
+
             if participant.has_blackjack():
                 print(f'{participant} has a natural Blackjack! This is an '
                       'automatic stay.')
@@ -441,17 +434,16 @@ class TOGame:
             if player.has_blackjack():
                 return player
         return None
-    
+
     def _win_by_totals(self):
         player = self._player
         dealer = self._dealer
 
         if player.hand_total > dealer.hand_total:
             return player
-        elif player.hand_total < dealer.hand_total:
+        if player.hand_total < dealer.hand_total:
             return dealer
-        else:
-            return 'draw'
+        return 'draw'
 
     def _determine_and_display_results(self):
         self._clear_and_display_title()
@@ -471,9 +463,9 @@ class TOGame:
                 return
             case self._dealer:
                 if self._player.hand_total == TOGame.BLACKJACK:
-                    print(f"It's a draw! Both players have a total of 21.")
+                    print("It's a draw! Both players have a total of 21.")
                 else:
-                    print(f"Dealer wins with a Natural Blackjack!")
+                    print("Dealer wins with a Natural Blackjack!")
                 return
             case 'draw':
                 print("It's a draw! Both players had a Blackjack.")
@@ -490,16 +482,16 @@ class TOGame:
     def _get_winner(self):
         player = self._player
         dealer = self._dealer
-        
+
         if player.is_busted():
             return dealer
         if dealer.is_busted():
             return player
-        
+
         bj_winner = self._someone_has_blackjack()
         if bj_winner:
             return bj_winner
-        
+
         return self._win_by_totals()
 
     def _distribute_and_display_winnings(self, winner):
@@ -572,7 +564,7 @@ class TOGame:
             print(f"Congratulations, you've finished with "
                   f"${self._player.wallet}!")
             print(f"You made ${difference} profit!")
-    
+
     def _start_game(self):
         self._clear_and_display_title()
         print('Shuffling cards...')
@@ -605,9 +597,11 @@ class TOGame:
                 break
         self._display_player_winnings()
         self._display_goodbye_msg()
-    pass
 
 game = TOGame()
 game.play()
 
-# pylint
+# Check inputs for errors, empty inputs, etc
+# Any refactoring?
+# Final checks
+# Reorganise game files
