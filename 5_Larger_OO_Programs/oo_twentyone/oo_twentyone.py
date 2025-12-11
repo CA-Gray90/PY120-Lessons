@@ -291,6 +291,11 @@ class TOGame:
             print(line.center(TOGame.TITLE_LENGTH, ' '))
         print()
 
+    @staticmethod
+    def _clear_and_display_title():
+        clear_screen()
+        print(' Twenty One '.center(TOGame.TITLE_LENGTH, '*'))
+
     def _display_rules(self):
         if self._yes_or_no('Would you like to see the basic rules?'):
             with open('TO_rules.json', 'r') as file:
@@ -307,8 +312,10 @@ class TOGame:
         cash = self._player.wallet
         if cash < TOGame.STARTING_CASH:
             print(f'You have ${cash} left.')
+            print()
         else:
             print(f'You have ${cash} in your wallet.')
+            print()
 
     def _display_goodbye_msg(self):
         print('Thank you for playing Twenty One! Goodbye.')
@@ -351,7 +358,7 @@ class TOGame:
 
     def _participants_turn(self, participant):
         while True:
-            clear_screen()
+            self._clear_and_display_title()
             if participant == self._dealer:
                 self._show_cards(reveal=True)
             else:
@@ -360,26 +367,30 @@ class TOGame:
             if participant.has_blackjack():
                 print(f'{participant} has a natural Blackjack! This is an '
                       'automatic stay.')
+                self._enter_to_continue()
                 break
 
             if participant.is_busted():
                 print(f'{participant} Busts!')
+                self._enter_to_continue()
                 break
 
             if participant.hand_total == TOGame.BLACKJACK:
                 print(f"{participant}'s hand total has reached 21. This is "
                       'an automatic stay.')
+                self._enter_to_continue()
                 break
 
             choice = participant.hit_or_stay()
             print(f'{participant} {choice}!')
             if choice == 'hits':
+                if participant == self._dealer:
+                    self._enter_to_continue()
                 participant.add_card(self._deck.deal_one())
             else:
+                self._enter_to_continue()
                 break
 
-            self._enter_to_continue()
-    
     def _place_bet(self):
         bet_max = self._player.wallet
         bet_min = 1
@@ -414,9 +425,6 @@ class TOGame:
         self._participants_turn(self._player)
 
     def _dealers_turn(self):
-        print('Dealers Hand revealed.')
-        self._show_cards(reveal=True)
-        self._enter_to_continue()
         self._participants_turn(self._dealer)
 
     def _someone_busts(self):
@@ -446,6 +454,7 @@ class TOGame:
             return 'draw'
 
     def _determine_and_display_results(self):
+        self._clear_and_display_title()
         player = self._player
         dealer = self._dealer
 
@@ -545,8 +554,7 @@ class TOGame:
     def _display_player_winnings(self):
         difference = abs(TOGame.STARTING_CASH - self._player.wallet)
         if self._player.is_broke():
-            print('Game ending early because Player is broke!\n' \
-            'You lost all your cash...')
+            print('Game ending early because Player is broke!')
         elif self._player.wallet < TOGame.STARTING_CASH:
             print(
                 f"You've finished the game with ${self._player.wallet} left.\n"
@@ -566,7 +574,7 @@ class TOGame:
             print(f"You made ${difference} profit!")
     
     def _start_game(self):
-        clear_screen()
+        self._clear_and_display_title()
         print('Shuffling cards...')
         self._shuffle_cards()
         time.sleep(1)
@@ -581,7 +589,7 @@ class TOGame:
         self._enter_to_continue('Ready to start the game?\n'
                                 'Press Enter to continue...')
         while True:
-            clear_screen()
+            self._clear_and_display_title()
             self._display_player_cash()
             self._place_bet()
             self._start_game()
@@ -602,6 +610,4 @@ class TOGame:
 game = TOGame()
 game.play()
 
-# Enter to continues
-# Improved UX, UI with clear terminal etc, time delays etc
-# Display simplified rules
+# pylint
