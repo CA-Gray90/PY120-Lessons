@@ -205,7 +205,6 @@ class Dealer(Participant):
         else:
             return 'hits'
 
-    # TOGame 'asks' Dealer to show hands, doesn't access hand objects directly
     def display_hidden_hand(self):
         return self._hand.hidden_hand_display()
 
@@ -270,6 +269,7 @@ class Player(Participant):
         return self._wallet.amount <= 0
 
 class TOGame:
+    TITLE_LENGTH = 80
     HALF_DECK = 26
     STARTING_CASH = 5
     RICH_LIMIT = 10
@@ -280,10 +280,29 @@ class TOGame:
         self._dealer = Dealer()
         self._player = Player(TOGame.STARTING_CASH)
         self._deck = Deck()
-
-    def _display_welcome_msg(self):
-        print('Welcome to Twenty One!')
     
+    @staticmethod
+    def _display_welcome_msg():
+        with open('TO_ascii_title.json', 'r') as file:
+            title_dict = json.load(file)
+
+        print(' Welcome to: '.center(TOGame.TITLE_LENGTH, '*'))
+        for line in title_dict["title"]:
+            print(line.center(TOGame.TITLE_LENGTH, ' '))
+        print()
+
+    def _display_rules(self):
+        if self._yes_or_no('Would you like to see the basic rules?'):
+            with open('TO_rules.json', 'r') as file:
+                rules_dict = json.load(file)
+            print()
+            for rule in rules_dict['rules']:
+                print(rule)
+            print()
+        print(f'You will be given ${TOGame.STARTING_CASH} to '
+              'begin with.')
+        print()
+
     def _display_player_cash(self):
         cash = self._player.wallet
         if cash < TOGame.STARTING_CASH:
@@ -558,6 +577,7 @@ class TOGame:
     def play(self):
         clear_screen()
         self._display_welcome_msg()
+        self._display_rules()
         self._enter_to_continue('Ready to start the game?\n'
                                 'Press Enter to continue...')
         while True:
@@ -584,5 +604,4 @@ game.play()
 
 # Enter to continues
 # Improved UX, UI with clear terminal etc, time delays etc
-# displaying ascii cards <-
 # Display simplified rules

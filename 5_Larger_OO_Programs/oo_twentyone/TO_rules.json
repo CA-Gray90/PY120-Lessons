@@ -1,0 +1,10 @@
+{
+    "rules" : [
+        " - In this game, you will play against the dealer in as simplified version of BlackJack.",
+        " - We will assume that you are familiar with the basic rules.",
+        " - You will also be given some starting money to bet with. You can choose how much to bet in each round.",
+        " - If you loose all your money, the game will end.",
+        " - Additionally, if you seem to be winning too much, you'll also be kicked out.",
+        "\nGood luck!"
+    ]
+}
