@@ -85,9 +85,6 @@ class Card:
     
     def __repr__(self):
         return f'Card({self._rank}, {self._suite})'
-    
-    def hide(self):
-        return 'Card is Hidden'
 
     def display(self, hidden=False):
         if not hidden:
@@ -150,7 +147,10 @@ class Hand:
     # Change here to get cards display for hidden hand:
     @property
     def hidden_hand(self):
-        return str([self._cards[0].hide()] + [self._cards[1]]) # <---
+        card1, card2 = self._cards[0], self._cards[1]
+
+        card1.display(hidden=True)
+        card2.display()
 
     # Currently this is how the hand is displayed:
     def __str__(self):
@@ -205,8 +205,7 @@ class Dealer(Participant):
             return 'hits'
 
     # TOGame 'asks' Dealer to show hands, doesn't access hand objects directly
-    @property
-    def hidden_hand(self):
+    def display_hidden_hand(self):
         return self._hand.hidden_hand
 
     @property
@@ -318,7 +317,9 @@ class TOGame:
         if reveal:
             print(f'Dealers Hand:\n{dealer.hand} : {dealer.hand_total}')
         else:
-            print(f'Dealers Hand:\n{dealer.hidden_hand} : {dealer.hidden_total}')
+            print('Dealers Hand:')
+            dealer.display_hidden_hand()
+            print(f'Dealer Total: {dealer.hidden_total}')
         print(f'Players Hand:\n{player.hand} : {player.hand_total}')
 
     def _participants_turn(self, participant):
