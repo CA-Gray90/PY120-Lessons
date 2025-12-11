@@ -2,6 +2,7 @@ import pdb
 import random
 import time
 import os
+import json
 
 def clear_screen():
     os.system('clear')
@@ -29,11 +30,54 @@ class Deck:
     def shuffle(self):
         random.shuffle(self._deck)
 
+class CardAscii:
+    with open('TO_card_ascii.json', 'r') as file:
+        ASCII_SUITES = json.load(file)
+    
+    def __init__(self):
+        self._diamond_ascii = CardAscii.ASCII_SUITES['diamonds']
+        self._clubs_ascii = CardAscii.ASCII_SUITES['clubs']
+        self._hearts_ascii = CardAscii.ASCII_SUITES['hearts']
+        self._spades_ascii = CardAscii.ASCII_SUITES['spades']
+        self._back_ascii = CardAscii.ASCII_SUITES['back']
+    
+    def card_ascii(self, suite=None, rank=None):
+        match suite:
+            case 'diamonds':
+                suite_ascii = self._diamond_ascii
+            case 'clubs':
+                suite_ascii = self._clubs_ascii
+            case 'hearts':
+                suite_ascii = self._hearts_ascii
+            case 'spades' :
+                suite_ascii = self._spades_ascii
+            case _:
+                suite_ascii = self._back_ascii
+    
+        return [self._card_edge()]       + \
+               [self._card_top(rank)]    + \
+               suite_ascii               + \
+               [self._card_bottom(rank)] + \
+               [self._card_edge()]
+
+    def _card_top(self, rank=None):
+        if rank:
+            return f'| {str(rank).ljust(2, ' ')}        |'
+        return '| ^  ^^^  ^ |'
+
+    def _card_bottom(self, rank=None):
+        if rank:
+            return f'|        {str(rank).rjust(2, ' ')} |'
+        return '| ^  ^^^  ^ |'
+
+    def _card_edge(self):
+        return '+-----------+'
+
 class Card:
     def __init__(self, rank, suite):
         self._rank = rank
         self._suite = suite
-        self._ascii_display = ''
+        self._ascii_display = CardAscii()
     
     @property
     def rank(self):
@@ -45,15 +89,13 @@ class Card:
     def hide(self):
         return 'Card is Hidden'
 
-    def display_hidden(self):
-        pass
-
-    def display_revealed(self):
-        pass
-
-    def _set_display(self):
-        pass
-    pass
+    def display(self, hidden=False):
+        if not hidden:
+            for l in self._ascii_display.card_ascii(self._suite, self._rank):
+                print(l)
+        else:
+            for l in self._ascii_display.card_ascii():
+                print(l)
 
 class Hand:
     COURT_CARD_VALUE = 10
@@ -105,9 +147,10 @@ class Hand:
         else: 
             return self.ACE_VALUE
 
+    # Change here to get cards display for hidden hand:
     @property
     def hidden_hand(self):
-        return str([self._cards[0].hide()] + [self._cards[1]])
+        return str([self._cards[0].hide()] + [self._cards[1]]) # <---
 
     # Currently this is how the hand is displayed:
     def __str__(self):
@@ -512,8 +555,6 @@ class TOGame:
             clear_screen()
             self._display_player_cash()
             self._place_bet()
-            # self._shuffle_cards()
-            # self._deal_cards(self._player, self._dealer)
             self._start_game()
 
             self._players_turn()
@@ -534,5 +575,5 @@ game.play()
 
 # Enter to continues
 # Improved UX, UI with clear terminal etc, time delays etc
-# displaying ascii cards
+# displaying ascii cards <-
 # Display simplified rules
