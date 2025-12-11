@@ -1,7 +1,7 @@
+import json
+import os
 import random
 import time
-import os
-import json
 
 def clear_screen():
     os.system('clear')
@@ -262,12 +262,12 @@ class Player(Participant):
         return self._wallet.amount <= 0
 
 class TOGame:
-    TITLE_LENGTH = 80
-    HALF_DECK = 26
-    STARTING_CASH = 5
-    RICH_LIMIT = 10
     BLACKJACK = 21
     DEALER_STAY_LIMIT = 17
+    HALF_DECK = 26
+    RICH_LIMIT = 10
+    STARTING_CASH = 5
+    TITLE_LENGTH = 80
 
     def __init__(self):
         self._dealer = Dealer()
