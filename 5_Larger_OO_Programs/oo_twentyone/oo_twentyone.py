@@ -144,17 +144,15 @@ class Hand:
         else: 
             return self.ACE_VALUE
 
-    # Change here to get cards display for hidden hand:
-    @property
-    def hidden_hand(self):
+    def hidden_hand_display(self):
         card1, card2 = self._cards[0], self._cards[1]
 
         card1.display(hidden=True)
         card2.display()
-
-    # Currently this is how the hand is displayed:
-    def __str__(self):
-        return str([self._cards])
+    
+    def hand_display(self):
+        for card in self._cards:
+            card.display()
 
 class Participant:
     def __init__(self):
@@ -191,6 +189,9 @@ class Participant:
     def discard_cards(self):
         self._hand.cards = []
     
+    def display_hand(self):
+        self._hand.hand_display()
+
     def __str__(self):
         return self._name
 
@@ -206,7 +207,7 @@ class Dealer(Participant):
 
     # TOGame 'asks' Dealer to show hands, doesn't access hand objects directly
     def display_hidden_hand(self):
-        return self._hand.hidden_hand
+        return self._hand.hidden_hand_display()
 
     @property
     def hidden_total(self):
@@ -315,12 +316,19 @@ class TOGame:
         player = self._player
 
         if reveal:
-            print(f'Dealers Hand:\n{dealer.hand} : {dealer.hand_total}')
+            print('Dealers Hand (Revealed):')
+            dealer.display_hand()
+            print(f'Dealer Total: {dealer.hand_total}')
         else:
-            print('Dealers Hand:')
+            print('Dealers Hand (Hidden):')
             dealer.display_hidden_hand()
             print(f'Dealer Total: {dealer.hidden_total}')
-        print(f'Players Hand:\n{player.hand} : {player.hand_total}')
+
+        print()
+        print(f'Players Hand:')
+        player.display_hand()
+        print(f'Players Total: {player.hand_total}')
+        print()
 
     def _participants_turn(self, participant):
         while True:
