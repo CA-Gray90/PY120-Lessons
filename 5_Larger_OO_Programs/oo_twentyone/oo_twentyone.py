@@ -289,6 +289,10 @@ class TOGame:
         clear_screen()
         print(' Twenty One '.center(TOGame.TITLE_LENGTH, '*'))
 
+    @staticmethod
+    def _display_goodbye_msg():
+        print('Thank you for playing Twenty One! Goodbye.')
+
     def _display_rules(self):
         if self._yes_or_no('Would you like to see the basic rules?'):
             with open('TO_rules.json', 'r') as file:
@@ -310,14 +314,11 @@ class TOGame:
             print(f'You have ${cash} in your wallet.')
             print()
 
-    def _display_goodbye_msg(self):
-        print('Thank you for playing Twenty One! Goodbye.')
-
     def _shuffle_cards(self):
+        self._check_deck()
         self._deck.shuffle()
 
     def _deal_cards(self, player1, player2):
-        self._check_deck()
         for _ in range(2):
             player1.add_card(self._deck.deal_one())
             player2.add_card(self._deck.deal_one())
@@ -326,7 +327,8 @@ class TOGame:
         deck = self._deck.deck
         if len(deck) < TOGame.HALF_DECK:
             print('Half of deck has already been dealt, shuffling'
-                  ' new deck in.')
+                  ' new deck in...')
+            self._enter_to_continue()
             self._deck = Deck()
             self._shuffle_cards()
 
@@ -350,8 +352,14 @@ class TOGame:
         print()
 
     def _participants_turn(self, participant):
+        title = '* PLAYERS TURN *' if participant == self._player \
+            else '* DEALERS TURN *'
+
         while True:
             self._clear_and_display_title()
+            print()
+            print(title.center(TOGame.TITLE_LENGTH, ' '))
+
             if participant == self._dealer:
                 self._show_cards(reveal=True)
             else:
@@ -395,10 +403,9 @@ class TOGame:
                                 'continue...')
             return
 
-        print('How much would you like to bet?')
         while True:
-            print(f'Choose between ${bet_min} and ${bet_max}')
-            choice = input('Place bet: ')
+            print(f'Choose between ${bet_min} and ${bet_max} to bet.')
+            choice = input('Place bet: $')
 
             try:
                 choice = int(choice)
@@ -413,12 +420,6 @@ class TOGame:
         print(f'You have placed a ${choice} bet!')
         self._enter_to_continue('Ready to see the cards? Press Enter to '
                                 'continue...')
-
-    def _players_turn(self):
-        self._participants_turn(self._player)
-
-    def _dealers_turn(self):
-        self._participants_turn(self._dealer)
 
     def _someone_busts(self):
         for player in (self._player, self._dealer):
@@ -447,6 +448,9 @@ class TOGame:
 
     def _determine_and_display_results(self):
         self._clear_and_display_title()
+        print()
+        print('* RESULTS *'.center(TOGame.TITLE_LENGTH, ' '))
+
         player = self._player
         dealer = self._dealer
 
@@ -545,6 +549,7 @@ class TOGame:
 
     def _display_player_winnings(self):
         difference = abs(TOGame.STARTING_CASH - self._player.wallet)
+
         if self._player.is_broke():
             print('Game ending early because Player is broke!')
         elif self._player.wallet < TOGame.STARTING_CASH:
@@ -565,43 +570,49 @@ class TOGame:
                   f"${self._player.wallet}!")
             print(f"You made ${difference} profit!")
 
-    def _start_game(self):
-        self._clear_and_display_title()
-        print('Shuffling cards...')
-        self._shuffle_cards()
-        time.sleep(1)
-        print('Dealing Cards...')
-        self._deal_cards(self._player, self._dealer)
-        time.sleep(1)
-
-    def play(self):
+    def _opening_sequence(self):
         clear_screen()
         self._display_welcome_msg()
         self._display_rules()
         self._enter_to_continue('Ready to start the game?\n'
                                 'Press Enter to continue...')
+
+    def _start_game(self):
+        self._clear_and_display_title()
+        self._display_player_cash()
+        self._place_bet()
+
+        self._clear_and_display_title()
+        self._shuffle_cards()
+        print('Shuffling cards...')
+        time.sleep(1)
+        self._deal_cards(self._player, self._dealer)
+        print('Dealing Cards...')
+        time.sleep(1)
+
+    def play(self):
+        self._opening_sequence()
+
         while True:
-            self._clear_and_display_title()
-            self._display_player_cash()
-            self._place_bet()
             self._start_game()
 
-            self._players_turn()
+            self._participants_turn(self._player)
             if not self._player.is_busted() and \
                 not self._player.has_blackjack():
-                self._dealers_turn()
+                self._participants_turn(self._dealer)
 
             self._determine_and_display_results()
             self._distribute_and_display_winnings(self._get_winner())
+
             if not self._play_again():
                 break
+
         self._display_player_winnings()
         self._display_goodbye_msg()
 
 game = TOGame()
 game.play()
 
-# Check inputs for errors, empty inputs, etc
 # Any refactoring?
 # Final checks
 # Reorganise game files
