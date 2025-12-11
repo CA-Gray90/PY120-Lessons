@@ -612,7 +612,3 @@ class TOGame:
 
 game = TOGame()
 game.play()
-
-# Any refactoring?
-# Final checks
-# Reorganise game files
