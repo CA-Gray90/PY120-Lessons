@@ -253,7 +253,9 @@ class Player(Participant):
 
     def hit_or_stay(self):
         while True:
-            choice = input('Player chooses either hit or stay: ').lower()
+            choice = input(
+                'Player chooses either hit or stay: ').lower().strip()
+
             if choice in {'h', 's', 'hit', 'stay'}:
                 return 'hits' if choice[0] == 'h' else 'stays'
             print('Invalid input, please try again.')
@@ -516,7 +518,7 @@ class TOGame:
     @staticmethod
     def _yes_or_no(prompt):
         while True:
-            choice = input(f'{prompt} (y/n): ').lower()
+            choice = input(f'{prompt} (y/n): ').lower().strip()
 
             if choice in ('y', 'n', 'yes', 'no'):
                 return choice[0] == 'y'
