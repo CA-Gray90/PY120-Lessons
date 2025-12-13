@@ -76,7 +76,6 @@ class Card:
     def __init__(self, rank, suite):
         self._rank = rank
         self._suite = suite
-        self._ascii_display = CardAscii()
 
     @property
     def rank(self):
@@ -87,10 +86,10 @@ class Card:
 
     def display(self, hidden=False):
         if not hidden:
-            for l in self._ascii_display.card_ascii(self._suite, self._rank):
+            for l in CardAscii().card_ascii(self._suite, self._rank):
                 print(l)
         else:
-            for l in self._ascii_display.card_ascii():
+            for l in CardAscii().card_ascii():
                 print(l)
 
 class Hand:
@@ -155,7 +154,6 @@ class Hand:
 class Participant:
     def __init__(self):
         self._hand = Hand()
-        self._score = 0         # Overall score; game wins.
         self._name = f'{self.__class__.__name__}'
 
     @property
