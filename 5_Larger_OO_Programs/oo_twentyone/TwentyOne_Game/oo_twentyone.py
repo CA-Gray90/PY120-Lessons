@@ -72,18 +72,7 @@ class CardAscii:
     def _card_edge(self):
         return '+-----------+'
 
-class Card:
-    def __init__(self, rank, suite):
-        self._rank = rank
-        self._suite = suite
-
-    @property
-    def rank(self):
-        return self._rank
-
-    def __repr__(self):
-        return f'Card({self._rank}, {self._suite})'
-
+class DisplayMixin:
     def display(self, hidden=False):
         if not hidden:
             for l in CardAscii().card_ascii(self._suite, self._rank):
@@ -91,6 +80,15 @@ class Card:
         else:
             for l in CardAscii().card_ascii():
                 print(l)
+
+class Card(DisplayMixin):
+    def __init__(self, rank, suite):
+        self._rank = rank
+        self._suite = suite
+
+    @property
+    def rank(self):
+        return self._rank
 
 class Hand:
     COURT_CARD_VALUE = 10
