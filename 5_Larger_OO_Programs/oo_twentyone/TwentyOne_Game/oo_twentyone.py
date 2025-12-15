@@ -289,7 +289,8 @@ class GameDisplayMixin:
     def _display_goodbye_msg():
         print('Thank you for playing Twenty One! Goodbye.')
 
-    def _display_rules(self):
+    @staticmethod
+    def _display_rules():
         if yes_or_no('Would you like to see the basic rules?'):
             with open('TO_rules.json', 'r') as file:
                 rules_dict = json.load(file)
@@ -300,6 +301,40 @@ class GameDisplayMixin:
         print(f'You will be given ${TOGame.STARTING_CASH} to '
               'begin with.')
         print()
+
+    @staticmethod
+    def _display_player_cash(player):
+        cash = player.wallet
+        if cash < TOGame.STARTING_CASH:
+            print(f'You have ${cash} left.')
+            print()
+        else:
+            print(f'You have ${cash} in your wallet.')
+            print()
+    
+    @staticmethod
+    def _display_player_winnings(player):
+        difference = abs(TOGame.STARTING_CASH - player.wallet)
+
+        if player.is_broke():
+            print('Game ending early because Player is broke!')
+        elif player.wallet < TOGame.STARTING_CASH:
+            print(
+                f"You've finished the game with ${player.wallet} left.\n"
+                f"You lost ${difference} overall."
+                )
+        elif player.wallet == TOGame.STARTING_CASH:
+            print('You finished with the same amount of cash that you started '
+                  'with.')
+        elif player.wallet >= TOGame.RICH_LIMIT:
+            print("You've reached the limit for what this casino is willing "
+                  "to pay out.\nYou've been kicked out!")
+            print(f"You've finished with ${player.wallet} in the wallet "
+                  f"and ${difference} in profit!")
+        elif player.wallet > TOGame.STARTING_CASH:
+            print(f"Congratulations, you've finished with "
+                  f"${player.wallet}!")
+            print(f"You made ${difference} profit!")
 
 class TOGame(GameDisplayMixin):
     BLACKJACK = 21
@@ -314,14 +349,9 @@ class TOGame(GameDisplayMixin):
         self._player = Player(TOGame.STARTING_CASH)
         self._deck = Deck()
 
-    def _display_player_cash(self):
-        cash = self._player.wallet
-        if cash < TOGame.STARTING_CASH:
-            print(f'You have ${cash} left.')
-            print()
-        else:
-            print(f'You have ${cash} in your wallet.')
-            print()
+    @staticmethod
+    def _too_rich(player):
+        return player.wallet >= TOGame.RICH_LIMIT
 
     def _shuffle_cards(self):
         self._check_deck()
@@ -520,11 +550,7 @@ class TOGame(GameDisplayMixin):
                 print(
                     'A draw results in no winnings being distributed.'
                     )
-        self._display_player_cash()
-
-    @staticmethod
-    def _too_rich(player):
-        return player.wallet >= TOGame.RICH_LIMIT
+        self._display_player_cash(self._player)
 
     def _play_again(self):
         if self._player.is_broke():
@@ -539,29 +565,6 @@ class TOGame(GameDisplayMixin):
 
         return False
 
-    def _display_player_winnings(self):
-        difference = abs(TOGame.STARTING_CASH - self._player.wallet)
-
-        if self._player.is_broke():
-            print('Game ending early because Player is broke!')
-        elif self._player.wallet < TOGame.STARTING_CASH:
-            print(
-                f"You've finished the game with ${self._player.wallet} left.\n"
-                f"You lost ${difference} overall."
-                )
-        elif self._player.wallet == TOGame.STARTING_CASH:
-            print('You finished with the same amount of cash that you started '
-                  'with.')
-        elif self._player.wallet >= TOGame.RICH_LIMIT:
-            print("You've reached the limit for what this casino is willing "
-                  "to pay out.\nYou've been kicked out!")
-            print(f"You've finished with ${self._player.wallet} in the wallet "
-                  f"and ${difference} in profit!")
-        elif self._player.wallet > TOGame.STARTING_CASH:
-            print(f"Congratulations, you've finished with "
-                  f"${self._player.wallet}!")
-            print(f"You made ${difference} profit!")
-
     def _opening_sequence(self):
         clear_screen()
         self._display_welcome_msg()
@@ -571,7 +574,7 @@ class TOGame(GameDisplayMixin):
 
     def _start_game(self):
         self._clear_and_display_title()
-        self._display_player_cash()
+        self._display_player_cash(self._player)
         self._place_bet()
 
         self._clear_and_display_title()
@@ -599,7 +602,7 @@ class TOGame(GameDisplayMixin):
             if not self._play_again():
                 break
 
-        self._display_player_winnings()
+        self._display_player_winnings(self._player)
         self._display_goodbye_msg()
 
 game = TOGame()
