@@ -102,19 +102,41 @@ class Card(CardDisplayMixin):
         self._suite = suite
 
     @property
+    def suite(self):
+        return self._suite
+
+    @property
     def rank(self):
         return self._rank
 
 class HandDisplayMixin:
-    def display_hidden_hand(self):
-        card1, card2 = self._cards[0], self._cards[1]
+    GAP = '   '
 
-        card1.display(hidden=True)
-        card2.display()
-    
+    def display_hidden_hand(self):
+        gap = HandDisplayMixin.GAP
+        card2 = self.cards[1]
+        total_lines = len(CardAscii().card_ascii(self.cards[0].suite, self.cards[0].rank))
+
+        for idx in range(total_lines):
+            print(f'{CardAscii().card_ascii()[idx]}{gap}'
+                  f'{CardAscii().card_ascii(card2.suite, card2.rank)[idx]}')
+
     def display_hand(self):
-        for card in self._cards:
-            card.display()
+        '''
+        Displays cards horizontally.
+
+        Expects list object as argument with Card objects as elements.
+        '''
+        gap = HandDisplayMixin.GAP
+        total_lines = len(CardAscii().card_ascii(self.cards[0].suite, self.cards[0].rank))
+
+        for idx in range(total_lines):
+
+            current_line = []
+            for card in self.cards:
+                current_line.append(CardAscii().card_ascii(card.suite, card.rank)[idx])
+
+            print(gap.join(current_line))
 
 class Hand(HandDisplayMixin):
     COURT_CARD_VALUE = 10

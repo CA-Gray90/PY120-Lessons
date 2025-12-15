@@ -65,7 +65,7 @@ class Card(CardDisplayMixin):
     def suite(self):
         return self._suite
 
-hand = [Card('K', 'clubs'), Card('Q', 'hearts'), Card(10, 'hearts'), Card(5, 'spades')]
+hand = [Card('K', 'clubs'), Card('Q', 'hearts')]
 '''
 
 I
@@ -106,4 +106,14 @@ def horizontal_display(hand):
 
         print(gap.join(current_line))
 
+def display_hidden_hand(hand):
+    gap = '   '
+    card2 = hand[1]
+    total_lines = len(CardAscii().card_ascii(hand[0].suite, hand[0].rank))
+
+    for idx in range(total_lines):
+        print(f'{CardAscii().card_ascii()[idx]}{gap}'
+                f'{CardAscii().card_ascii(card2.suite, card2.rank)[idx]}')
+
 horizontal_display(hand)
+display_hidden_hand(hand)
