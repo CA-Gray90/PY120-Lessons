@@ -91,7 +91,7 @@ class Card(CardDisplayMixin):
         return self._rank
 
 class HandDisplayMixin:
-    def hidden_hand_display(self):
+    def display_hidden_hand(self):
         card1, card2 = self._cards[0], self._cards[1]
 
         card1.display(hidden=True)
@@ -192,9 +192,6 @@ class Dealer(Participant):
         if self._hand.total >= TOGame.DEALER_STAY_LIMIT:
             return 'stays'
         return 'hits'
-
-    def display_hidden_hand(self):
-        return self._hand.hidden_hand_display()
 
     @property
     def hidden_total(self):
@@ -338,7 +335,7 @@ class TOGame:
             print(f'Dealer Total: {dealer.hand_total}')
         else:
             print('Dealers Hand (Hidden):')
-            dealer.display_hidden_hand()
+            dealer.hand.display_hidden_hand()
             print(f'Dealer Total: {dealer.hidden_total}')
 
         print()
