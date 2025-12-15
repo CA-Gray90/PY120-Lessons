@@ -254,19 +254,7 @@ class Player(Participant):
     def is_broke(self):
         return self._wallet.amount <= 0
 
-class TOGame:
-    BLACKJACK = 21
-    DEALER_STAY_LIMIT = 17
-    HALF_DECK = 26
-    RICH_LIMIT = 10
-    STARTING_CASH = 5
-    TITLE_LENGTH = 80
-
-    def __init__(self):
-        self._dealer = Dealer()
-        self._player = Player(TOGame.STARTING_CASH)
-        self._deck = Deck()
-
+class GameDisplayMixin:
     @staticmethod
     def _display_welcome_msg():
         with open('TO_ascii_title.json', 'r') as file:
@@ -297,6 +285,19 @@ class TOGame:
         print(f'You will be given ${TOGame.STARTING_CASH} to '
               'begin with.')
         print()
+
+class TOGame(GameDisplayMixin):
+    BLACKJACK = 21
+    DEALER_STAY_LIMIT = 17
+    HALF_DECK = 26
+    RICH_LIMIT = 10
+    STARTING_CASH = 5
+    TITLE_LENGTH = 80
+
+    def __init__(self):
+        self._dealer = Dealer()
+        self._player = Player(TOGame.STARTING_CASH)
+        self._deck = Deck()
 
     def _display_player_cash(self):
         cash = self._player.wallet
