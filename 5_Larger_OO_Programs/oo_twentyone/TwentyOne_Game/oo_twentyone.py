@@ -87,16 +87,7 @@ class CardAscii:
     def _card_edge(self):
         return '+-----------+'
 
-class CardDisplayMixin:
-    def display(self, hidden=False):
-        if not hidden:
-            for l in CardAscii().card_ascii(self._suite, self._rank):
-                print(l)
-        else:
-            for l in CardAscii().card_ascii():
-                print(l)
-
-class Card(CardDisplayMixin):
+class Card:
     def __init__(self, rank, suite):
         self._rank = rank
         self._suite = suite
@@ -444,12 +435,13 @@ class TOGame(GameDisplayMixin):
                 break
 
             choice = participant.hit_or_stay()
-            print(f'{participant} {choice}!')
             if choice == 'hits':
                 if participant == self._dealer:
+                    print(f'{participant} {choice}!')
                     enter_to_continue()
                 participant.add_card(self._deck.deal_one())
             else:
+                print(f'{participant} {choice}!')
                 enter_to_continue()
                 break
 
