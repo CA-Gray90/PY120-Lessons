@@ -6,6 +6,21 @@ import time
 def clear_screen():
     os.system('clear')
 
+def yes_or_no(prompt):
+    while True:
+        choice = input(f'{prompt} (y/n): ').lower().strip()
+
+        if choice in ('y', 'n', 'yes', 'no'):
+            return choice[0] == 'y'
+
+        print('Invalid choice. Try again.')
+
+def enter_to_continue(prompt=None):
+    if not prompt:
+        input('Press Enter to continue...')
+    else:
+        input(f'{prompt}')
+
 class Deck:
     RANKS = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
     SUITES = ['diamonds', 'clubs', 'hearts', 'spades']
@@ -275,7 +290,7 @@ class GameDisplayMixin:
         print('Thank you for playing Twenty One! Goodbye.')
 
     def _display_rules(self):
-        if self._yes_or_no('Would you like to see the basic rules?'):
+        if yes_or_no('Would you like to see the basic rules?'):
             with open('TO_rules.json', 'r') as file:
                 rules_dict = json.load(file)
             print()
@@ -322,7 +337,7 @@ class TOGame(GameDisplayMixin):
         if len(deck) < TOGame.HALF_DECK:
             print('Half of deck has already been dealt, shuffling'
                   ' new deck in...')
-            self._enter_to_continue()
+            enter_to_continue()
             self._deck = Deck()
             self._shuffle_cards()
 
@@ -362,28 +377,28 @@ class TOGame(GameDisplayMixin):
             if participant.has_blackjack():
                 print(f'{participant} has a natural Blackjack! This is an '
                       'automatic stay.')
-                self._enter_to_continue()
+                enter_to_continue()
                 break
 
             if participant.is_busted():
                 print(f'{participant} Busts!')
-                self._enter_to_continue()
+                enter_to_continue()
                 break
 
             if participant.hand_total == TOGame.BLACKJACK:
                 print(f"{participant}'s hand total has reached 21. This is "
                       'an automatic stay.')
-                self._enter_to_continue()
+                enter_to_continue()
                 break
 
             choice = participant.hit_or_stay()
             print(f'{participant} {choice}!')
             if choice == 'hits':
                 if participant == self._dealer:
-                    self._enter_to_continue()
+                    enter_to_continue()
                 participant.add_card(self._deck.deal_one())
             else:
-                self._enter_to_continue()
+                enter_to_continue()
                 break
 
     def _place_bet(self):
@@ -393,7 +408,7 @@ class TOGame(GameDisplayMixin):
         if bet_max == 1:
             print('Since you only have $1 left, your bet will be set to $1')
             self._player.bet = 1
-            self._enter_to_continue('Ready to see the cards? Press Enter to '
+            enter_to_continue('Ready to see the cards? Press Enter to '
                                 'continue...')
             return
 
@@ -412,7 +427,7 @@ class TOGame(GameDisplayMixin):
             self._player.bet = choice
             break
         print(f'You have placed a ${choice} bet!')
-        self._enter_to_continue('Ready to see the cards? Press Enter to '
+        enter_to_continue('Ready to see the cards? Press Enter to '
                                 'continue...')
 
     def _someone_busts(self):
@@ -508,23 +523,6 @@ class TOGame(GameDisplayMixin):
         self._display_player_cash()
 
     @staticmethod
-    def _yes_or_no(prompt):
-        while True:
-            choice = input(f'{prompt} (y/n): ').lower().strip()
-
-            if choice in ('y', 'n', 'yes', 'no'):
-                return choice[0] == 'y'
-
-            print('Invalid choice. Try again.')
-
-    @staticmethod
-    def _enter_to_continue(prompt=None):
-        if not prompt:
-            input('Press Enter to continue...')
-        else:
-            input(f'{prompt}')
-
-    @staticmethod
     def _too_rich(player):
         return player.wallet >= TOGame.RICH_LIMIT
 
@@ -534,7 +532,7 @@ class TOGame(GameDisplayMixin):
         if self._too_rich(self._player):
             return False
 
-        if self._yes_or_no('Would you like to play again?'):
+        if yes_or_no('Would you like to play again?'):
             self._player.discard_cards()
             self._dealer.discard_cards()
             return True
@@ -568,7 +566,7 @@ class TOGame(GameDisplayMixin):
         clear_screen()
         self._display_welcome_msg()
         self._display_rules()
-        self._enter_to_continue('Ready to start the game?\n'
+        enter_to_continue('Ready to start the game?\n'
                                 'Press Enter to continue...')
 
     def _start_game(self):
