@@ -72,7 +72,7 @@ class CardAscii:
     def _card_edge(self):
         return '+-----------+'
 
-class DisplayMixin:
+class CardDisplayMixin:
     def display(self, hidden=False):
         if not hidden:
             for l in CardAscii().card_ascii(self._suite, self._rank):
@@ -81,7 +81,7 @@ class DisplayMixin:
             for l in CardAscii().card_ascii():
                 print(l)
 
-class Card(DisplayMixin):
+class Card(CardDisplayMixin):
     def __init__(self, rank, suite):
         self._rank = rank
         self._suite = suite
@@ -90,7 +90,18 @@ class Card(DisplayMixin):
     def rank(self):
         return self._rank
 
-class Hand:
+class HandDisplayMixin:
+    def hidden_hand_display(self):
+        card1, card2 = self._cards[0], self._cards[1]
+
+        card1.display(hidden=True)
+        card2.display()
+    
+    def display_hand(self):
+        for card in self._cards:
+            card.display()
+
+class Hand(HandDisplayMixin):
     COURT_CARD_VALUE = 10
     ACE_VALUE = 11
 
@@ -139,16 +150,6 @@ class Hand:
             return self._non_ace_card_value(card2)
         return self.ACE_VALUE
 
-    def hidden_hand_display(self):
-        card1, card2 = self._cards[0], self._cards[1]
-
-        card1.display(hidden=True)
-        card2.display()
-
-    def hand_display(self):
-        for card in self._cards:
-            card.display()
-
 class Participant:
     def __init__(self):
         self._hand = Hand()
@@ -179,9 +180,6 @@ class Participant:
 
     def discard_cards(self):
         self._hand.cards = []
-
-    def display_hand(self):
-        self._hand.hand_display()
 
     def __str__(self):
         return self._name
@@ -336,7 +334,7 @@ class TOGame:
 
         if reveal:
             print('Dealers Hand (Revealed):')
-            dealer.display_hand()
+            dealer.hand.display_hand()
             print(f'Dealer Total: {dealer.hand_total}')
         else:
             print('Dealers Hand (Hidden):')
@@ -345,7 +343,7 @@ class TOGame:
 
         print()
         print('Players Hand:')
-        player.display_hand()
+        player.hand.display_hand()
         print(f'Players Total: {player.hand_total}')
         print()
 
